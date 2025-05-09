@@ -15,8 +15,8 @@
 #include <optional>
 
 #include "StelSkyCultureMgr.hpp"
-#include "Constellation.hpp"
-#include "Asterism.hpp"
+#include "ScmConstellation.hpp"
+#include "ScmAsterism.hpp"
 
 #include "ScmCommonName.hpp"
 
@@ -29,8 +29,8 @@ class scm::ScmSkyCulture
 {
 public:
 	ScmSkyCulture(QString id, QString region, StelSkyCulture::CLASSIFICATION classification,
-        bool fallbackToInternationalNames, QVector<Asterism> asterisms,
-        QVector<Constellation> constellations, QVector<ScmCommonName> commonNames);
+        bool fallbackToInternationalNames, QVector<ScmAsterism> asterisms,
+        QVector<ScmConstellation> constellations, QVector<ScmCommonName> commonNames);
 	~ScmSkyCulture();
 
     //! Returns the identifier of the sky culture
@@ -46,10 +46,10 @@ public:
     bool getFallbackToInternationalNames() const;
 
     //! Returns the asterisms of the sky culture
-    QVector<Asterism> getAsterisms() const;
+    QVector<ScmAsterism> getAsterisms() const;
 
     //! Returns the constellations of the sky culture
-    QVector<Constellation> getConstellations() const;
+    QVector<ScmConstellation> getConstellations() const;
 
     //! Returns the common names of the stars, planets and nonstellar objects
     QVector<ScmCommonName> getCommonNames() const;
@@ -73,13 +73,11 @@ private:
 	//! Whether to show common names in addition to the culture-specific ones
 	bool fallbackToInternationalNames = false;
 
-	// TODO: can we use "Asterism" or create own class?
 	//! The asterisms of the sky culture
-	QVector<Asterism> asterisms;
+	QVector<ScmAsterism> asterisms;
 
-	// TODO: can we use "Constellation" or create own class?
 	//! The constellations of the sky culture
-	QVector<Constellation> constellations;
+	QVector<ScmConstellation> constellations;
 
 	//! The common names of the stars, planets and nonstellar objects
 	QVector<ScmCommonName> commonNames;
