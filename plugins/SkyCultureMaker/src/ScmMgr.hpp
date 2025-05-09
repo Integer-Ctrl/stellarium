@@ -1,10 +1,10 @@
 /**
  * @file ScmMgr.hpp
- * @author
- * @brief Mangager for SkyCultureMaker plugin.
+ * @author fhofer, lgrumbach
+ * @brief Manager for SkyCultureMaker plugin.
  * @version 0.1
  * @date 2025-05-09
- * 
+ *
  * Managing the creation process of a new sky culture.
  * 1. Navigate in stellarium (UI) to the location of interest (from where the culture should be created)
  * 2. Starting creation process (click in UI)
@@ -18,3 +18,17 @@
  * 5. Click save button opens dialog to name: sky culture, lines, aliass, ...
  * 6. Completing the dialog (check that all needed arguments are existing and valid) converts intern c++ object to json
  */
+
+#ifndef SCM_MGR_HPP
+#define SCM_MGR_HPP
+
+namespace scm
+{
+class ScmMgr;
+}
+
+class scm::ScmMgr
+{
+};
+
+#endif	// SCM_MGR_HPP
