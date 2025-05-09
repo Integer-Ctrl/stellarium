@@ -28,10 +28,34 @@ class ScmSkyCulture;
 class scm::ScmSkyCulture
 {
 public:
-	ScmSkyCulture(QString id, QString region, StelSkyCulture::CLASSIFICATION classification,
-        bool fallbackToInternationalNames, QVector<ScmAsterism> asterisms,
-        QVector<ScmConstellation> constellations, QVector<ScmCommonName> commonNames);
+	ScmSkyCulture(QString id);
 	~ScmSkyCulture();
+
+    //! Sets the region of the sky culture
+    void setRegion(QString region);
+
+    //! Sets the classification of the sky culture
+    void setClassification(StelSkyCulture::CLASSIFICATION classification);
+
+    //! Sets whether to show common names in addition to the culture-specific ones
+    void setFallbackToInternationalNames(bool fallback);
+
+    //! Sets the asterisms of the sky culture
+    void setAsterisms(QVector<ScmAsterism> asterisms);
+
+    //! Adds an asterism to the sky culture
+    void addAsterism(ScmAsterism asterism);
+
+    //! Sets the constellations of the sky culture
+    void setConstellations(QVector<ScmConstellation> constellations);
+
+    //! Adds a constellation to the sky culture
+    void addConstellation(ScmConstellation constellation);
+
+    //! Sets the common names of the stars, planets and nonstellar objects
+    void setCommonNames(QVector<ScmCommonName> commonNames);
+
+    void addCommonName(ScmCommonName commonName);
 
     //! Returns the identifier of the sky culture
     QString getId() const;

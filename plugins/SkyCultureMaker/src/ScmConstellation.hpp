@@ -25,7 +25,7 @@ public:
     void setCommonName(ScmCommonName name);
 
     //! Returns the common name of the constellation
-    ScmCommonName getCmmonName() const;
+    ScmCommonName getCommonName() const;
 
 private:
     //! Common name of the constellation
