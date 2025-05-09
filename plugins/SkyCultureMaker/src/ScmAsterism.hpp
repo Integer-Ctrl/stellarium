@@ -21,11 +21,11 @@
  {
  public:
  
-     //! Sets the common name of the constellation
+     //! Sets the common name of the asterism
      void setCommonName(ScmCommonName name);
  
-     //! Returns the common name of the constellation
-     ScmCommonName getCmmonName() const;
+     //! Returns the common name of the asterism
+     ScmCommonName getCommonName() const;
  
  private:
      //! Common name of the constellation
