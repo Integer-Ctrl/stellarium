@@ -46,16 +46,26 @@ public:
     //! Adds an asterism to the sky culture
     void addAsterism(ScmAsterism asterism);
 
+    //! Removes an asterism from the sky culture by its ID
+    void removeAsterism(QString id);
+
     //! Sets the constellations of the sky culture
     void setConstellations(QVector<ScmConstellation> constellations);
 
     //! Adds a constellation to the sky culture
     void addConstellation(ScmConstellation constellation);
 
+    //! Removes a constellation from the sky culture by its ID
+    void removeConstellation(QString id);
+
     //! Sets the common names of the stars, planets and nonstellar objects
     void setCommonNames(QVector<ScmCommonName> commonNames);
 
+    //! Adds a common name to the sky culture
     void addCommonName(ScmCommonName commonName);
+
+    //! Removes a common name from the sky culture by its ID
+    void removeCommonName(QString id);
 
     //! Returns the identifier of the sky culture
     QString getId() const;
