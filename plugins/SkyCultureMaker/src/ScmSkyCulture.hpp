@@ -22,7 +22,7 @@
 
 namespace scm
 {
-class ScmSkyCulture;
+    class ScmSkyCulture;
 }
 
 class scm::ScmSkyCulture
@@ -96,8 +96,8 @@ private:
 	QString id;
 
 	/*! The name of region following the United Nations geoscheme UN~M49
-	 https://unstats.un.org/unsd/methodology/m49/ For skycultures of worldwide applicability (mostly those
-	 adhering to IAU constellation borders), use "World".
+	*   https://unstats.un.org/unsd/methodology/m49/ For skycultures of worldwide applicability (mostly those
+	*   adhering to IAU constellation borders), use "World".
     */
 	QString region;
 
@@ -124,12 +124,12 @@ private:
 	// std::optional<QString> edgeSource;
 
 	/*! Describes the coordinate epoch. Allowed values:
-    "J2000" (default)
-    "B1875" used for the edge list defining the IAU borders.
-    "Byyyy.y" (a number with B prepended) Arbitrary epoch as Besselian year.
-    "Jyyyy.y" (a number with J prepended) Arbitrary epoch as Julian year.
-    "JDddddddd.ddd" (a number with JD prepended) Arbitrary epoch as Julian Day number.
-    "ddddddd.ddd"
+    *   "J2000" (default)
+    *   "B1875" used for the edge list defining the IAU borders.
+    *   "Byyyy.y" (a number with B prepended) Arbitrary epoch as Besselian year.
+    *   "Jyyyy.y" (a number with J prepended) Arbitrary epoch as Julian year.
+    *   "JDddddddd.ddd" (a number with JD prepended) Arbitrary epoch as Julian Day number.
+    *   "ddddddd.ddd"
     */
 	// std::optional<QString> edgeEpoch;
 

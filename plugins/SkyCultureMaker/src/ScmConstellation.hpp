@@ -14,7 +14,7 @@
 
 namespace scm
 {
-class ScmConstellation;
+    class ScmConstellation;
 }
 
 class scm::ScmConstellation

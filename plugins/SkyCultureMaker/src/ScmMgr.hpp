@@ -24,7 +24,7 @@
 
 namespace scm
 {
-class ScmMgr;
+    class ScmMgr;
 }
 
 class scm::ScmMgr

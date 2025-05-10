@@ -54,10 +54,11 @@ public:
 	QJsonObject toJson() const;
 
 private:
-	//! Identifier of the common name
-	//! Example:
-	//!     Star: "HIP <code>"
-	//!     Planet: "NAME <name>"
+	/*! Identifier of the common name
+	 * 	Example:
+	 *    Star  : "HIP  <code>"
+	 *    Planet: "NAME <name>"
+	 */
 	QString id;
 
 	//! The english name
