@@ -8,6 +8,10 @@ class Ui_startDialog;
 
 class StartDialog : public StelDialog
 {
+
+protected:
+	void createDialogContent() override;
+
 public:
 	StartDialog();
 	~StartDialog() override;

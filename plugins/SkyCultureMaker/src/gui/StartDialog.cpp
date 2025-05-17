@@ -19,3 +19,8 @@ void StartDialog::retranslate()
 		ui->retranslateUi(dialog);
 	}
 }
+
+void StartDialog::createDialogContent()
+{
+	ui->setupUi(dialog);
+}

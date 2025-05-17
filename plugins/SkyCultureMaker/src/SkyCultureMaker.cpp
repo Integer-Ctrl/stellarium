@@ -53,6 +53,7 @@ SkyCultureMaker::SkyCultureMaker()
 	font.setPixelSize(25);
 
 	startDialog = new StartDialog();
+	startDialog->setVisible(true);
 }
 
 /*************************************************************************
