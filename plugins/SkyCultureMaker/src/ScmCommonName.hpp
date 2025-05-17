@@ -32,6 +32,9 @@ public:
 	//! Sets the native name in European glyphs or Pinyin for Chinese.
 	void setPronounce(QString name);
 
+	//! Sets the native name in IPA (International Phonetic Alphabet)
+	void setIpa(QString name);
+
 	//! Sets the references to the sources of the name spellings
 	void setReferences(QVector<int> refs);
 
@@ -46,6 +49,9 @@ public:
 
 	//! Returns the native name in European glyphs or Pinyin for Chinese.
 	std::optional<QString> getPronounce() const;
+
+	//! Returns the native name in IPA (International Phonetic Alphabet)
+	std::optional<QString> getIpa() const;
 
 	//! Returns the references to the sources of the name spellings
 	std::optional<QVector<int>> getReferences() const;
@@ -69,6 +75,9 @@ private:
 
 	//! Native name in European glyphs, if needed. For Chinese, expect Pinyin here.
 	std::optional<QString> pronounce;
+
+	//! The native name in IPA (International Phonetic Alphabet)
+	std::optional<QString> ipa;
 
 	//! References to the sources of the name spellings
 	std::optional<QVector<int>> references;
