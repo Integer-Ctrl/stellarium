@@ -7,6 +7,7 @@
 #include "SkyCultureMaker.hpp"
 #include "StelGui.hpp"
 #include "StelGuiItems.hpp"
+#include "StartDialog.hpp"
 
 #include <QApplication>
 #include <QDebug>
@@ -50,6 +51,8 @@ SkyCultureMaker::SkyCultureMaker()
 
 	setObjectName("SkyCultureMaker");
 	font.setPixelSize(25);
+
+	startDialog = new StartDialog();
 }
 
 /*************************************************************************
@@ -57,6 +60,7 @@ SkyCultureMaker::SkyCultureMaker()
 *************************************************************************/
 SkyCultureMaker::~SkyCultureMaker()
 {
+	delete startDialog;
 }
 
 /*************************************************************************
