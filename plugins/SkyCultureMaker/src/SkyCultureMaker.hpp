@@ -11,7 +11,7 @@
 
 class QPixmap;
 class StelButton;
-class StartDialog;
+class ScmStartDialog;
 
 //! This is an example of a plug-in which can be dynamically loaded into stellarium
 class SkyCultureMaker : public StelModule
@@ -83,7 +83,7 @@ private:
 	/// @param core The core used for drawing the line.
 	void drawLine(StelCore *core);
 
-	StartDialog* startDialog;
+	ScmStartDialog* scmStartDialog;
 };
 
 #include <QObject>

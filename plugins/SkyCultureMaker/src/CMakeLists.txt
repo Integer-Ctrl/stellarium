@@ -10,12 +10,12 @@ LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src)
 SET(SkyCultureMaker_SRCS
      SkyCultureMaker.hpp
      SkyCultureMaker.cpp
-     gui/StartDialog.hpp
-     gui/StartDialog.cpp
+     gui/ScmStartDialog.hpp
+     gui/ScmStartDialog.cpp
 )
 
 SET(StartDialog_UIS
-     gui/startDialog.ui
+     gui/scmStartDialog.ui
 )     
 
 ################# compiles resources files ############

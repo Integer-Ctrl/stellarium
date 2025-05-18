@@ -7,7 +7,7 @@
 #include "SkyCultureMaker.hpp"
 #include "StelGui.hpp"
 #include "StelGuiItems.hpp"
-#include "StartDialog.hpp"
+#include "ScmStartDialog.hpp"
 
 #include <QApplication>
 #include <QDebug>
@@ -52,8 +52,8 @@ SkyCultureMaker::SkyCultureMaker()
 	setObjectName("SkyCultureMaker");
 	font.setPixelSize(25);
 
-	startDialog = new StartDialog();
-	startDialog->setVisible(true);
+	scmStartDialog = new ScmStartDialog();
+	scmStartDialog->setVisible(true);
 }
 
 /*************************************************************************
@@ -61,7 +61,7 @@ SkyCultureMaker::SkyCultureMaker()
 *************************************************************************/
 SkyCultureMaker::~SkyCultureMaker()
 {
-	delete startDialog;
+	delete scmStartDialog;
 }
 
 /*************************************************************************
