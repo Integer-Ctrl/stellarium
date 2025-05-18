@@ -32,6 +32,15 @@ void ScmEditorDialog::createDialogContent()
 	connect(ui->enNameTE, &QTextEdit::textChanged, this, [this]() 
 	{
 		constellationEnglishName = ui->enNameTE->toPlainText();
+		if(constellationEnglishName.isEmpty())
+		{
+			ui->saveLabelsBtn->setEnabled(false);
+		}
+		else
+		{
+			ui->saveLabelsBtn->setEnabled(true);
+		}
+		updateLabelsSavedLabel(false);
 	});
 	connect(ui->natNameTE, &QTextEdit::textChanged, this, [this]() 
 	{
@@ -40,6 +49,7 @@ void ScmEditorDialog::createDialogContent()
 		{
 			constellationNativeName = std::nullopt;
 		}
+		updateLabelsSavedLabel(false);
 	});
 	connect(ui->pronounceTE, &QTextEdit::textChanged, this, [this]() 
 	{
@@ -48,6 +58,7 @@ void ScmEditorDialog::createDialogContent()
 		{
 			constellationPronounce = std::nullopt;
 		}
+		updateLabelsSavedLabel(false);
 	});
 	connect(ui->ipaTE, &QTextEdit::textChanged, this, [this]() 
 	{
@@ -56,8 +67,11 @@ void ScmEditorDialog::createDialogContent()
 		{
 			constellationIpa = std::nullopt;
 		}
+		updateLabelsSavedLabel(false);
 	});
+	ui->saveLabelsBtn->setEnabled(false);
 	connect(ui->saveLabelsBtn, &QPushButton::clicked, this, &ScmEditorDialog::saveLabels);
+	updateLabelsSavedLabel(false);
 }
 
 void ScmEditorDialog::saveLabels()
@@ -67,4 +81,18 @@ void ScmEditorDialog::saveLabels()
 	if(constellationNativeName) qDebug() << "	Native Name:" << constellationNativeName.value_or("N/A");
 	if(constellationPronounce) qDebug() << "	Pronounce:" << constellationPronounce.value_or("N/A");
 	if(constellationIpa) qDebug() << "	IPA:" << constellationIpa.value_or("N/A");
+
+	updateLabelsSavedLabel(true);
+}
+
+void ScmEditorDialog::updateLabelsSavedLabel(bool saved)
+{
+	if (saved)
+	{
+		ui->labelsSavedLbl->setText("Saved labels.");
+	}
+	else
+	{
+		ui->labelsSavedLbl->setText("");
+	}
 }

@@ -31,6 +31,8 @@ private:
 	std::optional<QString> constellationNativeName;
 	std::optional<QString> constellationPronounce;
 	std::optional<QString> constellationIpa;
+
+	void updateLabelsSavedLabel(bool saved);
 };
 
 #endif	// SCM_EDITOR_DIALOG_HPP
