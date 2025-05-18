@@ -5,7 +5,6 @@
 #include <QString>
 #include <optional>
 #include "StelDialog.hpp"
-#include "ScmCommonName.hpp"
 
 class Ui_scmEditorDialog;
 
