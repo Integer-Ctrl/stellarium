@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>scmEditorDialog</class>
+ <widget class="QWidget" name="scmEditorDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>349</width>
+    <height>520</height>
+   </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="TitleBar" name="titleBar">
+     <property name="title" stdset="0">
+      <string>Sky Culture Maker</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="Content">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QTabWidget" name="tabs">
+        <property name="currentIndex">
+         <number>2</number>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <widget class="QWidget" name="Draw">
+         <attribute name="icon">
+          <iconset resource="../../resources/SkyCultureMaker.qrc">
+           <normaloff>:/SkyCultureMaker/bt_LineDraw_Off.png</normaloff>
+           <normalon>:/SkyCultureMaker/bt_LineDraw_On.png</normalon>:/SkyCultureMaker/bt_LineDraw_Off.png</iconset>
+         </attribute>
+         <attribute name="title">
+          <string/>
+         </attribute>
+        </widget>
+        <widget class="QWidget" name="Label">
+         <attribute name="title">
+          <string>Labels</string>
+         </attribute>
+        </widget>
+        <widget class="QWidget" name="Artwork">
+         <attribute name="title">
+          <string>Artwork</string>
+         </attribute>
+        </widget>
+        <widget class="QWidget" name="Boundaries">
+         <attribute name="title">
+          <string>Boundaries</string>
+         </attribute>
+        </widget>
+        <widget class="QWidget" name="License">
+         <attribute name="title">
+          <string>License</string>
+         </attribute>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TitleBar</class>
+   <extends>QFrame</extends>
+   <header location="global">Dialog.hpp</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../resources/SkyCultureMaker.qrc"/>
+ </resources>
+ <connections/>
+</ui>
