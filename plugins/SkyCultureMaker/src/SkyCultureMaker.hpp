@@ -5,6 +5,7 @@
 #include "VecMath.hpp"
 #include "StelTranslator.hpp"
 #include "StelCore.hpp"
+#include "ScmDraw.hpp"
 
 #include <QFont>
 
@@ -31,11 +32,16 @@ public:
 
 	//! Handle mouse clicks. Please note that most of the interactions will be done through the GUI module.
 	//! @return set the event as accepted if it was intercepted
-	void handleMouseClicks(class QMouseEvent *) override;
+	void handleMouseClicks(QMouseEvent *) override;
 
 	//! Handle mouse moves. Please note that most of the interactions will be done through the GUI module.
 	//! @return true if the event was intercepted
-	bool handleMouseMoves(int x, int y, Qt::MouseButtons b);
+	bool handleMouseMoves(int x, int y, Qt::MouseButtons b) override;
+
+	//! Handle key events. Please note that most of the interactions will be done through the GUI module.
+	//! @param e the Key event
+	//! @return set the event as accepted if it was intercepted
+	void handleKeys(QKeyEvent* e) override;
 
 signals:
 	void eventIsLineDrawEnabled(bool b);
@@ -51,13 +57,6 @@ public slots:
 private:
 	const QString groupId = N_("Sky Culture Maker");
 	const QString actionIdLine = "actionShow_SkyCultureMaker_Line";
-	enum Drawing
-	{
-		None = 0,
-		hasStart = 1,
-		hasFloatingEnd = 2,
-		hasEnd = 4,
-	};
 
 	/// Indicates that line drawing can be done (QT Signal)
 	bool isLineDrawEnabled;
@@ -68,18 +67,8 @@ private:
 	/// Font used for displaying our text
 	QFont font;
 
-	/// The start point of the line.
-	Vec3d startPoint;
+	scm::ScmDraw *drawObj;
 
-	/// The end point of the line.
-	Vec3d endPoint;
-
-	/// Indicates that the startPoint has been set.
-	Drawing drawState;
-
-	/// Draws the line between the start and the current end point.
-	/// @param core The core used for drawing the line.
-	void drawLine(StelCore *core);
 };
 
 #include <QObject>

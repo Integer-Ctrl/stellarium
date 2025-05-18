@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QPixmap>
+#include "ScmDraw.hpp"
 
 /*************************************************************************
  This method is the one called automatically by the StelModuleMgr just
@@ -43,11 +44,7 @@ StelPluginInfo SkyCultureMakerStelPluginInterface::getPluginInfo() const
 *************************************************************************/
 SkyCultureMaker::SkyCultureMaker()
 	: isLineDrawEnabled(false)
-	, drawState(None)
 {
-	startPoint.set(0, 0, 0);
-	endPoint.set(0, 0, 0);
-
 	setObjectName("SkyCultureMaker");
 	font.setPixelSize(25);
 }
@@ -57,6 +54,7 @@ SkyCultureMaker::SkyCultureMaker()
 *************************************************************************/
 SkyCultureMaker::~SkyCultureMaker()
 {
+	delete drawObj;
 }
 
 /*************************************************************************
@@ -79,6 +77,7 @@ void SkyCultureMaker::init()
 	qDebug() << "init called for SkyCultureMaker";
 
 	StelApp &app = StelApp::getInstance();
+	drawObj = new scm::ScmDraw();
 
 	addAction(actionIdLine, groupId, N_("Sky Culture Maker Line"), "enabledDrawLine");
 
@@ -117,76 +116,51 @@ void SkyCultureMaker::draw(StelCore *core)
 {
 	if (isLineDrawEnabled)
 	{
-		drawLine(core);
+		drawObj->drawLine(core);
 	}
 }
 
-bool SkyCultureMaker::handleMouseMoves(int x, int y, Qt::MouseButtons)
+bool SkyCultureMaker::handleMouseMoves(int x, int y, Qt::MouseButtons b)
 {
-	if (drawState & (hasStart | hasFloatingEnd))
+	if (isLineDrawEnabled)
 	{
-		const StelProjectorP prj = StelApp::getInstance().getCore()->getProjection(StelCore::FrameAltAz);
-		prj->unProject(x, y, endPoint);
-		drawState = hasFloatingEnd;
-		return true;
+		if(drawObj->handleMouseMoves(x, y, b))
+		{
+			return true;
+		}
 	}
-
+	
 	return false;
 }
 
-void SkyCultureMaker::drawLine(StelCore *core)
+void SkyCultureMaker::handleMouseClicks(QMouseEvent *event)
 {
-	if (!(drawState & (hasEnd | hasFloatingEnd)))
+	if (isLineDrawEnabled)
 	{
-		return;
-	}
-
-	StelPainter painter(core->getProjection(StelCore::FrameAltAz));
-	painter.setBlending(true);
-	painter.setLineSmooth(true);
-	Vec3f color = {1.f, 0.5f, 0.5f};
-	bool alpha = (drawState == hasEnd ? 1.0f : 0.5f);
-	painter.setColor(color, alpha);
-	painter.drawGreatCircleArc(startPoint, endPoint);
-}
-
-void SkyCultureMaker::handleMouseClicks(class QMouseEvent *event)
-{
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-	qreal x = event->position().x(), y = event->position().y();
-#else
-	qreal x = event->x(), y = event->y();
-#endif
-
-	if (event->type() == QEvent::MouseButtonPress && event->button() == Qt::RightButton)
-	{
-		const StelProjectorP prj = StelApp::getInstance().getCore()->getProjection(StelCore::FrameAltAz);
-		Vec3d point;
-		prj->unProject(x, y, point);
-
-		if (drawState & (hasStart | hasFloatingEnd))
+		drawObj->handleMouseClicks(event);
+		if (event->isAccepted())
 		{
-			endPoint = point;
-			drawState = hasEnd;
+			return;
 		}
-		else
-		{
-			startPoint = point;
-			drawState = hasStart;
-		}
-
-		event->setAccepted(true);
-		return;
 	}
-	else if (event->type() == QEvent::MouseButtonDblClick && event->button() == Qt::RightButton)
-	{
-		// Reset line drawing
-		drawState = None;
-		event->setAccepted(true);
-		return;
-	}
+	
 
+	// Continue any other events to be handled...
+	
 	event->setAccepted(false);
+}
+void SkyCultureMaker::handleKeys(QKeyEvent* e)
+{
+	if (isLineDrawEnabled)
+	{
+		drawObj->handleKeys(e);
+		if (e->isAccepted())
+		{
+			return;
+		}
+	}
+
+	e->setAccepted(false);
 }
 
 void SkyCultureMaker::setIsLineDrawEnabled(bool b)
