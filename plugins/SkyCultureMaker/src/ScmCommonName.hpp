@@ -23,7 +23,7 @@ class ScmCommonName;
 class scm::ScmCommonName
 {
 public:
-	ScmCommonName(QString id, QString englishName);
+	ScmCommonName();
 	~ScmCommonName();
 
 	//! Sets the native name
@@ -37,9 +37,6 @@ public:
 
 	//! Sets the references to the sources of the name spellings
 	void setReferences(QVector<int> refs);
-
-	//! Returns the identifier of the common name
-	QString getId() const;
 
 	//! Returns the english name
 	QString getEnglishName() const;
@@ -65,6 +62,7 @@ private:
 	 *    Star  : "HIP  <code>"
 	 *    Planet: "NAME <name>"
 	 */
+	// TODO: check if necessary
 	QString id;
 
 	//! The english name
