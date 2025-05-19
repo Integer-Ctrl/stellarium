@@ -8,7 +8,7 @@
 
 scm::ScmDraw::ScmDraw()
 	: drawState(Drawing::None)
-	, snapToStar(false)
+	, snapToStar(true)
 {
 	currentLine.start.position.set(0, 0, 0);
 	currentLine.end.position.set(0, 0, 0);
@@ -52,7 +52,7 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 #endif
 
 	// Draw line
-	if (event->type() == QEvent::MouseButtonPress && event->button() == Qt::RightButton)
+	if (event->button() == Qt::RightButton && event->type() == QEvent::MouseButtonPress)
 	{
 		StelApp &app = StelApp::getInstance();
 		StelCore *core = app.getCore();
@@ -109,27 +109,25 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 			drawState = Drawing::hasStart;
 		}
 
-		event->setAccepted(true);
+		event->accept();
 		return;
 	}
 
 	// Reset line drawing
-	if (event->type() == QEvent::MouseButtonDblClick && event->button() == Qt::RightButton)
+	// Also works as a Undo feature.
+	if (event->button() == Qt::RightButton && event->type() == QEvent::MouseButtonDblClick)
 	{
 		drawState = Drawing::None;
 		if (!drawnLines.empty())
 		{
-			// Also works as a Undo feature.
 			drawnLines.pop_back();
 		}
-		event->setAccepted(true);
+		event->accept();
 		return;
 	}
-
-	event->setAccepted(false);
 }
 
-bool scm::ScmDraw::handleMouseMoves(int x, int y, Qt::MouseButtons)
+bool scm::ScmDraw::handleMouseMoves(int x, int y, Qt::MouseButtons b)
 {
 	StelApp &app = StelApp::getInstance();
 	StelCore *core = app.getCore();
@@ -165,9 +163,9 @@ bool scm::ScmDraw::handleMouseMoves(int x, int y, Qt::MouseButtons)
 		}
 
 		drawState = Drawing::hasFloatingEnd;
-		return true;
 	}
 
+	// We always return false as we still want to navigate in Stellarium with left mouse button
 	return false;
 }
 
@@ -175,10 +173,10 @@ void scm::ScmDraw::handleKeys(QKeyEvent *e)
 {
 	if (e->key() == Qt::Key::Key_Control)
 	{
-		snapToStar = e->type() == QEvent::KeyPress;
+		snapToStar = e->type() != QEvent::KeyPress;
 
-		e->setAccepted(true);
-		// No return to handle the space bar too.
+		e->accept();
+		return;
 	}
 }
 

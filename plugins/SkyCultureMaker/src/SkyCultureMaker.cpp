@@ -31,8 +31,10 @@ StelPluginInfo SkyCultureMakerStelPluginInterface::getPluginInfo() const
 	StelPluginInfo info;
 	info.id = "SkyCultureMaker";
 	info.displayedName = "Sky Culture Maker";
-	info.authors = "Vincent Gerlach (RivinHD), Luca-Philipp Grumbach (xLPMG), Fabian Hofer (Integer-Ctrl), Richard Hofmann (ZeyxRew), Mher Mnatsakanyan (MherMnatsakanyan03)";
-	info.contact = "Contact us using our GitHub usernames, via an Issue or the Discussion tab in the Stellarium repository.";
+	info.authors = "Vincent Gerlach (RivinHD), Luca-Philipp Grumbach (xLPMG), Fabian Hofer (Integer-Ctrl), Richard "
+		       "Hofmann (ZeyxRew), Mher Mnatsakanyan (MherMnatsakanyan03)";
+	info.contact =
+	    "Contact us using our GitHub usernames, via an Issue or the Discussion tab in the Stellarium repository.";
 	info.description = "Plugin to draw and export sky cultures in Stellarium.";
 	info.version = SKYCULTUREMAKER_PLUGIN_VERSION;
 	info.license = SKYCULTUREMAKER_PLUGIN_LICENSE;
@@ -87,7 +89,7 @@ void SkyCultureMaker::init()
 		QPixmap iconLineDisabled(":/SkyCultureMaker/bt_LineDraw_Off.png");
 		QPixmap iconLineEnabled(":/SkyCultureMaker/bt_LineDraw_On.png");
 		qDebug() << (iconLineDisabled.isNull() ? "Failed to load image: bt_LineDraw_Off.png"
-						      : "Loaded image: bt_LineDraw_Off.png");
+						       : "Loaded image: bt_LineDraw_Off.png");
 		qDebug() << (iconLineEnabled.isNull() ? "Failed to load image: bt_LineDraw_On.png"
 						      : "Loaded image: bt_LineDraw_On.png");
 
@@ -124,12 +126,12 @@ bool SkyCultureMaker::handleMouseMoves(int x, int y, Qt::MouseButtons b)
 {
 	if (isLineDrawEnabled)
 	{
-		if(drawObj->handleMouseMoves(x, y, b))
+		if (drawObj->handleMouseMoves(x, y, b))
 		{
 			return true;
 		}
 	}
-	
+
 	return false;
 }
 
@@ -143,13 +145,10 @@ void SkyCultureMaker::handleMouseClicks(QMouseEvent *event)
 			return;
 		}
 	}
-	
 
 	// Continue any other events to be handled...
-	
-	event->setAccepted(false);
 }
-void SkyCultureMaker::handleKeys(QKeyEvent* e)
+void SkyCultureMaker::handleKeys(QKeyEvent *e)
 {
 	if (isLineDrawEnabled)
 	{
@@ -159,8 +158,6 @@ void SkyCultureMaker::handleKeys(QKeyEvent* e)
 			return;
 		}
 	}
-
-	e->setAccepted(false);
 }
 
 void SkyCultureMaker::setIsLineDrawEnabled(bool b)
