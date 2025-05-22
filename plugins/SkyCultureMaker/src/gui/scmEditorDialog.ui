@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>361</width>
+    <width>609</width>
     <height>412</height>
    </rect>
   </property>
@@ -84,7 +84,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>4</number>
         </property>
         <property name="iconSize">
          <size>
@@ -236,6 +236,66 @@
          <attribute name="title">
           <string>Boundaries</string>
          </attribute>
+        </widget>
+        <widget class="QWidget" name="Import">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <attribute name="title">
+          <string>Import</string>
+         </attribute>
+         <widget class="QPushButton" name="pushButton">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>300</y>
+            <width>581</width>
+            <height>22</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Import</string>
+          </property>
+         </widget>
+         <widget class="QTreeView" name="fileSystem">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>39</y>
+            <width>581</width>
+            <height>221</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="filePathLineEdit">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>270</y>
+            <width>581</width>
+            <height>22</height>
+           </rect>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+          <property name="placeholderText">
+           <string>Select a file…</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="label">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>10</y>
+            <width>581</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Select an archive (.zip, .rar, ...) with an old format to convert to the new format</string>
+          </property>
+         </widget>
         </widget>
         <widget class="QWidget" name="License">
          <attribute name="title">
