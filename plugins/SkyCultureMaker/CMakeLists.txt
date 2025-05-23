@@ -21,11 +21,11 @@ CPMAddPackage(
 )
 
 # download https://github.com/artemvlas/qmicroz for archives
-# CPMAddPackage(
-#   NAME              qmicroz
-#   GITHUB_REPOSITORY artemvlas/qmicroz
-#   GIT_TAG           v0.4
-# )
+CPMAddPackage(
+  NAME              qmicroz
+  GITHUB_REPOSITORY artemvlas/qmicroz
+  GIT_TAG           v0.4
+)
 
 
 ADD_DEFINITIONS(-DSKYCULTUREMAKER_PLUGIN_VERSION="${SCM_VERSION}")
