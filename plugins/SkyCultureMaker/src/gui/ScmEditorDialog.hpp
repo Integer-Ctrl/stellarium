@@ -4,11 +4,11 @@
 #include <QObject>
 #include <QString>
 #include <optional>
-#include "StelDialog.hpp"
+#include "StelDialogSeparate.hpp"
 
 class Ui_scmEditorDialog;
 
-class ScmEditorDialog : public StelDialog
+class ScmEditorDialog : public StelDialogSeparate
 {
 
 protected:

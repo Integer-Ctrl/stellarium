@@ -2,7 +2,7 @@
 #include "ui_scmEditorDialog.h"
 
 ScmEditorDialog::ScmEditorDialog()
-	: StelDialog("ScmEditorDialog")
+	: StelDialogSeparate("ScmEditorDialog")
 {
 	ui = new Ui_scmEditorDialog;
 }

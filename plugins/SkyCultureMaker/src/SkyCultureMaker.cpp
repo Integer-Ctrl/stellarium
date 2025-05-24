@@ -14,7 +14,23 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QPixmap>
+#include <QKeyEvent>
 #include "ScmDraw.hpp"
+
+/**
+ * Managing the creation process of a new sky culture.
+ * 1. Navigate in stellarium (UI) to the location of interest (from where the culture should be created)
+ * 2. Starting creation process (click in UI)
+ * 3. Draw lines from start to star
+ *   a) Only stars should be selectable
+ *   b) Add functionality to draw separated/unconnected lines (e.g. cross constelation)
+ *   c) Add functionality to delete a line
+ *     I)  Deleting a inner line of a stick figure should split the figure into two stick figures
+ *     II) Connecting two stick figures should merge them into one stick figure
+ * 4. Add button to save sky culture
+ * 5. Click save button opens dialog to name: sky culture, lines, aliass, ...
+ * 6. Completing the dialog (check that all needed arguments are existing and valid) converts intern c++ object to json
+ */
 
 /*************************************************************************
  This method is the one called automatically by the StelModuleMgr just
@@ -47,16 +63,16 @@ StelPluginInfo SkyCultureMakerStelPluginInterface::getPluginInfo() const
  Constructor
 *************************************************************************/
 SkyCultureMaker::SkyCultureMaker()
-	: isLineDrawEnabled(false)
-{
+	: isScmEnabled(false), isLineDrawEnabled(false)
+{	
+	qDebug() << "SkyCulture Maker constructed";
+
 	setObjectName("SkyCultureMaker");
 	font.setPixelSize(25);
 
 	scmStartDialog = new ScmStartDialog();
-	scmStartDialog->setVisible(true);
 
 	scmEditorDialog = new ScmEditorDialog();
-	scmEditorDialog->setVisible(true);
 }
 
 /*************************************************************************
@@ -66,6 +82,7 @@ SkyCultureMaker::~SkyCultureMaker()
 {
 	delete drawObj;
 	delete scmStartDialog;
+	delete scmEditorDialog;
 }
 
 /*************************************************************************
@@ -90,24 +107,24 @@ void SkyCultureMaker::init()
 	StelApp &app = StelApp::getInstance();
 	drawObj = new scm::ScmDraw();
 
-	addAction(actionIdLine, groupId, N_("Sky Culture Maker Line"), "enabledDrawLine");
+	addAction(actionIdLine, groupId, N_("Sky Culture Maker"), "enabledScm");
 
-	// Add a toolbar button
+	// Add a SCM toolbar button for starting creation process
 	try
 	{
-		QPixmap iconLineDisabled(":/SkyCultureMaker/bt_LineDraw_Off.png");
-		QPixmap iconLineEnabled(":/SkyCultureMaker/bt_LineDraw_On.png");
-		qDebug() << (iconLineDisabled.isNull() ? "Failed to load image: bt_LineDraw_Off.png"
-						       : "Loaded image: bt_LineDraw_Off.png");
-		qDebug() << (iconLineEnabled.isNull() ? "Failed to load image: bt_LineDraw_On.png"
-						      : "Loaded image: bt_LineDraw_On.png");
+		QPixmap iconScmDisabled(":/SkyCultureMaker/bt_SCM_Off.png");
+		QPixmap iconScmEnabled(":/SkyCultureMaker/bt_SCM_On.png");
+		qDebug() << (iconScmDisabled.isNull() ? "Failed to load image: bt_SCM_Off.png"
+						       : "Loaded image: bt_SCM_Off.png");
+		qDebug() << (iconScmEnabled.isNull() ? "Failed to load image: bt_SCM_On.png"
+						      : "Loaded image: bt_SCM_On.png");
 
 		StelGui *gui = dynamic_cast<StelGui *>(app.getGui());
 		if (gui != Q_NULLPTR)
 		{
 			toolbarButton = new StelButton(Q_NULLPTR,
-						       iconLineEnabled,
-						       iconLineDisabled,
+						       iconScmEnabled,
+						       iconScmDisabled,
 						       QPixmap(":/graphicGui/miscGlow32x32.png"),
 						       actionIdLine,
 						       false);
@@ -120,9 +137,20 @@ void SkyCultureMaker::init()
 	}
 }
 
-/*************************************************************************
- Draw our module. This should print "Hello world!" in the main window
-*************************************************************************/
+/***********************
+ Manage creation process
+***********************/
+
+void SkyCultureMaker::startScmProcess()
+{
+	scmStartDialog->setVisible(true);
+}
+
+void SkyCultureMaker::stopScmProcess()
+{
+	scmStartDialog->setVisible(false);
+}
+
 void SkyCultureMaker::draw(StelCore *core)
 {
 	if (isLineDrawEnabled)
@@ -169,11 +197,37 @@ void SkyCultureMaker::handleKeys(QKeyEvent *e)
 	}
 }
 
-void SkyCultureMaker::setIsLineDrawEnabled(bool b)
+void SkyCultureMaker::setIsScmEnabled(bool b)
 {
-	if (b != isLineDrawEnabled)
+	if (b == true)
 	{
-		isLineDrawEnabled = b;
-		emit eventIsLineDrawEnabled(b);
+		startScmProcess();
+	}
+	else
+	{
+		stopScmProcess();
+	}
+
+	if (b != isScmEnabled)
+	{
+		isScmEnabled = b;
+		emit eventIsScmEnabled(b);
+	}
+}
+
+void SkyCultureMaker::pressKey(Qt::Key key)
+{
+	QKeyEvent press = QKeyEvent(QEvent::KeyPress, key, Qt::NoModifier);
+	QKeyEvent release = QKeyEvent(QEvent::KeyRelease, key, Qt::NoModifier);
+	QWidget *mainView = qobject_cast<QWidget *>(qApp->activeWindow());
+
+	if (mainView)
+	{
+		QApplication::sendEvent(mainView, &press);
+		QApplication::sendEvent(mainView, &release);
+	}
+	else
+	{
+		qDebug() << "Failed to press key" << key;
 	}
 }

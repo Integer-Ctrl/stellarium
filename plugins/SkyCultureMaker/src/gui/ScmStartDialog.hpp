@@ -19,6 +19,9 @@ public:
 public slots:
 	void retranslate() override;
 
+private slots:
+	void createNewScmTimeLocation();
+
 private:
 	Ui_scmStartDialog* ui;
 };

@@ -20,7 +20,7 @@ class SkyCultureMaker : public StelModule
 {
 	Q_OBJECT
 	Q_PROPERTY(
-	    bool enabledDrawLine READ getIsLineDrawEnabled WRITE setIsLineDrawEnabled NOTIFY eventIsLineDrawEnabled)
+	    bool enabledScm READ getIsScmEnabled WRITE setIsScmEnabled NOTIFY eventIsScmEnabled)
 public:
 	SkyCultureMaker();
 	~SkyCultureMaker() override;
@@ -46,20 +46,30 @@ public:
 	//! @return set the event as accepted if it was intercepted
 	void handleKeys(QKeyEvent* e) override;
 
+	/**
+	 * @brief Press the given key.
+	 * 
+	 * @param key The key to press.
+	 */
+	static void pressKey(Qt::Key key);
+
 signals:
-	void eventIsLineDrawEnabled(bool b);
+	void eventIsScmEnabled(bool b);
 
 public slots:
-	bool getIsLineDrawEnabled() const
+	bool getIsScmEnabled() const
 	{
-		return isLineDrawEnabled;
+		return isScmEnabled;
 	}
 
-	void setIsLineDrawEnabled(bool b);
+	void setIsScmEnabled(bool b);
 
 private:
 	const QString groupId = N_("Sky Culture Maker");
 	const QString actionIdLine = "actionShow_SkyCultureMaker_Line";
+
+	/// Indicates that SCM creation process is enabled (QT Signal)
+	bool isScmEnabled;
 
 	/// Indicates that line drawing can be done (QT Signal)
 	bool isLineDrawEnabled;
@@ -76,7 +86,16 @@ private:
 	/// @param core The core used for drawing the line.
 	void drawLine(StelCore *core);
 
+	/// Dialog for starting/editing/cancel creation process
 	ScmStartDialog* scmStartDialog;
+
+	/// Toogle SCM creation process on
+	void startScmProcess();
+
+	/// Toogle SCM creation process off
+	void stopScmProcess();
+
+	/// Dialog for creating/editing a sky culture
 	ScmEditorDialog* scmEditorDialog;
 };
 

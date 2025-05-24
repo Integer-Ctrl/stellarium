@@ -16,7 +16,6 @@ SET( SkyCultureMaker_SRCS
      ScmAsterism.hpp
      ScmCommonName.hpp
      ScmConstellation.hpp
-     ScmMgr.hpp
      ScmSkyCulture.hpp
 
      gui/ScmStartDialog.hpp
