@@ -22,21 +22,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    # Install latest CMake and Ninja.
-    - uses: lukka/get-cmake@latest
-
-    - name: Set up vcpkg
-      uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-        vcpkgGitCommitId: 'ce613c41372b23b1f51333815feb3edd87ef8a8b' # https://github.com/microsoft/vcpkg/releases/tag/2025.04.09
-        runVcpkgInstall: false
-        useShell: true
-    
-    - name: Install vcpkg
-      run: |
-        vcpkg install zlib:x64-windows
-
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
@@ -75,7 +60,7 @@ jobs:
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: |
-        cmake -B build -S . -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=stellarium-bin
+        cmake -B build -S . -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DCMAKE_INSTALL_PREFIX=stellarium-bin
 
     - name: Build
       # Build your program with the given configuration
@@ -85,11 +70,13 @@ jobs:
     
     # We use the first find as it should only be one
     - name: Install Stellarium for Bundeling
-      shell: cmd  
       run: |
-        for /f "delims=" %I in ('where /r installers stellarium-*-qt6-win64.exe') do set "INSTALLER=%I" & goto :found
-        :found
-        "%INSTALLER%" /silent /dir=stellarium-installation /CURRENTUSER /NOICONS
+        $installer = Get-ChildItem -Path installers -Recurse -Filter 'stellarium-*-qt6-win64.exe' | Select-Object -First 1
+        if ($installer) {
+          & $installer.FullName /silent /dir=stellarium-installation /CURRENTUSER /NOICONS
+        } else {
+          Write-Error "Installer not found."
+        }
 
 
     - name: Deploy Artifact
