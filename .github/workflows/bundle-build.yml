@@ -78,7 +78,8 @@ jobs:
 
           $quickInstallScript = "stellarium-installer\quickInstall.bat"
           $installerRelativePath = ".\" + $installer.Name
-          $quickInstallContent = "`"$installerRelativePath`" /silent /dir=stellarium /CURRENTUSER /NOICONS /LOG=`"installation.log`""
+          $quickInstallContent = "`"$installerRelativePath`" /silent /dir=stellarium /CURRENTUSER /NOICONS /LOG=`"installation.log`" /MERGETASKS=`"!desktopicon`""
+          $quickInstallContent += "`r`nmklink stellarium.exe stellarium\stellarium.exe"
           Set-Content -Path $quickInstallScript -Value $quickInstallContent
         } else {
           Write-Error "Installer not found."
