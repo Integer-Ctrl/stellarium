@@ -85,6 +85,7 @@ jobs:
     
     # We use the first find as it should only be one
     - name: Install Stellarium for Bundeling
+      shell: cmd  
       run: |
         for /f "delims=" %I in ('where /r installers stellarium-*-qt6-win64.exe') do set "INSTALLER=%I" & goto :found
         :found
