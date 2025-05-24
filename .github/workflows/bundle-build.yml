@@ -73,9 +73,11 @@ jobs:
       run: |
         $installer = Get-ChildItem -Path installers -Recurse -Filter 'stellarium-*-qt6-win64.exe' | Select-Object -First 1
         if ($installer) {
-          & $installer.FullName /silent /dir=stellarium-installation /CURRENTUSER /NOICONS
+          & $installer.FullName /silent /dir=stellarium-installation /CURRENTUSER /NOICONS /LOG="installation.log" /MERGETASKS="!checkexisting"
           New-Item -ItemType Directory -Path stellarium-installer -Force | Out-Null
           Copy-Item $installer.FullName stellarium-installer\
+          Write-Host "===== installation.log ====="
+          Get-Content installation.log
         } else {
           Write-Error "Installer not found."
         }
