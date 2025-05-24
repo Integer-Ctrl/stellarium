@@ -10,6 +10,7 @@
 #include "gui/ScmStartDialog.hpp"
 #include "gui/ScmSkyCultureDialog.hpp"
 #include "gui/ScmConstellationDialog.hpp"
+#include "StelActionMgr.hpp"
 
 #include <QApplication>
 #include <QDebug>
@@ -64,8 +65,9 @@ StelPluginInfo SkyCultureMakerStelPluginInterface::getPluginInfo() const
  Constructor
 *************************************************************************/
 SkyCultureMaker::SkyCultureMaker()
-	: isScmEnabled(false), isLineDrawEnabled(false)
-{	
+	: isScmEnabled(false)
+	, isLineDrawEnabled(false)
+{
 	qDebug() << "SkyCulture Maker constructed";
 
 	setObjectName("SkyCultureMaker");
@@ -74,7 +76,6 @@ SkyCultureMaker::SkyCultureMaker()
 	scmStartDialog = new ScmStartDialog(this);
 	scmSkyCultureDialog = new ScmSkyCultureDialog(this);
 	scmConstellationDialog = new ScmConstellationDialog(this);
-
 }
 
 /*************************************************************************
@@ -86,6 +87,20 @@ SkyCultureMaker::~SkyCultureMaker()
 	delete scmStartDialog;
 	delete scmSkyCultureDialog;
 	delete scmConstellationDialog;
+}
+
+void SkyCultureMaker::setActionToggle(const QString &id, bool toggle)
+{
+	StelActionMgr *actionMgr = StelApp::getInstance().getStelActionManager();
+	auto action = actionMgr->findAction(id);
+	if (action)
+	{
+		action->setChecked(toggle);
+	}
+	else
+	{
+		qDebug() << "Sky Culture Maker: Could not find action: " << id;
+	}
 }
 
 /*************************************************************************
@@ -118,9 +133,9 @@ void SkyCultureMaker::init()
 		QPixmap iconScmDisabled(":/SkyCultureMaker/bt_SCM_Off.png");
 		QPixmap iconScmEnabled(":/SkyCultureMaker/bt_SCM_On.png");
 		qDebug() << (iconScmDisabled.isNull() ? "Failed to load image: bt_SCM_Off.png"
-						       : "Loaded image: bt_SCM_Off.png");
+						      : "Loaded image: bt_SCM_Off.png");
 		qDebug() << (iconScmEnabled.isNull() ? "Failed to load image: bt_SCM_On.png"
-						      : "Loaded image: bt_SCM_On.png");
+						     : "Loaded image: bt_SCM_On.png");
 
 		StelGui *gui = dynamic_cast<StelGui *>(app.getGui());
 		if (gui != Q_NULLPTR)
@@ -146,16 +161,38 @@ void SkyCultureMaker::init()
 
 void SkyCultureMaker::startScmProcess()
 {
+	if (true != isScmEnabled)
+	{
+		isScmEnabled = true;
+		emit eventIsScmEnabled(true);
+	}
+
 	scmStartDialog->setVisible(true);
 }
 
 void SkyCultureMaker::stopScmProcess()
 {
+	if (false != isScmEnabled)
+	{
+		isScmEnabled = false;
+		emit eventIsScmEnabled(false);
+	}
+
 	// TODO: close or delete all dialogs related to the creation process
-	scmStartDialog->setVisible(false);
-	scmSkyCultureDialog->setVisible(false);
-	scmConstellationDialog->setVisible(false);
-	isScmEnabled = false;
+	if (scmStartDialog->visible())
+	{
+		scmStartDialog->setVisible(false);
+	}
+
+	if (scmSkyCultureDialog->visible())
+	{
+		scmSkyCultureDialog->setVisible(false);
+	}
+
+	if (scmConstellationDialog->visible())
+	{
+		scmConstellationDialog->setVisible(false);
+	}
 }
 
 void SkyCultureMaker::draw(StelCore *core)
@@ -214,29 +251,6 @@ void SkyCultureMaker::setIsScmEnabled(bool b)
 	{
 		stopScmProcess();
 	}
-
-	if (b != isScmEnabled)
-	{
-		isScmEnabled = b;
-		emit eventIsScmEnabled(b);
-	}
-}
-
-void SkyCultureMaker::pressKey(Qt::Key key)
-{
-	QKeyEvent press = QKeyEvent(QEvent::KeyPress, key, Qt::NoModifier);
-	QKeyEvent release = QKeyEvent(QEvent::KeyRelease, key, Qt::NoModifier);
-	QWidget *mainView = qobject_cast<QWidget *>(qApp->activeWindow());
-
-	if (mainView)
-	{
-		QApplication::sendEvent(mainView, &press);
-		QApplication::sendEvent(mainView, &release);
-	}
-	else
-	{
-		qDebug() << "Failed to press key" << key;
-	}
 }
 
 void SkyCultureMaker::setSkyCultureDialogVisibility(bool b)
@@ -247,4 +261,17 @@ void SkyCultureMaker::setSkyCultureDialogVisibility(bool b)
 void SkyCultureMaker::setConstellationDialogVisibility(bool b)
 {
 	scmConstellationDialog->setVisible(b);
+}
+
+void SkyCultureMaker::setIsLineDrawEnabled(bool b)
+{
+	isLineDrawEnabled = b;
+}
+
+void SkyCultureMaker::triggerDrawUndo()
+{
+	if (isLineDrawEnabled)
+	{
+		drawObj->undoLastLine();
+	}
 }

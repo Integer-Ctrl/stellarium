@@ -1,8 +1,9 @@
 #include "ScmStartDialog.hpp"
 #include "ui_scmStartDialog.h"
 
-ScmStartDialog::ScmStartDialog(SkyCultureMaker* maker)
-	: StelDialog("ScmStartDialog"), maker(maker)
+ScmStartDialog::ScmStartDialog(SkyCultureMaker *maker)
+	: StelDialog("ScmStartDialog")
+	, maker(maker)
 {
 	ui = new Ui_scmStartDialog;
 }
@@ -32,22 +33,32 @@ void ScmStartDialog::createDialogContent()
 	connect(ui->titleBar, SIGNAL(movedTo(QPoint)), this, SLOT(handleMovedTo(QPoint)));
 
 	// Buttons
-	connect(ui->scmStartCancelpushButton, &QPushButton::clicked, this, &ScmStartDialog::closeDialog); // Cancel
-	connect(ui->scmStartCreatepushButton, &QPushButton::clicked, this, &ScmStartDialog::startScmCreationProcess); // Create
-	connect(ui->scmStartEditpushButton, &QPushButton::clicked, this, &ScmStartDialog::closeDialog); // Edit - TODO: add logic (currently closing the window)
+	connect(ui->scmStartCancelpushButton, &QPushButton::clicked, this, &ScmStartDialog::closeDialog);  // Cancel
+	connect(ui->scmStartCreatepushButton,
+		&QPushButton::clicked,
+		this,
+		&ScmStartDialog::startScmCreationProcess);  // Create
+	connect(ui->scmStartEditpushButton,
+		&QPushButton::clicked,
+		this,
+		&ScmStartDialog::closeDialog);	// Edit - TODO: add logic (currently closing the window)
 }
 
 void ScmStartDialog::startScmCreationProcess()
 {
-	dialog->setVisible(false); // Close the dialog before starting the editor
-	maker->setSkyCultureDialogVisibility(true); // Start the editor dialog for creating a new Sky Culture
+	dialog->setVisible(false);  // Close the dialog before starting the editor
+	maker->setSkyCultureDialogVisibility(true);  // Start the editor dialog for creating a new Sky Culture
 
-	SkyCultureMaker::pressKey(Qt::Key_F5); // Simulate pressing F5 to trigger Datetime window
-	SkyCultureMaker::pressKey(Qt::Key_F6); // Simulate pressing F6 to trigger Location window
+	SkyCultureMaker::setActionToggle("actionShow_DateTime_Window_Global", true);
+	SkyCultureMaker::setActionToggle("actionShow_Location_Window_Global", true);
+	SkyCultureMaker::setActionToggle("actionShow_Ground", false);
+	SkyCultureMaker::setActionToggle("actionShow_Atmosphere", false);
+	SkyCultureMaker::setActionToggle("actionShow_MeteorShowers", false);
+	SkyCultureMaker::setActionToggle("actionShow_Satellite_Hints", false);
 }
 
 void ScmStartDialog::closeDialog()
 {
 	StelDialog::close();
-	maker->setIsScmEnabled(false); // Disable the Sky Culture Maker 
+	maker->setIsScmEnabled(false);	// Disable the Sky Culture Maker
 }

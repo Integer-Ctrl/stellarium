@@ -12,7 +12,8 @@ class Ui_scmConstellationDialog;
 class ScmConstellationDialog : public StelDialogSeparate
 {
 public:
-	enum class Tools { 
+	enum class Tools
+	{
 		None,
 		Pen,
 		Eraser,
@@ -22,20 +23,21 @@ protected:
 	void createDialogContent() override;
 
 public:
-	ScmConstellationDialog(SkyCultureMaker* maker);
+	ScmConstellationDialog(SkyCultureMaker *maker);
 	~ScmConstellationDialog() override;
 
 public slots:
 	void retranslate() override;
 
 private slots:
-	void togglePen();
+	void togglePen(bool checked);
+	void toggleEraser(bool checked);
+	void triggerUndo();
 
 private:
 	Ui_scmConstellationDialog *ui;
-	SkyCultureMaker* maker;
-	Tools selectedTool = Tools::None;
-
+	SkyCultureMaker *maker;
+	Tools activeTool = Tools::None;
 };
 
 #endif	// SCM_CONSTELLATION_DIALOG_HPP

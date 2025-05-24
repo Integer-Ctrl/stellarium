@@ -117,11 +117,11 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 	// Also works as a Undo feature.
 	if (event->button() == Qt::RightButton && event->type() == QEvent::MouseButtonDblClick)
 	{
-		drawState = Drawing::None;
 		if (!drawnLines.empty())
 		{
 			drawnLines.pop_back();
 		}
+		drawState = Drawing::None;
 		event->accept();
 		return;
 	}
@@ -180,14 +180,23 @@ void scm::ScmDraw::handleKeys(QKeyEvent *e)
 
 	if (e->key() == Qt::Key::Key_Z && e->modifiers() == Qt::Modifier::CTRL)
 	{
-		if (!drawnLines.empty())
-		{
-			scm::ScmDraw::StarLine last = drawnLines.back();
-			drawnLines.pop_back();
-			currentLine.start = last.end;
-			drawState = Drawing::hasStart;
-		}
+		undoLastLine();
 		e->accept();
+	}
+}
+
+void scm::ScmDraw::undoLastLine()
+{
+	if (!drawnLines.empty())
+	{
+		scm::ScmDraw::StarLine last = drawnLines.back();
+		drawnLines.pop_back();
+		currentLine.start = last.start;
+		drawState = Drawing::hasFloatingEnd;
+	}
+	else
+	{
+		drawState = Drawing::None;
 	}
 }
 

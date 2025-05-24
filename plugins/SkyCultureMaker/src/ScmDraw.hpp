@@ -107,6 +107,9 @@ public:
 	 * @return std::optional<StarPoint> The found star point if available.
 	 */
 	std::optional<StarPoint> findNearestPoint(int x, int y, StelProjectorP prj);
+
+	//! Undo the last drawn line.
+	void undoLastLine();
 };
 
 }  // namespace scm

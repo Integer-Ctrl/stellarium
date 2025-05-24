@@ -20,15 +20,14 @@ class ScmStartDialog;
 class SkyCultureMaker : public StelModule
 {
 	Q_OBJECT
-	Q_PROPERTY(
-	    bool enabledScm READ getIsScmEnabled WRITE setIsScmEnabled NOTIFY eventIsScmEnabled)
+	Q_PROPERTY(bool enabledScm READ getIsScmEnabled WRITE setIsScmEnabled NOTIFY eventIsScmEnabled)
 public:
 	SkyCultureMaker();
 	~SkyCultureMaker() override;
 
-	//! @brief Press the given key.
-	//! @param key The key to press.
-	static void pressKey(Qt::Key key);
+	//! @brief Set the toggle value for a given action.
+	//! @param toggle The toggled value to be set.
+	static void setActionToggle(const QString &id, bool toggle);
 
 	///////////////////////////////////////////////////////////////////////////
 	// Methods defined in the StelModule class
@@ -49,13 +48,19 @@ public:
 	//! Handle key events. Please note that most of the interactions will be done through the GUI module.
 	//! @param e the Key event
 	//! @return set the event as accepted if it was intercepted
-	void handleKeys(QKeyEvent* e) override;
+	void handleKeys(QKeyEvent *e) override;
 
 	//! @brief Shows the sky culture dialog.
 	void setSkyCultureDialogVisibility(bool b);
 
 	//! @brief Shows the constellation dialog.
 	void setConstellationDialogVisibility(bool b);
+
+	//! @brief Toggles the usage of the line draw.
+	void setIsLineDrawEnabled(bool b);
+
+	//! @brief Triggers a single undo operation in the line draw.
+	void triggerDrawUndo();
 
 signals:
 	void eventIsScmEnabled(bool b);
@@ -97,13 +102,13 @@ private:
 	void stopScmProcess();
 
 	//! Dialog for starting/editing/cancel creation process
-	ScmStartDialog* scmStartDialog;
+	ScmStartDialog *scmStartDialog;
 
 	//! Dialog for creating/editing a sky culture
-	ScmSkyCultureDialog* scmSkyCultureDialog;
+	ScmSkyCultureDialog *scmSkyCultureDialog;
 
 	//! Dialog for creating/editing a constellation
-	ScmConstellationDialog* scmConstellationDialog;
+	ScmConstellationDialog *scmConstellationDialog;
 };
 
 #include <QObject>
