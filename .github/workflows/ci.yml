@@ -46,9 +46,7 @@ jobs:
 
     - name: Compile
       working-directory: build
-      run: |
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target buildTests
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target stellarium
+      run: make -j ${{env.parallel_processes}}
 
     - name: Run unit tests
       uses: coactions/setup-xvfb@v1
@@ -89,9 +87,7 @@ jobs:
 
     - name: Compile
       working-directory: build
-      run: |
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target buildTests
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target stellarium
+      run: make -j ${{env.parallel_processes}}
 
     - name: Run unit tests
       uses: coactions/setup-xvfb@v1
@@ -138,9 +134,7 @@ jobs:
 
     - name: Compile
       working-directory: build
-      run: |
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target buildTests
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target stellarium
+      run: make -j ${{env.parallel_processes}}
 
     - name: Run unit tests
       uses: coactions/setup-xvfb@v1
@@ -179,9 +173,7 @@ jobs:
 
     - name: Compile
       working-directory: build
-      run: |
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target buildTests
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target stellarium
+      run: make -j ${{env.parallel_processes}}
 
     - name: Run unit tests
       uses: coactions/setup-xvfb@v1
@@ -220,9 +212,7 @@ jobs:
 
     - name: Compile
       working-directory: build
-      run: |
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target buildTests
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target stellarium
+      run: make -j ${{env.parallel_processes}}
 
     - name: Run unit tests
       uses: coactions/setup-xvfb@v1
@@ -264,9 +254,7 @@ jobs:
 
     - name: Compile
       working-directory: build
-      run: |
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target buildTests
-        cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target stellarium
+      run: make -j ${{env.parallel_processes}}
 
     - name: Run unit tests
       uses: coactions/setup-xvfb@v1
@@ -302,52 +290,9 @@ jobs:
           mkdir builds
           cd builds
           cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On "${{ github.workspace }}"
-          cmake --config RelWithDebInfo -j ${{env.parallel_processes}} --target buildTests
+          make -j ${{env.parallel_processes}}
           Xvfb :0 -ac -screen 0 1024x768x24+32 >/dev/null 2>&1 &
           sleep 3
           ctest --output-on-failure
           sleep 1
           pkill Xvfb
-
-  ci-windows-qt6-mingw:
-    name: "Windows (amd64; qt6; mingw)"
-    runs-on: windows-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.actor, 'transifex')"
-
-    defaults:
-      run:
-        shell: msys2 {0}
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Requirements
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        msystem: UCRT64
-        install: >-
-          git
-          make
-        pacboy: >-
-          toolchain:p
-          cmake:p
-          ninja:p
-          zlib:p
-          qt6:p
-    
-    - name: Configure CMake
-      run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -G Ninja -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On
-
-    - name: Compile
-      run: |
-        cmake --build build --config RelWithDebInfo -j ${{env.parallel_processes}} --target buildTests
-        cmake --build build --config RelWithDebInfo -j ${{env.parallel_processes}} --target stellarium
-        
-    - name: Run unit tests
-      uses: coactions/setup-xvfb@v1
-      with:
-        working-directory: build
-        run: ctest --output-on-failure

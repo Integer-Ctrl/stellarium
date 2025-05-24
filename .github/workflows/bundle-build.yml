@@ -23,7 +23,7 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         aqtversion: '==3.1.*'
         version: '6.5.1'
@@ -74,12 +74,20 @@ jobs:
         $installer = Get-ChildItem -Path installers -Recurse -Filter 'stellarium-*-qt6-win64.exe' | Select-Object -First 1
         if ($installer) {
           & $installer.FullName /silent /dir=stellarium-installation /CURRENTUSER /NOICONS
+          New-Item -ItemType Directory -Path stellarium-installer -Force | Out-Null
+          Copy-Item $installer.FullName stellarium-installer\
         } else {
           Write-Error "Installer not found."
         }
+    
+    - name: Deploy Stellarium installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: stellarium-windows-installer
+        path: stellarium-installer
+        retention-days: 3  # Don't store to long as stellarium builds are large
 
-
-    - name: Deploy Artifact
+    - name: Deploy Stellarium zipped
       uses: actions/upload-artifact@v4
       with:
         name: stellarium-windows-${{matrix.build_type}}
