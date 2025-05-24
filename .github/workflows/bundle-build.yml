@@ -29,7 +29,7 @@ jobs:
       uses: lukka/run-vcpkg@v11
       with:
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-        vcpkgGitCommitId: 'latest'
+        vcpkgGitCommitId: 'ce613c41372b23b1f51333815feb3edd87ef8a8b' # https://github.com/microsoft/vcpkg/releases/tag/2025.04.09
         runVcpkgInstall: false
         useShell: true
     
