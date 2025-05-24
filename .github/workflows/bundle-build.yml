@@ -30,9 +30,10 @@ jobs:
       with:
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
         vcpkgGitCommitId: 'latest'
-        runVcpkgInstall: true
+        runVcpkgInstall: false
+        useShell: true
     
-    - name: Create vcpkg.json
+    - name: Install vcpkg
       run: |
         vcpkg install zlib:x64-windows
 
