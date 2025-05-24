@@ -14,6 +14,7 @@
 #include <vector>
 #include <QString>
 #include "enumBitops.hpp"
+#include <optional>
 
 namespace scm
 {
