@@ -23,8 +23,11 @@ class ScmCommonName;
 class scm::ScmCommonName
 {
 public:
-	ScmCommonName();
+	ScmCommonName(QString id);
 	~ScmCommonName();
+
+	//! Sets the english name
+	void setEnglishName(QString name);
 
 	//! Sets the native name
 	void setNativeName(QString name);
@@ -62,7 +65,6 @@ private:
 	 *    Star  : "HIP  <code>"
 	 *    Planet: "NAME <name>"
 	 */
-	// TODO: check if necessary
 	QString id;
 
 	//! The english name

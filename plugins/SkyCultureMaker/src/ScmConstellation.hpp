@@ -19,17 +19,6 @@ namespace scm
 
 class scm::ScmConstellation
 {
-public:
-
-    //! Sets the common name of the constellation
-    void setCommonName(ScmCommonName name);
-
-    //! Returns the common name of the constellation
-    ScmCommonName getCommonName() const;
-
-private:
-    //! Common name of the constellation
-    ScmCommonName commonName;
 };
 
 #endif	// SCM_CONSTELLATION_HPP
