@@ -22,9 +22,15 @@ SET( SkyCultureMaker_SRCS
      gui/ScmStartDialog.cpp
      gui/ScmEditorDialog.hpp
      gui/ScmEditorDialog.cpp
+     gui/ScmConstellationDialog.hpp
+     gui/ScmConstellationDialog.cpp
+     gui/ScmSkyCultureDialog.hpp
+     gui/ScmSkyCultureDialog.cpp
 )
 
 SET( SCM_UIS
+     gui/scmConstellationDialog.ui
+     gui/scmSkyCultureDialog.ui
      gui/scmStartDialog.ui
      gui/scmEditorDialog.ui
 )     

@@ -1,5 +1,5 @@
-#ifndef SCM_EDITOR_DIALOG_HPP
-#define SCM_EDITOR_DIALOG_HPP
+#ifndef SCM_SKY_CULTURE_DIALOG_HPP
+#define SCM_SKY_CULTURE_DIALOG_HPP
 
 #include <QObject>
 #include <QString>
@@ -7,29 +7,32 @@
 #include "StelDialogSeparate.hpp"
 #include "../SkyCultureMaker.hpp"
 
-class Ui_scmEditorDialog;
+class Ui_scmSkyCultureDialog;
 
-class ScmEditorDialog : public StelDialogSeparate
+class ScmSkyCultureDialog : public StelDialogSeparate
 {
 
 protected:
 	void createDialogContent() override;
 
 public:
-	ScmEditorDialog(SkyCultureMaker* maker);
-	~ScmEditorDialog() override;
+	ScmSkyCultureDialog(SkyCultureMaker* maker);
+	~ScmSkyCultureDialog() override;
 
 public slots:
 	void retranslate() override;
 
 private slots:
-	void saveLabels();
+	void saveSkyCulture();
+	void constellationDialog();
+	void removeConstellation();
 
 private:
-	Ui_scmEditorDialog *ui;
+	Ui_scmSkyCultureDialog *ui;
 	SkyCultureMaker* maker;
 
 	QString constellationEnglishName;
+	std::vector<QString> constellationList;
 	std::optional<QString> constellationNativeName;
 	std::optional<QString> constellationPronounce;
 	std::optional<QString> constellationIpa;
@@ -37,4 +40,4 @@ private:
 	void updateSkyCultureSave(bool saved);
 };
 
-#endif	// SCM_EDITOR_DIALOG_HPP
+#endif	// SCM_SKY_CULTURE_DIALOG_HPP

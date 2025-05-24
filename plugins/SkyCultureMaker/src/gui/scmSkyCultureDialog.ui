@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>scmEditorDialog</class>
- <widget class="QWidget" name="scmEditorDialog">
+ <class>scmSkyCultureDialog</class>
+ <widget class="QWidget" name="scmSkyCultureDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

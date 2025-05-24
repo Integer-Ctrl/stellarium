@@ -1,6 +1,6 @@
 /**
  * @file ScmDraw.hpp
- * @author vgerlach
+ * @author vgerlach, lgrumbach
  * @brief Draws between stars objects and free coordinate points.
  * @version 0.1
  * @date 2025-05-17
@@ -24,55 +24,55 @@ class ScmDraw
 public:
 	struct StarPoint
 	{
-		/// @brief The position of the point in coordinates.
+		//! @brief The position of the point in coordinates.
 		Vec3d position;
 
-		/// @brief The star id of the the point if available.
+		//! @brief The star id of the the point if available.
 		std::optional<QString> starID;
 	};
 
 	struct StarLine
 	{
-		/// @brief The start point of the line.
+		//! @brief The start point of the line.
 		StarPoint start;
 
-		/// @brief The end point of the line.
+		//! @brief The end point of the line.
 		StarPoint end;
 	};
 
-	/// @brief The possibles states during the drawing.
+	//! @brief The possibles states during the drawing.
 	enum class Drawing
 	{
-		/// @brief No line is available.
+		//! @brief No line is available.
 		None = 1,
-		/// @brief The line as a starting point.
+		//! @brief The line as a starting point.
 		hasStart = 2,
-		/// @brief The line has a not placed end that is attached to the cursor.
+		//! @brief The line has a not placed end that is attached to the cursor.
 		hasFloatingEnd = 4,
-		/// @brief The line is complete i.e. has start and end point.
+		//! @brief The line is complete i.e. has start and end point.
 		hasEnd = 8,
-		/// @brief The end is an already existing point.
+		//! @brief The end is an already existing point.
 		hasEndExistingPoint = 16,
 	};
 
 private:
-	/// @brief The search radius to attach to a point on a existing line.
+	//! @brief The search radius to attach to a point on a existing line.
 	uint32_t maxSnapRadiusInPixels = 25;
 
-	/// @brief Indicates that the startPoint has been set.
+	//! @brief Indicates that the startPoint has been set.
 	Drawing drawState;
 
-	/// @brief Indicates if a line start or end will snap to the nearest star.
+	//! @brief Indicates if a line start or end will snap to the nearest star.
 	bool snapToStar;
 
-	/// @brief The current pending point.
+	//! @brief The current pending point.
 	StarLine currentLine;
 
-	/// @brief The fixed points.
+	//! @brief The fixed points.
 	std::vector<StarLine> drawnLines;
 
 public:
-	/// @brief The frame that is used for calculation and is drawn on.
+	//! @brief The frame that is used for calculation and is drawn on.
 	const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
 
 	ScmDraw();

@@ -12,6 +12,7 @@
 #define SCM_SKYCULTURE_HPP
 
 #include <QString>
+#include <QVector>
 #include <optional>
 
 #include "StelSkyCultureMgr.hpp"

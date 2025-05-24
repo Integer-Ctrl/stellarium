@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "StelDialog.hpp"
+#include "../SkyCultureMaker.hpp"
 
 class Ui_scmStartDialog;
 
@@ -13,17 +14,19 @@ protected:
 	void createDialogContent() override;
 
 public:
-	ScmStartDialog();
+	ScmStartDialog(SkyCultureMaker* maker);
 	~ScmStartDialog() override;
 
 public slots:
 	void retranslate() override;
 
 private slots:
-	void createNewScmTimeLocation();
+	void startScmCreationProcess();
+	void closeDialog();
 
 private:
 	Ui_scmStartDialog* ui;
+	SkyCultureMaker* maker;
 };
 
 #endif // SCMSTARTDIALOG_HPP

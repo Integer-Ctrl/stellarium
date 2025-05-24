@@ -176,7 +176,18 @@ void scm::ScmDraw::handleKeys(QKeyEvent *e)
 		snapToStar = e->type() != QEvent::KeyPress;
 
 		e->accept();
-		return;
+	}
+
+	if (e->key() == Qt::Key::Key_Z && e->modifiers() == Qt::Modifier::CTRL)
+	{
+		if (!drawnLines.empty())
+		{
+			scm::ScmDraw::StarLine last = drawnLines.back();
+			drawnLines.pop_back();
+			currentLine.start = last.end;
+			drawState = Drawing::hasStart;
+		}
+		e->accept();
 	}
 }
 

@@ -12,8 +12,9 @@
 
 class QPixmap;
 class StelButton;
+class ScmSkyCultureDialog;
+class ScmConstellationDialog;
 class ScmStartDialog;
-class ScmEditorDialog;
 
 //! This is an example of a plug-in which can be dynamically loaded into stellarium
 class SkyCultureMaker : public StelModule
@@ -24,6 +25,10 @@ class SkyCultureMaker : public StelModule
 public:
 	SkyCultureMaker();
 	~SkyCultureMaker() override;
+
+	//! @brief Press the given key.
+	//! @param key The key to press.
+	static void pressKey(Qt::Key key);
 
 	///////////////////////////////////////////////////////////////////////////
 	// Methods defined in the StelModule class
@@ -46,12 +51,11 @@ public:
 	//! @return set the event as accepted if it was intercepted
 	void handleKeys(QKeyEvent* e) override;
 
-	/**
-	 * @brief Press the given key.
-	 * 
-	 * @param key The key to press.
-	 */
-	static void pressKey(Qt::Key key);
+	//! @brief Shows the sky culture dialog.
+	void setSkyCultureDialogVisibility(bool b);
+
+	//! @brief Shows the constellation dialog.
+	void setConstellationDialogVisibility(bool b);
 
 signals:
 	void eventIsScmEnabled(bool b);
@@ -68,35 +72,38 @@ private:
 	const QString groupId = N_("Sky Culture Maker");
 	const QString actionIdLine = "actionShow_SkyCultureMaker_Line";
 
-	/// Indicates that SCM creation process is enabled (QT Signal)
+	//! Indicates that SCM creation process is enabled (QT Signal)
 	bool isScmEnabled;
 
-	/// Indicates that line drawing can be done (QT Signal)
+	//! Indicates that line drawing can be done (QT Signal)
 	bool isLineDrawEnabled;
 
-	/// The button to activate line drawing.
+	//! The button to activate line drawing.
 	StelButton *toolbarButton;
 
-	/// Font used for displaying our text
+	//! Font used for displaying our text
 	QFont font;
 
 	scm::ScmDraw *drawObj;
 
-	/// Draws the line between the start and the current end point.
-	/// @param core The core used for drawing the line.
+	//! Draws the line between the start and the current end point.
+	//! @param core The core used for drawing the line.
 	void drawLine(StelCore *core);
 
-	/// Dialog for starting/editing/cancel creation process
-	ScmStartDialog* scmStartDialog;
-
-	/// Toogle SCM creation process on
+	//! Toogle SCM creation process on
 	void startScmProcess();
 
-	/// Toogle SCM creation process off
+	//! Toogle SCM creation process off
 	void stopScmProcess();
 
-	/// Dialog for creating/editing a sky culture
-	ScmEditorDialog* scmEditorDialog;
+	//! Dialog for starting/editing/cancel creation process
+	ScmStartDialog* scmStartDialog;
+
+	//! Dialog for creating/editing a sky culture
+	ScmSkyCultureDialog* scmSkyCultureDialog;
+
+	//! Dialog for creating/editing a constellation
+	ScmConstellationDialog* scmConstellationDialog;
 };
 
 #include <QObject>

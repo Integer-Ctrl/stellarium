@@ -7,8 +7,9 @@
 #include "SkyCultureMaker.hpp"
 #include "StelGui.hpp"
 #include "StelGuiItems.hpp"
-#include "ScmStartDialog.hpp"
-#include "ScmEditorDialog.hpp"
+#include "gui/ScmStartDialog.hpp"
+#include "gui/ScmSkyCultureDialog.hpp"
+#include "gui/ScmConstellationDialog.hpp"
 
 #include <QApplication>
 #include <QDebug>
@@ -70,9 +71,10 @@ SkyCultureMaker::SkyCultureMaker()
 	setObjectName("SkyCultureMaker");
 	font.setPixelSize(25);
 
-	scmStartDialog = new ScmStartDialog();
+	scmStartDialog = new ScmStartDialog(this);
+	scmSkyCultureDialog = new ScmSkyCultureDialog(this);
+	scmConstellationDialog = new ScmConstellationDialog(this);
 
-	scmEditorDialog = new ScmEditorDialog();
 }
 
 /*************************************************************************
@@ -82,7 +84,8 @@ SkyCultureMaker::~SkyCultureMaker()
 {
 	delete drawObj;
 	delete scmStartDialog;
-	delete scmEditorDialog;
+	delete scmSkyCultureDialog;
+	delete scmConstellationDialog;
 }
 
 /*************************************************************************
@@ -148,7 +151,11 @@ void SkyCultureMaker::startScmProcess()
 
 void SkyCultureMaker::stopScmProcess()
 {
+	// TODO: close or delete all dialogs related to the creation process
 	scmStartDialog->setVisible(false);
+	scmSkyCultureDialog->setVisible(false);
+	scmConstellationDialog->setVisible(false);
+	isScmEnabled = false;
 }
 
 void SkyCultureMaker::draw(StelCore *core)
@@ -230,4 +237,14 @@ void SkyCultureMaker::pressKey(Qt::Key key)
 	{
 		qDebug() << "Failed to press key" << key;
 	}
+}
+
+void SkyCultureMaker::setSkyCultureDialogVisibility(bool b)
+{
+	scmSkyCultureDialog->setVisible(b);
+}
+
+void SkyCultureMaker::setConstellationDialogVisibility(bool b)
+{
+	scmConstellationDialog->setVisible(b);
 }

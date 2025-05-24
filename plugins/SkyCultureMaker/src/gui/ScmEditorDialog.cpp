@@ -1,8 +1,8 @@
 #include "ScmEditorDialog.hpp"
 #include "ui_scmEditorDialog.h"
 
-ScmEditorDialog::ScmEditorDialog()
-	: StelDialogSeparate("ScmEditorDialog")
+ScmEditorDialog::ScmEditorDialog(SkyCultureMaker* maker)
+	: StelDialogSeparate("ScmEditorDialog"), maker(maker)
 {
 	ui = new Ui_scmEditorDialog;
 }
@@ -40,7 +40,7 @@ void ScmEditorDialog::createDialogContent()
 		{
 			ui->saveLabelsBtn->setEnabled(true);
 		}
-		updateLabelsSavedLabel(false);
+		updateSkyCultureSave(false);
 	});
 	connect(ui->natNameTE, &QTextEdit::textChanged, this, [this]() 
 	{
@@ -49,7 +49,7 @@ void ScmEditorDialog::createDialogContent()
 		{
 			constellationNativeName = std::nullopt;
 		}
-		updateLabelsSavedLabel(false);
+		updateSkyCultureSave(false);
 	});
 	connect(ui->pronounceTE, &QTextEdit::textChanged, this, [this]() 
 	{
@@ -58,7 +58,7 @@ void ScmEditorDialog::createDialogContent()
 		{
 			constellationPronounce = std::nullopt;
 		}
-		updateLabelsSavedLabel(false);
+		updateSkyCultureSave(false);
 	});
 	connect(ui->ipaTE, &QTextEdit::textChanged, this, [this]() 
 	{
@@ -67,11 +67,11 @@ void ScmEditorDialog::createDialogContent()
 		{
 			constellationIpa = std::nullopt;
 		}
-		updateLabelsSavedLabel(false);
+		updateSkyCultureSave(false);
 	});
 	ui->saveLabelsBtn->setEnabled(false);
 	connect(ui->saveLabelsBtn, &QPushButton::clicked, this, &ScmEditorDialog::saveLabels);
-	updateLabelsSavedLabel(false);
+	updateSkyCultureSave(false);
 }
 
 void ScmEditorDialog::saveLabels()
@@ -82,10 +82,10 @@ void ScmEditorDialog::saveLabels()
 	if(constellationPronounce) qDebug() << "	Pronounce:" << constellationPronounce.value_or("N/A");
 	if(constellationIpa) qDebug() << "	IPA:" << constellationIpa.value_or("N/A");
 
-	updateLabelsSavedLabel(true);
+	updateSkyCultureSave(true);
 }
 
-void ScmEditorDialog::updateLabelsSavedLabel(bool saved)
+void ScmEditorDialog::updateSkyCultureSave(bool saved)
 {
 	if (saved)
 	{
