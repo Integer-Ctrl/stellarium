@@ -10,6 +10,15 @@ LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/src)
 SET( SkyCultureMaker_SRCS
      SkyCultureMaker.hpp
      SkyCultureMaker.cpp
+
+     ScmDraw.hpp
+     ScmDraw.cpp
+     ScmAsterism.hpp
+     ScmCommonName.hpp
+     ScmConstellation.hpp
+     ScmMgr.hpp
+     ScmSkyCulture.hpp
+
      gui/ScmStartDialog.hpp
      gui/ScmStartDialog.cpp
      gui/ScmEditorDialog.hpp
