@@ -6,11 +6,14 @@
 #include "StelTranslator.hpp"
 #include "StelCore.hpp"
 #include "ScmDraw.hpp"
+#include "StelObjectModule.hpp"
 
 #include <QFont>
 
 class QPixmap;
 class StelButton;
+class ScmStartDialog;
+class ScmEditorDialog;
 
 //! This is an example of a plug-in which can be dynamically loaded into stellarium
 class SkyCultureMaker : public StelModule
@@ -69,6 +72,12 @@ private:
 
 	scm::ScmDraw *drawObj;
 
+	/// Draws the line between the start and the current end point.
+	/// @param core The core used for drawing the line.
+	void drawLine(StelCore *core);
+
+	ScmStartDialog* scmStartDialog;
+	ScmEditorDialog* scmEditorDialog;
 };
 
 #include <QObject>
