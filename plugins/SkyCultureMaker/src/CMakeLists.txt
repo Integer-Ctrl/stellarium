@@ -33,13 +33,7 @@ ENDIF()
 
 ADD_LIBRARY(SkyCultureMaker-static STATIC ${SkyCultureMaker_SRCS} ${SkyCultureMaker_RES_CXX} ${SCM_UIS})
 SET_TARGET_PROPERTIES(SkyCultureMaker-static PROPERTIES OUTPUT_NAME "SkyCultureMaker")
-TARGET_LINK_LIBRARIES(SkyCultureMaker-static Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets skyculture_converter_lib qmicroz)
-
-target_include_directories(SkyCultureMaker-static
-  PRIVATE
-    ${qmicroz_SOURCE_DIR}/src
-    ${qmicroz_SOURCE_DIR}/miniz
-)
+TARGET_LINK_LIBRARIES(SkyCultureMaker-static Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets skyculture_converter_lib unarr)
 
 SET_TARGET_PROPERTIES(SkyCultureMaker-static PROPERTIES COMPILE_FLAGS "-DQT_STATICPLUGIN")
 ADD_DEPENDENCIES(AllStaticPlugins SkyCultureMaker-static)

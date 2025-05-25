@@ -21,10 +21,17 @@ CPMAddPackage(
 )
 
 # download https://github.com/artemvlas/qmicroz for archives
+#CPMAddPackage(
+#  NAME              qmicroz
+#  GITHUB_REPOSITORY artemvlas/qmicroz
+#  GIT_TAG           v0.4
+#)
+
+# download https://github.com/selmf/unarr for archives
 CPMAddPackage(
-  NAME              qmicroz
-  GITHUB_REPOSITORY artemvlas/qmicroz
-  GIT_TAG           v0.4
+  NAME              unarr
+  GITHUB_REPOSITORY selmf/unarr
+  GIT_TAG           v1.1.1
 )
 
 

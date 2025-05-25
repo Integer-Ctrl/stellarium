@@ -248,7 +248,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>Select an archive (.zip, .rar, ...) with an old format to convert to the new format</string>
+             <string>Select an archive (.zip, .rar, .z7 or tar) with an old format to convert to the new format</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>

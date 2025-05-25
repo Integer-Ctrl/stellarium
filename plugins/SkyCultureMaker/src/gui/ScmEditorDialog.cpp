@@ -1,13 +1,71 @@
 #include "ScmEditorDialog.hpp"
 #include "ui_scmEditorDialog.h"
 #include "SkyCultureConverter.hpp"
-#include "qmicroz.h"
+#include "unarr.h"
 #include <QFileDialog>
 #include <QFileSystemModel>
 #include <QMessageBox>
 #include <QMimeDatabase>
 #include <QtConcurrent/QtConcurrent>
 #include <QFutureWatcher>
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
+
+ar_archive *ar_open_any_archive(ar_stream *stream, const char *fileext)
+{
+	ar_archive *ar = ar_open_rar_archive(stream);
+	if (!ar)
+		ar = ar_open_zip_archive(stream,
+					 fileext && (strcmp(fileext, ".xps") == 0 || strcmp(fileext, ".epub") == 0));
+	if (!ar)
+		ar = ar_open_7z_archive(stream);
+	if (!ar)
+		ar = ar_open_tar_archive(stream);
+	return ar;
+}
+
+QString extractArchive(const QString &archivePath, const QString &destinationPath)
+{
+	ar_stream *stream = ar_open_file(archivePath.toUtf8().constData());
+	if (!stream)
+	{
+		return QString("Failed to open archive: %1").arg(archivePath);
+	}
+	ar_archive *archive = ar_open_any_archive(stream, QFileInfo(archivePath).suffix().toUtf8().constData());
+	if (!archive)
+	{
+		ar_close(stream);
+		return QString("Failed to open archive: %1").arg(archivePath);
+	}
+
+	// iterate entries and decompress each
+	while (ar_parse_entry(archive))
+	{
+		QString name = QString::fromUtf8(ar_entry_get_name(archive));
+		QString outPath = destinationPath + "/" + name;
+		QDir().mkpath(QFileInfo(outPath).path());
+		QFile outFile(outPath);
+		if (outFile.open(QIODevice::WriteOnly))
+		{
+			qint64 remaining = ar_entry_get_size(archive);
+			const qint64 bufSize = 8192;
+			while (remaining > 0)
+			{
+				qint64 chunk = qMin<qint64>(remaining, bufSize);
+				QByteArray buffer(chunk, 0);
+				if (!ar_entry_uncompress(
+					archive, reinterpret_cast<unsigned char *>(buffer.data()), chunk))
+					break;
+				outFile.write(buffer);
+				remaining -= chunk;
+			}
+			outFile.close();
+		}
+	}
+	ar_close_archive(archive);
+	ar_close(stream);
+}
 
 ScmEditorDialog::ScmEditorDialog()
 	: StelDialog("ScmEditorDialog")
@@ -160,7 +218,15 @@ void ScmEditorDialog::createDialogContent()
 
 				try
 				{
-					QMicroz::extract(path, tempDir);
+					// Extract the archive to the temporary directory
+					qDebug() << "Extracting archive:" << path << "to" << tempDir;
+
+					QString error = extractArchive(path, tempDir);
+					if (!error.isEmpty())
+					{
+						return error;
+					}
+
 					qDebug() << "Archive extracted to:" << tempDir;
 				}
 				catch (const std::exception &e)
