@@ -170,7 +170,7 @@ void ScmEditorDialog::createDialogContent()
 		});
 
 	connect(
-	    ui->pushButton,
+	    ui->importButton,
 	    &QPushButton::clicked,
 	    this,
 	    [this]()
@@ -193,7 +193,7 @@ void ScmEditorDialog::createDialogContent()
 		    QDir().mkpath(tempDir);
 		    QDir tempFolder(tempDir);
 
-		    ui->pushButton->setEnabled(false);
+		    ui->importButton->setEnabled(false);
 
 		    // Run conversion in a background thread
 		    QFuture<QString> future = QtConcurrent::run(
@@ -313,7 +313,7 @@ void ScmEditorDialog::createDialogContent()
 				    QString resultText = watcher->future().result();
 				    ui->filePathLineEdit->setText(resultText);
 				    tempFolder.removeRecursively();
-				    ui->pushButton->setEnabled(true);
+				    ui->importButton->setEnabled(true);
 				    watcher->deleteLater();
 			    });
 		    watcher->setFuture(future);
