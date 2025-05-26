@@ -199,9 +199,6 @@ void ScmEditorDialog::createDialogContent()
 		    QFuture<QString> future = QtConcurrent::run(
 			[path, tempDir, tempFolder]() mutable -> QString
 			{
-				QString baseName = QFileInfo(path).fileName();	// e.g. "foo.zip"
-				QString stem = baseName.left(baseName.lastIndexOf('.'));
-				const QString tempDir = QDir::tempPath() + "/skycultures/" + stem;
 				// Check if the file is a valid archive
 				QMimeDatabase db;
 				QMimeType mime = db.mimeTypeForFile(path, QMimeDatabase::MatchContent);
@@ -216,7 +213,7 @@ void ScmEditorDialog::createDialogContent()
 				if (!archiveTypes.contains(mime.name()))
 				{
 					return QStringLiteral(
-					    "Please select a valid archive file (zip, tar, rar, 7z, gzip…)");
+					    "Please select a valid archive file (zip, tar, rar or 7z)");
 				}
 
 				try
@@ -239,17 +236,17 @@ void ScmEditorDialog::createDialogContent()
 
 				QStringList extracted_files =
 				    tempFolder.entryList(QDir::AllEntries | QDir::NoDotAndDotDot);
+
 				qDebug() << "Extracted files:" << extracted_files.length();
-				for (const QString &file : extracted_files)
-				{
-					qDebug() << " - " << file;
-				}
+
 				if (extracted_files.isEmpty())
 				{
 					return "No files found in the archive.";
 				}
 
 				// set source as the folder that gets converted
+				// Archive can have a single folder with the skyculture files or
+				// an the skyculture files directly in the root
 				QString source;
 				if (extracted_files.contains("info.ini"))
 					source = tempDir;
