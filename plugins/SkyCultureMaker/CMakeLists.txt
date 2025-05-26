@@ -14,18 +14,11 @@ include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 # download https://github.com/Stellarium/stellarium-skyculture-converter
 CPMAddPackage(
   NAME              StellariumSkyCultureConverter
-  GITHUB_REPOSITORY MherMnatsakanyan03/stellarium-skyculture-converter
-  GIT_TAG           MakeLib
+  GITHUB_REPOSITORY Stellarium/stellarium-skyculture-converter
+  GIT_TAG           master
   OPTIONS
     "SKYCULTURE_CONVERTER_BUILD_TESTS OFF"
 )
-
-# download https://github.com/artemvlas/qmicroz for archives
-#CPMAddPackage(
-#  NAME              qmicroz
-#  GITHUB_REPOSITORY artemvlas/qmicroz
-#  GIT_TAG           v0.4
-#)
 
 # download https://github.com/selmf/unarr for archives
 CPMAddPackage(
