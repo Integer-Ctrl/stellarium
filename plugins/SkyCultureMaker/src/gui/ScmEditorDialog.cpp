@@ -12,6 +12,7 @@
 #include <QFileInfo>
 #include <QDir>
 
+// Code snippert from https://github.com/selmf/unarr/blob/master/test/main.c
 ar_archive *ar_open_any_archive(ar_stream *stream, const char *fileext)
 {
 	ar_archive *ar = ar_open_rar_archive(stream);
