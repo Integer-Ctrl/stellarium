@@ -11,6 +11,17 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
+# Add LibTidy dependency
+CPMAddPackage(
+  NAME tidy-html5
+  GITHUB_REPOSITORY htacg/tidy-html5
+  GIT_TAG 5.8.0
+  OPTIONS
+    "BUILD_TAB2SPACE OFF"
+    "BUILD_SHARED_LIB OFF"
+    "TIDY_CONSOLE_SHARED OFF"
+)
+
 # download https://github.com/Stellarium/stellarium-skyculture-converter
 CPMAddPackage(
   NAME              StellariumSkyCultureConverter
@@ -18,7 +29,6 @@ CPMAddPackage(
   GIT_TAG           master
   OPTIONS
     "SKYCULTURE_CONVERTER_BUILD_TESTS OFF"
-    "ENABLE_LIBTIDY OFF"  # Add this option if the converter supports it
 )
 
 # download https://github.com/selmf/unarr for archives
