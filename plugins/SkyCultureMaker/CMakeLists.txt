@@ -11,6 +11,22 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
+CPMAddPackage(
+  NAME              tidy_html5
+  GITHUB_REPOSITORY    htacg/tidy-html5
+  GIT_TAG              5.8.0
+  OPTIONS
+    "BUILD_SHARED_LIBS OFF"
+    "BUILD_TESTING OFF"
+)
+
+set(LIBTIDY_INCLUDE_DIR
+    ${tidy_html5_SOURCE_DIR}/include
+    CACHE PATH "Where to find tidy.h" FORCE)
+set(LIBTIDY_LIBRARY
+    ${tidy_html5_BINARY_DIR}/libtidy.a
+    CACHE FILEPATH "Path to libtidy" FORCE)
+
 # download https://github.com/Stellarium/stellarium-skyculture-converter
 CPMAddPackage(
   NAME              StellariumSkyCultureConverter
