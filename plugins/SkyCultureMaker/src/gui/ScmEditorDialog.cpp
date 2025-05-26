@@ -65,6 +65,8 @@ QString extractArchive(const QString &archivePath, const QString &destinationPat
 	}
 	ar_close_archive(archive);
 	ar_close(stream);
+
+	return QString();
 }
 
 ScmEditorDialog::ScmEditorDialog()
