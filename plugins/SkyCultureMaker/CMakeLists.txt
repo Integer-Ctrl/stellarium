@@ -11,20 +11,18 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
-find_package(LibTidy QUIET)
-
-if(NOT LibTidy_FOUND)
-  CPMAddPackage(
+CPMFindPackage(
     NAME tidy
+    VERSION 5.8.0
     GITHUB_REPOSITORY htacg/tidy-html5
     GIT_TAG           5.8.0
-  )
+)
 
 if(tidy_ADDED)
     set(LIBTIDY_INCLUDE_DIR "${tidy_SOURCE_DIR}/include")
     set(LIBTIDY_LIBRARY "${tidy_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}tidy_static${CMAKE_STATIC_LIBRARY_SUFFIX}")
 
-    # Patch include/tidyplatform.h to add typedef for uint
+    # Patch include/tidyplatform.h to add typedef for uint and ulong
     set(_tidyplatform_h "${tidy_SOURCE_DIR}/include/tidyplatform.h")
     if(EXISTS "${_tidyplatform_h}")
         file(READ "${_tidyplatform_h}" _tidyplatform_h_content)
@@ -34,7 +32,16 @@ if(tidy_ADDED)
             _tidyplatform_h_content "${_tidyplatform_h_content}")
         file(WRITE "${_tidyplatform_h}" "${_tidyplatform_h_content}")
     endif()
-  endif()
+    # Patch src/tidylib.c to include <sys/stat.h> before using S_IFDIR
+    set(_tidylib_c "${tidy_SOURCE_DIR}/src/tidylib.c")
+    if(EXISTS "${_tidylib_c}")
+        file(READ "${_tidylib_c}" _tidylib_c_content)
+        string(REPLACE
+            "#define M_IS_DIR S_IFDIR"
+            "#include <sys/stat.h>\n#define M_IS_DIR S_IFDIR"
+            _tidylib_c_content "${_tidylib_c_content}")
+        file(WRITE "${_tidylib_c}" "${_tidylib_c_content}")
+    endif()
 endif()
 
 # download https://github.com/Stellarium/stellarium-skyculture-converter
