@@ -20,9 +20,20 @@ if(NOT LibTidy_FOUND)
     GIT_TAG           5.8.0
   )
 
-  if(tidy_ADDED)
+if(tidy_ADDED)
     set(LIBTIDY_INCLUDE_DIR "${tidy_SOURCE_DIR}/include")
     set(LIBTIDY_LIBRARY "${tidy_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}tidy_static${CMAKE_STATIC_LIBRARY_SUFFIX}")
+
+    # Patch include/tidyplatform.h to add typedef for uint
+    set(_tidyplatform_h "${tidy_SOURCE_DIR}/include/tidyplatform.h")
+    if(EXISTS "${_tidyplatform_h}")
+        file(READ "${_tidyplatform_h}" _tidyplatform_h_content)
+        string(REPLACE
+            "#endif\n\n#if !defined(HPUX_OS) && !defined(CYGWIN_OS) && !defined(MAC_OS_X) && !defined(BE_OS) && !defined(SOLARIS_OS) && !defined(BSD_BASED_OS) && !defined(OSF_OS) && !defined(IRIX_OS) && !defined(AIX_OS) && !defined(LINUX_OS) && !defined(__HAIKU__)"
+            "#else"
+            _tidyplatform_h_content "${_tidyplatform_h_content}")
+        file(WRITE "${_tidyplatform_h}" "${_tidyplatform_h_content}")
+    endif()
   endif()
 endif()
 
