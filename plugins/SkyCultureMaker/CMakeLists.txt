@@ -11,6 +11,21 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
+find_package(LibTidy QUIET)
+
+if(NOT LibTidy_FOUND)
+  CPMAddPackage(
+    NAME tidy
+    GITHUB_REPOSITORY htacg/tidy-html5
+    GIT_TAG           5.8.0
+  )
+
+  if(tidy_ADDED)
+    set(LIBTIDY_INCLUDE_DIR "${tidy_SOURCE_DIR}/include")
+    set(LIBTIDY_LIBRARY "${tidy_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}tidy_static${CMAKE_STATIC_LIBRARY_SUFFIX}")
+  endif()
+endif()
+
 # download https://github.com/Stellarium/stellarium-skyculture-converter
 CPMAddPackage(
   NAME              StellariumSkyCultureConverter
@@ -20,12 +35,27 @@ CPMAddPackage(
     "SKYCULTURE_CONVERTER_BUILD_TESTS OFF"
 )
 
+if(StellariumSkyCultureConverter_ADDED AND tidy_ADDED)
+  ADD_DEPENDENCIES(skyculture_converter_lib tidy-static)
+endif()
+
 # download https://github.com/selmf/unarr for archives
 CPMAddPackage(
   NAME              unarr
   GITHUB_REPOSITORY selmf/unarr
   GIT_TAG           v1.1.1
 )
+
+if(WIN32)
+  # Patch unarr's common/stream.c to include <objidl.h> after windows.h
+  if(EXISTS "${unarr_SOURCE_DIR}/common/stream.c")
+    file(READ "${unarr_SOURCE_DIR}/common/stream.c" _stream_c_content)
+    string(REPLACE "#define COBJMACROS\n#include <windows.h>\n"
+                  "#define COBJMACROS\n#include <windows.h>\n#include <objidl.h>\n"
+                  _stream_c_content "${_stream_c_content}")
+    file(WRITE "${unarr_SOURCE_DIR}/common/stream.c" "${_stream_c_content}")
+  endif()
+endif(WIN32)
 
 ADD_DEFINITIONS(-DSKYCULTUREMAKER_PLUGIN_VERSION="${SCM_VERSION}")
 ADD_DEFINITIONS(-DSKYCULTUREMAKER_PLUGIN_LICENSE="GNU GPLv2 or later")
