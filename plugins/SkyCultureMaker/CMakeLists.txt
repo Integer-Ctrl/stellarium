@@ -30,7 +30,7 @@ if(tidy_ADDED)
         file(READ "${_tidyplatform_h}" _tidyplatform_h_content)
         string(REPLACE
             "#endif\n\n#if !defined(HPUX_OS) && !defined(CYGWIN_OS) && !defined(MAC_OS_X) && !defined(BE_OS) && !defined(SOLARIS_OS) && !defined(BSD_BASED_OS) && !defined(OSF_OS) && !defined(IRIX_OS) && !defined(AIX_OS) && !defined(LINUX_OS) && !defined(__HAIKU__)"
-            "#else"
+            "#else\n#undef ulong\n   typedef unsigned long ulong;"
             _tidyplatform_h_content "${_tidyplatform_h_content}")
         file(WRITE "${_tidyplatform_h}" "${_tidyplatform_h_content}")
     endif()
