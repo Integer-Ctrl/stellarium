@@ -157,16 +157,20 @@ void ScmEditorDialog::createDialogContent()
 	/* ============================================= SCM importer/converter */
 	auto fsModel = new QFileSystemModel(this);
 	fsModel->setRootPath(QDir::homePath());
-	ui->fileSystem->setModel(fsModel);
-	ui->fileSystem->setRootIndex(fsModel->index(QDir::homePath()));
+	//ui->fileSystem->setModel(fsModel);
+	//ui->fileSystem->setRootIndex(fsModel->index(QDir::homePath()));
 
-	connect(ui->fileSystem,
-		&QTreeView::clicked,
+	connect(ui->browseButton,
+		&QPushButton::clicked,
 		this,
-		[this, fsModel](const QModelIndex &idx)
+		[this]()
 		{
-			const QString path = fsModel->filePath(idx);
-			ui->filePathLineEdit->setText(path);
+			const QString file = QFileDialog::getOpenFileName(
+			    dialog, tr("Select an archive"), QDir::homePath(), tr("Archives (*.zip *.rar *.7z *.tar)"));
+			if (!file.isEmpty())
+			{
+				ui->filePathLineEdit->setText(file);
+			}
 		});
 
 	connect(

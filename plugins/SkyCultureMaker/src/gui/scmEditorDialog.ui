@@ -256,17 +256,25 @@
            </widget>
           </item>
           <item>
-           <widget class="QTreeView" name="fileSystem"/>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="filePathLineEdit">
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-            <property name="placeholderText">
-             <string>Select a file…</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="fileSelectLayout">
+            <item>
+             <widget class="QLineEdit" name="filePathLineEdit">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="placeholderText">
+               <string>Select a file…</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="browseButton">
+              <property name="text">
+               <string>Browse…</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="QPushButton" name="importButton">
