@@ -41,12 +41,10 @@ void ScmConstellationDialog::togglePen(bool checked)
 	{
 		ui->eraserBtn->setChecked(false);
 		activeTool = Tools::Pen;
-		maker->setIsLineDrawEnabled(true);
 	}
 	else
 	{
 		activeTool = Tools::None;
-		maker->setIsLineDrawEnabled(false);
 	}
 }
 
@@ -56,12 +54,10 @@ void ScmConstellationDialog::toggleEraser(bool checked)
 	{
 		ui->penBtn->setChecked(false);
 		activeTool = Tools::Eraser;
-		maker->setIsLineDrawEnabled(true);
 	}
 	else
 	{
 		activeTool = Tools::None;
-		maker->setIsLineDrawEnabled(false);
 	}
 }
 

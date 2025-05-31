@@ -262,6 +262,7 @@ void SkyCultureMaker::setSkyCultureDialogVisibility(bool b)
 void SkyCultureMaker::setConstellationDialogVisibility(bool b)
 {
 	scmConstellationDialog->setVisible(b);
+	setIsLineDrawEnabled(b);
 }
 
 void SkyCultureMaker::setIsLineDrawEnabled(bool b)
