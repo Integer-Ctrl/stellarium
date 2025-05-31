@@ -12,20 +12,20 @@
 
 #include <QString>
 #include <QVector>
-#include <QJsonObject>
 #include <optional>
+#include <variant>
+#include "ScmDraw.hpp"
 
 namespace scm
 {
-    class ScmConstellation;
-}
 
-class scm::ScmConstellation
+class ScmConstellation
 {
 public:
-    //! Returns the constellation as a JSON object
-	QJsonObject toJson() const;
+	ScmConstellation(ScmDraw::ListCoordinateStar constellation);
 
+	void setId(QString id);
+    QString getId() const;
 private:
     //! Identifier of the constellation
     QString id;
@@ -44,6 +44,12 @@ private:
 
 	//! References to the sources of the name spellings
 	std::optional<QVector<int>> references;
+
+	//! List of stars forming the segments
+	ScmDraw::ListCoordinateStar constellation;
 };
+
+}  // namespace scm
+
 
 #endif	// SCM_CONSTELLATION_HPP

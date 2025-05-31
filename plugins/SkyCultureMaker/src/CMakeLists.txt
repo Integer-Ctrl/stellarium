@@ -14,14 +14,16 @@ SET( SkyCultureMaker_SRCS
      ScmDraw.hpp
      ScmDraw.cpp
      ScmAsterism.hpp
+     ScmAsterism.cpp
      ScmCommonName.hpp
+     ScmCommonName.cpp
      ScmConstellation.hpp
+     ScmConstellation.cpp
      ScmSkyCulture.hpp
+     ScmSkyCulture.cpp
 
      gui/ScmStartDialog.hpp
      gui/ScmStartDialog.cpp
-     gui/ScmEditorDialog.hpp
-     gui/ScmEditorDialog.cpp
      gui/ScmConstellationDialog.hpp
      gui/ScmConstellationDialog.cpp
      gui/ScmSkyCultureDialog.hpp
@@ -32,7 +34,6 @@ SET( SCM_UIS
      gui/scmConstellationDialog.ui
      gui/scmSkyCultureDialog.ui
      gui/scmStartDialog.ui
-     gui/scmEditorDialog.ui
 )     
 
 ################# compiles resources files ############

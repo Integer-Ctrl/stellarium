@@ -48,6 +48,7 @@ void ScmStartDialog::startScmCreationProcess()
 {
 	dialog->setVisible(false);  // Close the dialog before starting the editor
 	maker->setSkyCultureDialogVisibility(true);  // Start the editor dialog for creating a new Sky Culture
+	maker->setNewSkyCulture();
 
 	SkyCultureMaker::setActionToggle("actionShow_DateTime_Window_Global", true);
 	SkyCultureMaker::setActionToggle("actionShow_Location_Window_Global", true);

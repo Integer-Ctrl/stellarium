@@ -31,13 +31,11 @@ private:
 	Ui_scmSkyCultureDialog *ui;
 	SkyCultureMaker* maker;
 
-	QString constellationEnglishName;
+	QString name;
 	std::vector<QString> constellationList;
-	std::optional<QString> constellationNativeName;
-	std::optional<QString> constellationPronounce;
-	std::optional<QString> constellationIpa;
 
 	void updateSkyCultureSave(bool saved);
+	void setIdFromName(QString &name);
 };
 
 #endif	// SCM_SKY_CULTURE_DIALOG_HPP

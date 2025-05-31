@@ -29,10 +29,10 @@ void ScmSkyCultureDialog::createDialogContent()
 	connect(ui->titleBar, &TitleBar::closeClicked, this, &StelDialogSeparate::close);
 
 	// Overview Tab
-	connect(ui->constellationNameTE, &QTextEdit::textChanged, this, [this]()
+	connect(ui->skyCultureNameTE, &QTextEdit::textChanged, this, [this]()
 	{
-		constellationEnglishName = ui->constellationNameTE->toPlainText();
-		if (constellationEnglishName.isEmpty())
+		name = ui->skyCultureNameTE->toPlainText();
+		if (name.isEmpty())
 		{
 			ui->SaveSkyCultureBtn->setEnabled(false);
 		}
@@ -40,6 +40,7 @@ void ScmSkyCultureDialog::createDialogContent()
 		{
 			ui->SaveSkyCultureBtn->setEnabled(true);
 		}
+		setIdFromName(name);
 		updateSkyCultureSave(false);
 	});
 
@@ -57,10 +58,6 @@ void ScmSkyCultureDialog::updateSkyCultureSave(bool saved)
 void ScmSkyCultureDialog::saveSkyCulture()
 {
 	qDebug() << "ScmSkyCulture Dialog: Saving";
-	qDebug() << "	English Name:" << constellationEnglishName;
-	if(constellationNativeName) qDebug() << "	Native Name:" << constellationNativeName.value_or("N/A");
-	if(constellationPronounce) qDebug() << "	Pronounce:" << constellationPronounce.value_or("N/A");
-	if(constellationIpa) qDebug() << "	IPA:" << constellationIpa.value_or("N/A");
 
 	updateSkyCultureSave(true);
 }
@@ -74,4 +71,10 @@ void ScmSkyCultureDialog::removeConstellation()
 void ScmSkyCultureDialog::constellationDialog()
 {
 	maker->setConstellationDialogVisibility(true); // Disable the Sky Culture Maker 
+}
+
+void ScmSkyCultureDialog::setIdFromName(QString &name)
+{
+	QString id = name.toLower().replace(" ", "_");
+	maker->getCurrentSkyCulture()->setId(id);
 }

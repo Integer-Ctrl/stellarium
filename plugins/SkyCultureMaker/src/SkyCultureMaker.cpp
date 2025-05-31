@@ -87,6 +87,7 @@ SkyCultureMaker::~SkyCultureMaker()
 	delete scmStartDialog;
 	delete scmSkyCultureDialog;
 	delete scmConstellationDialog;
+	delete currentSkyCulture;
 }
 
 void SkyCultureMaker::setActionToggle(const QString &id, bool toggle)
@@ -274,4 +275,18 @@ void SkyCultureMaker::triggerDrawUndo()
 	{
 		drawObj->undoLastLine();
 	}
+}
+
+void SkyCultureMaker::setNewSkyCulture()
+{
+	if(currentSkyCulture)
+	{
+		delete currentSkyCulture;
+	}
+	currentSkyCulture = new scm::ScmSkyCulture();
+}
+
+scm::ScmSkyCulture *SkyCultureMaker::getCurrentSkyCulture()
+{
+	return currentSkyCulture;
 }

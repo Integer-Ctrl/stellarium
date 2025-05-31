@@ -15,6 +15,9 @@
 #include <QString>
 #include "enumBitops.hpp"
 #include <optional>
+#include <tuple>
+#include "StelObjectType.hpp"
+#include <variant>
 
 namespace scm
 {
@@ -22,23 +25,48 @@ namespace scm
 class ScmDraw
 {
 public:
-	struct StarPoint
+	//! @brief The pair of start and end coordinate
+	struct CoordinateLine
 	{
-		//! @brief The position of the point in coordinates.
-		Vec3d position;
+		//! @brief The start coordinate of the line.
+		Vec3d start;
 
-		//! @brief The star id of the the point if available.
-		std::optional<QString> starID;
+		//! @brief The end coordinate of the line.
+		Vec3d end;
 	};
 
+	//! @brief The pair of optional start and end stars
 	struct StarLine
 	{
-		//! @brief The start point of the line.
-		StarPoint start;
+		//! @brief The start star of the line.
+		std::optional<QString> start;
 
-		//! @brief The end point of the line.
-		StarPoint end;
+		//! @brief The end star of the line.
+		std::optional<QString> end;
 	};
+
+	typedef std::variant<std::vector<CoordinateLine>, std::vector<StarLine>> ListCoordinateStar;
+
+	//! @brief The lines of the current drawn constellation
+	struct Lines
+	{
+		//! @brief The coordinate pairs of a line.
+		std::vector<CoordinateLine> coordinates;
+
+		//! @brief The optional available stars too the coordinates.
+		std::vector<StarLine> stars;
+	};
+	
+	//! @brief The point of a single star with coordinates.
+	struct StarPoint
+	{
+		//! @brief The coordinate of a single point.
+		Vec3d coordinate;
+
+		//! @brief The optional star at that coordinate.
+		std::optional<QString> star;
+	};
+	
 
 	//! @brief The possibles states during the drawing.
 	enum class Drawing
@@ -66,10 +94,10 @@ private:
 	bool snapToStar;
 
 	//! @brief The current pending point.
-	StarLine currentLine;
+	std::tuple<CoordinateLine, StarLine> currentLine;
 
 	//! @brief The fixed points.
-	std::vector<StarLine> drawnLines;
+	Lines drawnLines;
 
 public:
 	//! @brief The frame that is used for calculation and is drawn on.
@@ -110,6 +138,11 @@ public:
 
 	//! Undo the last drawn line.
 	void undoLastLine();
+
+	/**
+	 * @brief Get the drawn stick figures as coordinates or stars.
+	 */
+	ListCoordinateStar getDrawnStars();
 };
 
 }  // namespace scm

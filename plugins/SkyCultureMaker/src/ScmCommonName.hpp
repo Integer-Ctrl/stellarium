@@ -11,20 +11,17 @@
 #define SCM_COMMONNAME_HPP
 
 #include <QString>
-#include <QVector>
+#include <vector>
 #include <QJsonObject>
 #include <optional>
 
 namespace scm
 {
-class ScmCommonName;
-}
 
-class scm::ScmCommonName
+class ScmCommonName
 {
 public:
 	ScmCommonName(QString id);
-	~ScmCommonName();
 
 	//! Sets the english name
 	void setEnglishName(QString name);
@@ -39,7 +36,7 @@ public:
 	void setIpa(QString name);
 
 	//! Sets the references to the sources of the name spellings
-	void setReferences(QVector<int> refs);
+	void setReferences(std::vector<int> refs);
 
 	//! Returns the english name
 	QString getEnglishName() const;
@@ -54,7 +51,7 @@ public:
 	std::optional<QString> getIpa() const;
 
 	//! Returns the references to the sources of the name spellings
-	std::optional<QVector<int>> getReferences() const;
+	std::optional<std::vector<int>> getReferences() const;
 
 	//! Returns the common name as a JSON object
 	QJsonObject toJson() const;
@@ -80,7 +77,9 @@ private:
 	std::optional<QString> ipa;
 
 	//! References to the sources of the name spellings
-	std::optional<QVector<int>> references;
+	std::optional<std::vector<int>> references;
 };
+
+}  // namespace scm
 
 #endif	// SCM_COMMONNAME_HPP

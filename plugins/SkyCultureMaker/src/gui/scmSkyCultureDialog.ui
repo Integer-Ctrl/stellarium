@@ -110,7 +110,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QTextEdit" name="constellationNameTE">
+           <widget class="QTextEdit" name="skyCultureNameTE">
             <property name="maximumSize">
              <size>
               <width>16777215</width>

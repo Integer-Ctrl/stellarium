@@ -7,6 +7,7 @@
 #include "StelCore.hpp"
 #include "ScmDraw.hpp"
 #include "StelObjectModule.hpp"
+#include "ScmSkyCulture.hpp"
 
 #include <QFont>
 
@@ -62,6 +63,11 @@ public:
 	//! @brief Triggers a single undo operation in the line draw.
 	void triggerDrawUndo();
 
+	//! @brief Sets a new sky culture object
+	void setNewSkyCulture();
+
+	scm::ScmSkyCulture *getCurrentSkyCulture();
+
 signals:
 	void eventIsScmEnabled(bool b);
 
@@ -109,6 +115,9 @@ private:
 
 	//! Dialog for creating/editing a constellation
 	ScmConstellationDialog *scmConstellationDialog;
+
+	//! The current sky culture
+	scm::ScmSkyCulture *currentSkyCulture;
 };
 
 #include <QObject>
