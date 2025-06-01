@@ -18,7 +18,7 @@
 #include "StelSkyCultureMgr.hpp"
 #include "ScmConstellation.hpp"
 #include "ScmAsterism.hpp"
-
+#include "ScmTypes.hpp"
 #include "ScmCommonName.hpp"
 
 namespace scm
@@ -46,10 +46,13 @@ public:
     void removeAsterism(QString id);
 
     //! Adds a constellation to the sky culture
-    void addConstellation(ScmConstellation constellation);
+    void addConstellation(QString id, scm::ListCoordinateStar constellation);
 
     //! Removes a constellation from the sky culture by its ID
     void removeConstellation(QString id);
+
+     //! Gets a constellation from the sky culture by its ID
+    scm::ScmConstellation *getConstellation(QString id);
 
     //! Adds a common name to the sky culture
     void addCommonName(ScmCommonName commonName);

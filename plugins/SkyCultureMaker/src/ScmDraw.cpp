@@ -203,7 +203,7 @@ void scm::ScmDraw::undoLastLine()
 	}
 }
 
-std::optional<scm::ScmDraw::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelProjectorP prj)
+std::optional<scm::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelProjectorP prj)
 {
 	if (drawnLines.coordinates.empty())
 	{
@@ -245,9 +245,9 @@ std::optional<scm::ScmDraw::StarPoint> scm::ScmDraw::findNearestPoint(int x, int
 	return {};
 }
 
-scm::ScmDraw::ListCoordinateStar scm::ScmDraw::getDrawnStars()
+scm::ListCoordinateStar scm::ScmDraw::getDrawnStars()
 {
-	ListCoordinateStar  constellation;
+	ListCoordinateStar constellation;
 	bool all_stars =  std::all_of(drawnLines.stars.begin(), drawnLines.stars.end(), [](const StarLine &star){ return star.start.has_value() && star.end.has_value(); });
 	if (all_stars)
 	{

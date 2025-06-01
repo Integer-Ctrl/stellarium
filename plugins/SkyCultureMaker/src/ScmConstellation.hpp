@@ -14,7 +14,7 @@
 #include <QVector>
 #include <optional>
 #include <variant>
-#include "ScmDraw.hpp"
+#include "ScmTypes.hpp"
 
 namespace scm
 {
@@ -22,10 +22,16 @@ namespace scm
 class ScmConstellation
 {
 public:
-	ScmConstellation(ScmDraw::ListCoordinateStar constellation);
+	ScmConstellation(scm::ListCoordinateStar constellation);
 
 	void setId(QString id);
     QString getId() const;
+
+	void setEnglishName(QString name);
+	void setNativeName(std::optional<QString> name);
+	void setPronounce(std::optional<QString> pronounce);
+	void setIPA(std::optional<QString> ipa);
+	void setConstellation(scm::ListCoordinateStar constellation);
 private:
     //! Identifier of the constellation
     QString id;
@@ -46,7 +52,7 @@ private:
 	std::optional<QVector<int>> references;
 
 	//! List of stars forming the segments
-	ScmDraw::ListCoordinateStar constellation;
+	scm::ListCoordinateStar constellation;
 };
 
 }  // namespace scm

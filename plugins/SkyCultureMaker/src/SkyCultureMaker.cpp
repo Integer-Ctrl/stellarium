@@ -291,3 +291,8 @@ scm::ScmSkyCulture *SkyCultureMaker::getCurrentSkyCulture()
 {
 	return currentSkyCulture;
 }
+
+scm::ScmDraw *SkyCultureMaker::getScmDraw()
+{
+	return drawObj;
+}

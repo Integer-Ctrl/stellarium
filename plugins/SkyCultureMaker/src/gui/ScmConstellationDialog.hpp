@@ -35,9 +35,26 @@ private slots:
 	void triggerUndo();
 
 private:
+	/// Specifies whether the current data can be saved as a constellation or not.
+	bool canBeSaved = false;
+
 	Ui_scmConstellationDialog *ui;
 	SkyCultureMaker *maker;
 	Tools activeTool = Tools::None;
+
+	QString constellationEnglishName;
+	std::optional<QString> constellationNativeName;
+	std::optional<QString> constellationPronounce;
+	std::optional<QString> constellationIPA;
+
+	/**
+	 * @brief Updates the canBeSaved state based on different criteria.
+	 */
+	void updateCanBeSavedState();
+
+	void saveConstellation();
+
+	void resetDialog();
 };
 
 #endif	// SCM_CONSTELLATION_DIALOG_HPP

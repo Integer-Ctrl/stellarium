@@ -8,6 +8,8 @@
 #include "ScmDraw.hpp"
 #include "StelObjectModule.hpp"
 #include "ScmSkyCulture.hpp"
+#include "ScmConstellation.hpp"
+#include "ScmTypes.hpp"
 
 #include <QFont>
 
@@ -68,6 +70,8 @@ public:
 
 	scm::ScmSkyCulture *getCurrentSkyCulture();
 
+	scm::ScmDraw *getScmDraw();
+
 signals:
 	void eventIsScmEnabled(bool b);
 
@@ -118,6 +122,9 @@ private:
 
 	//! The current sky culture
 	scm::ScmSkyCulture *currentSkyCulture;
+
+	//! The current constellation
+	scm::ScmConstellation *currentConstellation;
 };
 
 #include <QObject>
