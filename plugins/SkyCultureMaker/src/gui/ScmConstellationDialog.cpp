@@ -22,6 +22,11 @@ void ScmConstellationDialog::retranslate()
 	}
 }
 
+void ScmConstellationDialog::close()
+{
+	maker->setConstellationDialogVisibility(false);
+}
+
 void ScmConstellationDialog::createDialogContent()
 {
 	ui->setupUi(dialog);
@@ -29,42 +34,54 @@ void ScmConstellationDialog::createDialogContent()
 
 	connect(&StelApp::getInstance(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
 	connect(ui->titleBar, SIGNAL(movedTo(QPoint)), this, SLOT(handleMovedTo(QPoint)));
-	connect(ui->titleBar, &TitleBar::closeClicked, this, &StelDialogSeparate::close);
+	connect(ui->titleBar, &TitleBar::closeClicked, this, &ScmConstellationDialog::close);
 
 	connect(ui->penBtn, &QPushButton::toggled, this, &ScmConstellationDialog::togglePen);
 	connect(ui->eraserBtn, &QPushButton::toggled, this, &ScmConstellationDialog::toggleEraser);
 	connect(ui->undoBtn, &QPushButton::clicked, this, &ScmConstellationDialog::triggerUndo);
 
 	// LABELS TAB
-	connect(ui->enNameTE, &QTextEdit::textChanged, this, [this]() 
-	{
-		constellationEnglishName = ui->enNameTE->toPlainText();
-		updateCanBeSavedState();
-	});
-	connect(ui->natNameTE, &QTextEdit::textChanged, this, [this]() 
-	{
-		constellationNativeName = ui->natNameTE->toPlainText();
-		if (constellationNativeName->isEmpty())
+	connect(ui->enNameTE,
+		&QTextEdit::textChanged,
+		this,
+		[this]()
 		{
-			constellationNativeName = std::nullopt;
-		}
-	});
-	connect(ui->pronounceTE, &QTextEdit::textChanged, this, [this]() 
-	{
-		constellationPronounce = ui->pronounceTE->toPlainText();
-		if (constellationPronounce->isEmpty())
+			constellationEnglishName = ui->enNameTE->toPlainText();
+			updateCanBeSavedState();
+		});
+	connect(ui->natNameTE,
+		&QTextEdit::textChanged,
+		this,
+		[this]()
 		{
-			constellationPronounce = std::nullopt;
-		}
-	});
-	connect(ui->ipaTE, &QTextEdit::textChanged, this, [this]() 
-	{
-		constellationIPA = ui->ipaTE->toPlainText();
-		if (constellationIPA->isEmpty())
+			constellationNativeName = ui->natNameTE->toPlainText();
+			if (constellationNativeName->isEmpty())
+			{
+				constellationNativeName = std::nullopt;
+			}
+		});
+	connect(ui->pronounceTE,
+		&QTextEdit::textChanged,
+		this,
+		[this]()
 		{
-			constellationIPA = std::nullopt;
-		}
-	});
+			constellationPronounce = ui->pronounceTE->toPlainText();
+			if (constellationPronounce->isEmpty())
+			{
+				constellationPronounce = std::nullopt;
+			}
+		});
+	connect(ui->ipaTE,
+		&QTextEdit::textChanged,
+		this,
+		[this]()
+		{
+			constellationIPA = ui->ipaTE->toPlainText();
+			if (constellationIPA->isEmpty())
+			{
+				constellationIPA = std::nullopt;
+			}
+		});
 }
 
 void ScmConstellationDialog::togglePen(bool checked)
@@ -110,7 +127,7 @@ void ScmConstellationDialog::updateCanBeSavedState()
 	////////////////////////////////////////////////////
 
 	// shouldnt happen
-	if(nullptr == maker->getCurrentSkyCulture())
+	if (nullptr == maker->getCurrentSkyCulture())
 	{
 		canBeSaved = false;
 	}
@@ -119,8 +136,8 @@ void ScmConstellationDialog::updateCanBeSavedState()
 		canBeSaved = false;
 	}
 	// Check if drawnStars is empty
-	auto drawnStars = maker->getScmDraw()->getDrawnStars();
-	if(std::visit([](const auto& vec) { return vec.empty(); }, drawnStars))
+	auto drawnConstellation = maker->getScmDraw()->getCoordinates();
+	if (drawnConstellation.empty())
 	{
 		canBeSaved = false;
 	}
@@ -135,8 +152,9 @@ void ScmConstellationDialog::updateCanBeSavedState()
 void ScmConstellationDialog::saveConstellation()
 {
 	QString id = constellationEnglishName.toLower().replace(" ", "_");
-	scm::ListCoordinateStar constellation = maker->getScmDraw()->getDrawnStars();
-	maker->getCurrentSkyCulture()->addConstellation(id, constellation);
+	auto coordinates = maker->getScmDraw()->getCoordinates();
+	auto stars = maker->getScmDraw()->getStars();
+	maker->getCurrentSkyCulture()->addConstellation(id, coordinates, stars);
 	scm::ScmConstellation *constellationObj = maker->getCurrentSkyCulture()->getConstellation(id);
 
 	constellationObj->setEnglishName(constellationEnglishName);

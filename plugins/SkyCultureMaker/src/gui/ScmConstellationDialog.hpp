@@ -28,6 +28,7 @@ public:
 
 public slots:
 	void retranslate() override;
+	void close() override;
 
 private slots:
 	void togglePen(bool checked);

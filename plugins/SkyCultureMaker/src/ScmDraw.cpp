@@ -17,10 +17,6 @@ scm::ScmDraw::ScmDraw()
 	maxSnapRadiusInPixels *= core->getCurrentStelProjectorParams().devicePixelsPerPixel;
 }
 
-scm::ScmDraw::~ScmDraw()
-{
-}
-
 void scm::ScmDraw::drawLine(StelCore *core)
 {
 	StelPainter painter(core->getProjection(drawFrame));
@@ -39,7 +35,8 @@ void scm::ScmDraw::drawLine(StelCore *core)
 	{
 		color = {1.f, 0.7f, 0.7f};
 		painter.setColor(color, 0.5f);
-		painter.drawGreatCircleArc(std::get<CoordinateLine>(currentLine).start, std::get<CoordinateLine>(currentLine).end);
+		painter.drawGreatCircleArc(std::get<CoordinateLine>(currentLine).start,
+					   std::get<CoordinateLine>(currentLine).end);
 	}
 }
 
@@ -93,8 +90,8 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 
 		if (hasFlag(drawState, (Drawing::hasStart | Drawing::hasFloatingEnd)))
 		{
-			std::get<CoordinateLine>(currentLine).end= point;
-			std::get<StarLine>(currentLine).end= starID;
+			std::get<CoordinateLine>(currentLine).end = point;
+			std::get<StarLine>(currentLine).end = starID;
 			drawState = Drawing::hasEnd;
 
 			drawnLines.coordinates.push_back(std::get<CoordinateLine>(currentLine));
@@ -191,7 +188,7 @@ void scm::ScmDraw::undoLastLine()
 {
 	if (!drawnLines.coordinates.empty())
 	{
-		
+
 		currentLine = std::make_tuple(drawnLines.coordinates.back(), drawnLines.stars.back());
 		drawnLines.coordinates.pop_back();
 		drawnLines.stars.pop_back();
@@ -201,6 +198,26 @@ void scm::ScmDraw::undoLastLine()
 	{
 		drawState = Drawing::None;
 	}
+}
+
+std::vector<scm::StarLine> scm::ScmDraw::getStars()
+{
+	bool all_stars =
+	    std::all_of(drawnLines.stars.begin(),
+			drawnLines.stars.end(),
+			[](const StarLine &star) { return star.start.has_value() && star.end.has_value(); });
+
+	if (all_stars)
+	{
+		return drawnLines.stars;
+	}
+
+	return std::vector<StarLine>();
+}
+
+std::vector<scm::CoordinateLine> scm::ScmDraw::getCoordinates()
+{
+	return drawnLines.coordinates;
 }
 
 std::optional<scm::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelProjectorP prj)
@@ -235,38 +252,10 @@ std::optional<scm::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelP
 
 	if (minDistance < maxSnapRadiusInPixels * maxSnapRadiusInPixels)
 	{
-		StarPoint point = {
-			min->start,
-			drawnLines.stars.at(std::distance(drawnLines.coordinates.begin(), min)).start
-		};
+		StarPoint point = {min->start,
+				   drawnLines.stars.at(std::distance(drawnLines.coordinates.begin(), min)).start};
 		return point;
 	}
 
 	return {};
-}
-
-scm::ListCoordinateStar scm::ScmDraw::getDrawnStars()
-{
-	ListCoordinateStar constellation;
-	bool all_stars =  std::all_of(drawnLines.stars.begin(), drawnLines.stars.end(), [](const StarLine &star){ return star.start.has_value() && star.end.has_value(); });
-	if (all_stars)
-	{
-		constellation.emplace<std::vector<CoordinateLine>>(drawnLines.coordinates.size());
-		auto &list = std::get<std::vector<CoordinateLine>>(constellation);
-		for(const auto& coordinate : drawnLines.coordinates)
-		{
-			list.push_back(coordinate);
-		}
-	}
-	else
-	{
-		constellation.emplace<std::vector<StarLine>>(drawnLines.stars.size());
-		auto &list = std::get<std::vector<StarLine>>(constellation);
-		for(const auto& star : drawnLines.stars)
-		{
-			list.push_back(star);
-		}
-	}
-
-	return constellation;
 }

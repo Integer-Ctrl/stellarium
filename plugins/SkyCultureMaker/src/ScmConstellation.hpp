@@ -11,7 +11,7 @@
 #define SCM_CONSTELLATION_HPP
 
 #include <QString>
-#include <QVector>
+#include <vector>
 #include <optional>
 #include <variant>
 #include "ScmTypes.hpp"
@@ -22,21 +22,32 @@ namespace scm
 class ScmConstellation
 {
 public:
-	ScmConstellation(scm::ListCoordinateStar constellation);
+	//! @brief The frame that is used for calculation and is drawn on.
+	static const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
+
+	ScmConstellation(std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars);
 
 	void setId(QString id);
-    QString getId() const;
+	QString getId() const;
 
 	void setEnglishName(QString name);
 	void setNativeName(std::optional<QString> name);
 	void setPronounce(std::optional<QString> pronounce);
 	void setIPA(std::optional<QString> ipa);
-	void setConstellation(scm::ListCoordinateStar constellation);
-private:
-    //! Identifier of the constellation
-    QString id;
+	void setConstellation(std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars);
 
-    //! The english name
+	/**
+	 * @brief Draws the constellation based on the coordinates.
+	 *
+	 * @param core The core used for drawing.
+	 */
+	void drawConstellation(StelCore *core) const;
+
+private:
+	//! Identifier of the constellation
+	QString id;
+
+	//! The english name
 	QString englishName;
 
 	//! The native name
@@ -51,11 +62,13 @@ private:
 	//! References to the sources of the name spellings
 	std::optional<QVector<int>> references;
 
-	//! List of stars forming the segments
-	scm::ListCoordinateStar constellation;
+	//! List of coordinates forming the segments.
+	std::vector<CoordinateLine> constellationCoordinates;
+
+	//! List of stars forming the segments. Might be empty.
+	std::vector<StarLine> constellationStars;
 };
 
 }  // namespace scm
-
 
 #endif	// SCM_CONSTELLATION_HPP

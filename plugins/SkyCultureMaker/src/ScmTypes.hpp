@@ -28,8 +28,6 @@ struct StarLine
 	std::optional<QString> end;
 };
 
-typedef std::variant<std::vector<CoordinateLine>, std::vector<StarLine>> ListCoordinateStar;
-
 //! @brief The lines of the current drawn constellation
 struct Lines
 {

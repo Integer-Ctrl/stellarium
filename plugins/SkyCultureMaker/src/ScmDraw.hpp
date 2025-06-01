@@ -43,10 +43,9 @@ private:
 
 public:
 	//! @brief The frame that is used for calculation and is drawn on.
-	const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
+	static const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
 
 	ScmDraw();
-	~ScmDraw();
 
 	/**
 	 * @brief Draws the line between the start and the current end point.
@@ -82,9 +81,18 @@ public:
 	void undoLastLine();
 
 	/**
-	 * @brief Get the drawn stick figures as coordinates or stars.
+	 * @brief Get the drawn stick figures as stars if available.
+	 *
+	 * @return std::vector<StarLine> The optional filled vector of stars matching the coordinates.
 	 */
-	ListCoordinateStar getDrawnStars();
+	std::vector<StarLine> getStars();
+
+	/**
+	 * @brief Get the drawn stick figures as coordinates.
+	 *
+	 * @return std::vector<CoordinateLine> The drawn coordinates.
+	 */
+	std::vector<CoordinateLine> getCoordinates();
 };
 
 }  // namespace scm

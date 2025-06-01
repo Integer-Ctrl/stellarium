@@ -16,11 +16,12 @@ protected:
 	void createDialogContent() override;
 
 public:
-	ScmSkyCultureDialog(SkyCultureMaker* maker);
+	ScmSkyCultureDialog(SkyCultureMaker *maker);
 	~ScmSkyCultureDialog() override;
 
 public slots:
 	void retranslate() override;
+	void close() override;
 
 private slots:
 	void saveSkyCulture();
@@ -29,7 +30,7 @@ private slots:
 
 private:
 	Ui_scmSkyCultureDialog *ui;
-	SkyCultureMaker* maker;
+	SkyCultureMaker *maker;
 
 	QString name;
 	std::vector<QString> constellationList;

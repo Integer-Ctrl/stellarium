@@ -18,6 +18,8 @@
 #include <QPixmap>
 #include <QKeyEvent>
 #include "ScmDraw.hpp"
+#include <vector>
+#include "ScmTypes.hpp"
 
 /**
  * Managing the creation process of a new sky culture.
@@ -185,15 +187,8 @@ void SkyCultureMaker::stopScmProcess()
 		scmStartDialog->setVisible(false);
 	}
 
-	if (scmSkyCultureDialog->visible())
-	{
-		scmSkyCultureDialog->setVisible(false);
-	}
-
-	if (scmConstellationDialog->visible())
-	{
-		scmConstellationDialog->setVisible(false);
-	}
+	setSkyCultureDialogVisibility(false);
+	setConstellationDialogVisibility(false);
 }
 
 void SkyCultureMaker::draw(StelCore *core)
@@ -201,6 +196,14 @@ void SkyCultureMaker::draw(StelCore *core)
 	if (isLineDrawEnabled)
 	{
 		drawObj->drawLine(core);
+	}
+
+	if (isScmEnabled && currentSkyCulture != nullptr)
+	{
+		for (const auto &constellation : currentSkyCulture->getConstellations())
+		{
+			constellation.drawConstellation(core);
+		}
 	}
 }
 
@@ -256,12 +259,19 @@ void SkyCultureMaker::setIsScmEnabled(bool b)
 
 void SkyCultureMaker::setSkyCultureDialogVisibility(bool b)
 {
-	scmSkyCultureDialog->setVisible(b);
+	if (b != scmSkyCultureDialog->visible())
+	{
+		scmSkyCultureDialog->setVisible(b);
+	}
 }
 
 void SkyCultureMaker::setConstellationDialogVisibility(bool b)
 {
-	scmConstellationDialog->setVisible(b);
+	if (b != scmConstellationDialog->visible())
+	{
+		scmConstellationDialog->setVisible(b);
+	}
+
 	setIsLineDrawEnabled(b);
 }
 
@@ -280,7 +290,7 @@ void SkyCultureMaker::triggerDrawUndo()
 
 void SkyCultureMaker::setNewSkyCulture()
 {
-	if(currentSkyCulture)
+	if (currentSkyCulture)
 	{
 		delete currentSkyCulture;
 	}

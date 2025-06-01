@@ -32,9 +32,11 @@ void scm::ScmSkyCulture::removeAsterism(QString id)
 	    end(asterisms));
 }
 
-void scm::ScmSkyCulture::addConstellation(QString id, scm::ListCoordinateStar constellation)
+void scm::ScmSkyCulture::addConstellation(QString id,
+					  std::vector<CoordinateLine> coordinates,
+					  std::vector<StarLine> stars)
 {
-	scm::ScmConstellation constellationObj(constellation);
+	scm::ScmConstellation constellationObj(coordinates, stars);
 	constellationObj.setId(id);
 	constellations.push_back(constellationObj);
 }
@@ -47,12 +49,17 @@ void scm::ScmSkyCulture::removeConstellation(QString id)
 			     end(constellations));
 }
 
-scm::ScmConstellation* scm::ScmSkyCulture::getConstellation(QString id)
+scm::ScmConstellation *scm::ScmSkyCulture::getConstellation(QString id)
 {
-	for (auto& constellation : constellations)
+	for (auto &constellation : constellations)
 	{
 		if (constellation.getId() == id)
 			return &constellation;
 	}
 	return nullptr;
+}
+
+std::vector<scm::ScmConstellation> scm::ScmSkyCulture::getConstellations() const
+{
+	return constellations;
 }

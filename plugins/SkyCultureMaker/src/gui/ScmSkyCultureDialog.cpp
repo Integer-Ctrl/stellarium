@@ -1,8 +1,9 @@
 #include "ScmSkyCultureDialog.hpp"
 #include "ui_scmSkyCultureDialog.h"
 
-ScmSkyCultureDialog::ScmSkyCultureDialog(SkyCultureMaker* maker)
-	: StelDialogSeparate("ScmSkyCultureDialog"), maker(maker)
+ScmSkyCultureDialog::ScmSkyCultureDialog(SkyCultureMaker *maker)
+	: StelDialogSeparate("ScmSkyCultureDialog")
+	, maker(maker)
 {
 	ui = new Ui_scmSkyCultureDialog;
 }
@@ -20,29 +21,37 @@ void ScmSkyCultureDialog::retranslate()
 	}
 }
 
+void ScmSkyCultureDialog::close()
+{
+	maker->setSkyCultureDialogVisibility(false);
+}
+
 void ScmSkyCultureDialog::createDialogContent()
 {
 	ui->setupUi(dialog);
 
 	connect(&StelApp::getInstance(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
 	connect(ui->titleBar, SIGNAL(movedTo(QPoint)), this, SLOT(handleMovedTo(QPoint)));
-	connect(ui->titleBar, &TitleBar::closeClicked, this, &StelDialogSeparate::close);
+	connect(ui->titleBar, &TitleBar::closeClicked, this, &ScmSkyCultureDialog::close);
 
 	// Overview Tab
-	connect(ui->skyCultureNameTE, &QTextEdit::textChanged, this, [this]()
-	{
-		name = ui->skyCultureNameTE->toPlainText();
-		if (name.isEmpty())
+	connect(ui->skyCultureNameTE,
+		&QTextEdit::textChanged,
+		this,
+		[this]()
 		{
-			ui->SaveSkyCultureBtn->setEnabled(false);
-		}
-		else
-		{
-			ui->SaveSkyCultureBtn->setEnabled(true);
-		}
-		setIdFromName(name);
-		updateSkyCultureSave(false);
-	});
+			name = ui->skyCultureNameTE->toPlainText();
+			if (name.isEmpty())
+			{
+				ui->SaveSkyCultureBtn->setEnabled(false);
+			}
+			else
+			{
+				ui->SaveSkyCultureBtn->setEnabled(true);
+			}
+			setIdFromName(name);
+			updateSkyCultureSave(false);
+		});
 
 	ui->SaveSkyCultureBtn->setEnabled(false);
 	connect(ui->SaveSkyCultureBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::saveSkyCulture);
@@ -70,7 +79,7 @@ void ScmSkyCultureDialog::removeConstellation()
 
 void ScmSkyCultureDialog::constellationDialog()
 {
-	maker->setConstellationDialogVisibility(true); // Disable the Sky Culture Maker 
+	maker->setConstellationDialogVisibility(true);	// Disable the Sky Culture Maker
 }
 
 void ScmSkyCultureDialog::setIdFromName(QString &name)
