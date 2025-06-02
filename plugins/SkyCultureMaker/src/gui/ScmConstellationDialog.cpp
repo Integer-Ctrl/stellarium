@@ -192,7 +192,6 @@ void ScmConstellationDialog::resetDialog()
 	ui->idTE->clear();
 
 	constellationPlaceholderId.clear();
-	ui->idTE->clear();
 	ui->idTE->setPlaceholderText("");
 
 	constellationEnglishName.clear();
