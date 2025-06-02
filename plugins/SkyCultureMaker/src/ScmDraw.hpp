@@ -18,7 +18,12 @@
 #include <tuple>
 #include "StelObjectType.hpp"
 #include <variant>
-#include "ScmTypes.hpp"
+#include "types/DrawTools.hpp"
+#include "types/Drawing.hpp"
+#include "types/CoordinateLine.hpp"
+#include "types/StarLine.hpp"
+#include "types/Lines.hpp"
+#include "types/StarPoint.hpp"
 
 namespace scm
 {
@@ -26,26 +31,26 @@ namespace scm
 class ScmDraw
 {
 private:
-	//! @brief The search radius to attach to a point on a existing line.
+	/// The search radius to attach to a point on a existing line.
 	uint32_t maxSnapRadiusInPixels = 25;
 
-	//! @brief Indicates that the startPoint has been set.
-	Drawing drawState;
+	/// Indicates that the startPoint has been set.
+	Drawing drawState = Drawing::None;
 
-	//! @brief Indicates if a line start or end will snap to the nearest star.
-	bool snapToStar;
+	/// Indicates if a line start or end will snap to the nearest star.
+	bool snapToStar = false;
 
-	//! @brief The current pending point.
+	/// The current pending point.
 	std::tuple<CoordinateLine, StarLine> currentLine;
 
-	//! @brief The fixed points.
+	/// The fixed points.
 	Lines drawnLines;
 
-	//! @brief The current active tool
+	/// The current active tool
 	DrawTools activeTool = DrawTools::None;
 
 public:
-	//! @brief The frame that is used for calculation and is drawn on.
+	/// The frame that is used for calculation and is drawn on.
 	static const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
 
 	ScmDraw();
@@ -57,17 +62,17 @@ public:
 	 */
 	void drawLine(StelCore *core);
 
-	//! Handle mouse clicks. Please note that most of the interactions will be done through the GUI module.
-	//! @return set the event as accepted if it was intercepted
+	/// Handle mouse clicks. Please note that most of the interactions will be done through the GUI module.
+	/// @return set the event as accepted if it was intercepted
 	void handleMouseClicks(QMouseEvent *);
 
-	//! Handle mouse moves. Please note that most of the interactions will be done through the GUI module.
-	//! @return true if the event was intercepted
+	/// Handle mouse moves. Please note that most of the interactions will be done through the GUI module.
+	/// @return true if the event was intercepted
 	bool handleMouseMoves(int x, int y, Qt::MouseButtons b);
 
-	//! Handle key events. Please note that most of the interactions will be done through the GUI module.
-	//! @param e the Key event
-	//! @return set the event as accepted if it was intercepted
+	/// Handle key events. Please note that most of the interactions will be done through the GUI module.
+	/// @param e the Key event
+	/// @return set the event as accepted if it was intercepted
 	void handleKeys(QKeyEvent *e);
 
 	/**
@@ -80,7 +85,7 @@ public:
 	 */
 	std::optional<StarPoint> findNearestPoint(int x, int y, StelProjectorP prj);
 
-	//! Undo the last drawn line.
+	/// Undo the last drawn line.
 	void undoLastLine();
 
 	/**

@@ -28,6 +28,13 @@ SET( SkyCultureMaker_SRCS
      gui/ScmConstellationDialog.cpp
      gui/ScmSkyCultureDialog.hpp
      gui/ScmSkyCultureDialog.cpp
+
+     types/CoordinateLine.hpp
+     types/Drawing.hpp
+     types/DrawTools.hpp
+     types/Lines.hpp
+     types/StarLine.hpp
+     types/StarPoint.hpp
 )
 
 SET( SCM_UIS

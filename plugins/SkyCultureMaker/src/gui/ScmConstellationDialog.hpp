@@ -6,13 +6,12 @@
 #include <optional>
 #include "StelDialogSeparate.hpp"
 #include "../SkyCultureMaker.hpp"
-#include "../ScmTypes.hpp"
+#include "../types/DrawTools.hpp"
 
 class Ui_scmConstellationDialog;
 
 class ScmConstellationDialog : public StelDialogSeparate
 {
-public:
 protected:
 	void createDialogContent() override;
 

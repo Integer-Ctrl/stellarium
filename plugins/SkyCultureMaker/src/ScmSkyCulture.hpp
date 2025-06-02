@@ -12,14 +12,16 @@
 #define SCM_SKYCULTURE_HPP
 
 #include <QString>
-#include <vector>
+// #include <vector>
 #include <optional>
 
 #include "StelSkyCultureMgr.hpp"
 #include "ScmConstellation.hpp"
 #include "ScmAsterism.hpp"
-#include "ScmTypes.hpp"
+#include "types/CoordinateLine.hpp"
+#include "types/StarLine.hpp"
 #include "ScmCommonName.hpp"
+#include "StelCore.hpp"
 
 namespace scm
 {
@@ -27,53 +29,60 @@ namespace scm
 class ScmSkyCulture
 {
 public:
-	//! Sets the id of the sky culture
+	/// Sets the id of the sky culture
 	void setId(QString id);
 
-	//! Sets the region of the sky culture
+	/// Sets the region of the sky culture
 	void setRegion(QString region);
 
-	//! Sets the classification of the sky culture
+	/// Sets the classification of the sky culture
 	void setClassification(StelSkyCulture::CLASSIFICATION classification);
 
-	//! Sets whether to show common names in addition to the culture-specific ones
+	/// Sets whether to show common names in addition to the culture-specific ones
 	void setFallbackToInternationalNames(bool fallback);
 
-	//! Adds an asterism to the sky culture
+	/// Adds an asterism to the sky culture
 	void addAsterism(ScmAsterism asterism);
 
-	//! Removes an asterism from the sky culture by its ID
+	/// Removes an asterism from the sky culture by its ID
 	void removeAsterism(QString id);
 
-	//! Adds a constellation to the sky culture
+	/// Adds a constellation to the sky culture
 	void addConstellation(QString id, std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars);
 
-	//! Removes a constellation from the sky culture by its ID
+	/// Removes a constellation from the sky culture by its ID
 	void removeConstellation(QString id);
 
-	//! Gets a constellation from the sky culture by its ID
+	/// Gets a constellation from the sky culture by its ID
 	scm::ScmConstellation *getConstellation(QString id);
 
-	//! Adds a common name to the sky culture
+	/// Adds a common name to the sky culture
 	void addCommonName(ScmCommonName commonName);
 
-	//! Removes a common name from the sky culture by its ID
+	/// Removes a common name from the sky culture by its ID
 	void removeCommonName(QString id);
 
-	//! Returns the asterisms of the sky culture
+	/// Returns the asterisms of the sky culture
 	// TODO: QVector<ScmAsterism> getAsterisms() const;
 
-	//! Returns the constellations of the sky culture
+	/// Returns the constellations of the sky culture
 	std::vector<ScmConstellation> getConstellations() const;
 
-	//! Returns the common names of the stars, planets and nonstellar objects
+	/// Returns the common names of the stars, planets and nonstellar objects
 	std::vector<ScmCommonName> getCommonNames() const;
 
-	//! Returns the sky culture as a JSON object
+	/**
+	* @brief Returns the sky culture as a JSON object
+	*/
 	QJsonObject toJson() const;
 
+	/**
+	* @brief Draws the sky culture.
+	*/
+	void draw(StelCore *core);
+
 private:
-	//! Sky culture identifier
+	/// Sky culture identifier
 	QString id;
 
 	/*! The name of region following the United Nations geoscheme UN~M49
@@ -82,26 +91,26 @@ private:
 	 */
 	QString region;
 
-	//! Classification of sky culture (enum)
+	/// Classification of sky culture (enum)
 	StelSkyCulture::CLASSIFICATION classification;
 
-	//! Whether to show common names in addition to the culture-specific ones
+	/// Whether to show common names in addition to the culture-specific ones
 	bool fallbackToInternationalNames = false;
 
-	//! The asterisms of the sky culture
+	/// The asterisms of the sky culture
 	std::vector<ScmAsterism> asterisms;
 
-	//! The constellations of the sky culture
+	/// The constellations of the sky culture
 	std::vector<ScmConstellation> constellations;
 
-	//! The common names of the stars, planets and nonstellar objects
+	/// The common names of the stars, planets and nonstellar objects
 	std::vector<ScmCommonName> commonNames;
 
 	// TODO: edges:
-	//! Type of the edges. Can be one of "none", "iau" or "own". TODO: enum?
+	/// Type of the edges. Can be one of "none", "iau" or "own". TODO: enum?
 	// std::optional<QString> edgeType;
 
-	//! Source of the edges.
+	/// Source of the edges.
 	// std::optional<QString> edgeSource;
 
 	/*! Describes the coordinate epoch. Allowed values:
@@ -114,7 +123,7 @@ private:
 	 */
 	// std::optional<QString> edgeEpoch;
 
-	//! Describes the edges of the constellations.
+	/// Describes the edges of the constellations.
 	// std::optional<QVector<QString>> edges;
 };
 

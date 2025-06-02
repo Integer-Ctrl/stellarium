@@ -63,3 +63,11 @@ std::vector<scm::ScmConstellation> scm::ScmSkyCulture::getConstellations() const
 {
 	return constellations;
 }
+
+void scm::ScmSkyCulture::draw(StelCore *core)
+{
+	for (auto &constellation : constellations)
+	{
+		constellation.drawConstellation(core);
+	}
+}

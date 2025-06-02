@@ -19,7 +19,6 @@
 #include <QKeyEvent>
 #include "ScmDraw.hpp"
 #include <vector>
-#include "ScmTypes.hpp"
 
 /**
  * Managing the creation process of a new sky culture.
@@ -75,6 +74,7 @@ SkyCultureMaker::SkyCultureMaker()
 	setObjectName("SkyCultureMaker");
 	font.setPixelSize(25);
 
+	drawObj = new scm::ScmDraw();
 	scmStartDialog = new ScmStartDialog(this);
 	scmSkyCultureDialog = new ScmSkyCultureDialog(this);
 	scmConstellationDialog = new ScmConstellationDialog(this);
@@ -85,11 +85,16 @@ SkyCultureMaker::SkyCultureMaker()
 *************************************************************************/
 SkyCultureMaker::~SkyCultureMaker()
 {
+	// Initalized on start
 	delete drawObj;
 	delete scmStartDialog;
 	delete scmSkyCultureDialog;
 	delete scmConstellationDialog;
-	delete currentSkyCulture;
+
+	if (currentSkyCulture != nullptr)
+	{
+		delete currentSkyCulture;
+	}
 }
 
 void SkyCultureMaker::setActionToggle(const QString &id, bool toggle)
@@ -126,7 +131,6 @@ void SkyCultureMaker::init()
 	qDebug() << "init called for SkyCultureMaker";
 
 	StelApp &app = StelApp::getInstance();
-	drawObj = new scm::ScmDraw();
 
 	addAction(actionIdLine, groupId, N_("Sky Culture Maker"), "enabledScm");
 
@@ -193,17 +197,14 @@ void SkyCultureMaker::stopScmProcess()
 
 void SkyCultureMaker::draw(StelCore *core)
 {
-	if (isLineDrawEnabled)
+	if (isLineDrawEnabled && drawObj != nullptr)
 	{
 		drawObj->drawLine(core);
 	}
 
 	if (isScmEnabled && currentSkyCulture != nullptr)
 	{
-		for (const auto &constellation : currentSkyCulture->getConstellations())
-		{
-			constellation.drawConstellation(core);
-		}
+		currentSkyCulture->draw(core);
 	}
 }
 
@@ -295,7 +296,7 @@ void SkyCultureMaker::setDrawTool(scm::DrawTools tool)
 
 void SkyCultureMaker::setNewSkyCulture()
 {
-	if (currentSkyCulture)
+	if (currentSkyCulture != nullptr)
 	{
 		delete currentSkyCulture;
 	}

@@ -19,20 +19,39 @@ namespace scm
 class ScmAsterism
 {
 public:
+    /**
+    * @brief Sets the id of the asterism
+    * 
+    * @param id id
+    */
     void setId(QString id);
+
+    /**
+    * @brief Gets the id of the asterism
+    * 
+    * @return id
+    */
     QString getId() const;
 
-    //! Sets the common name of the asterism
+    /**
+     * @brief Sets the common name of the asterism.
+     *
+     * @param name The common name of this asterim.
+     */
     void setCommonName(ScmCommonName name);
 
-    //! Returns the common name of the asterism
+    /**
+     * @brief Returns the common name of the asterism.
+     *
+     * @return The common name of the this asterism.
+     */
     ScmCommonName getCommonName() const;
  
 private:
-    //! Id of the Asterism
+    /// Id of the Asterism
     QString id;
 
-    //! Common name of the constellation
+    /// Common name of the constellation
     ScmCommonName commonName;
 };
 

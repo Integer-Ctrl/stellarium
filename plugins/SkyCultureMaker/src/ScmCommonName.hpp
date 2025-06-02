@@ -23,37 +23,37 @@ class ScmCommonName
 public:
 	ScmCommonName(QString id);
 
-	//! Sets the english name
+	/// Sets the english name
 	void setEnglishName(QString name);
 
-	//! Sets the native name
+	/// Sets the native name
 	void setNativeName(QString name);
 
-	//! Sets the native name in European glyphs or Pinyin for Chinese.
+	/// Sets the native name in European glyphs or Pinyin for Chinese.
 	void setPronounce(QString name);
 
-	//! Sets the native name in IPA (International Phonetic Alphabet)
+	/// Sets the native name in IPA (International Phonetic Alphabet)
 	void setIpa(QString name);
 
-	//! Sets the references to the sources of the name spellings
+	/// Sets the references to the sources of the name spellings
 	void setReferences(std::vector<int> refs);
 
-	//! Returns the english name
+	/// Returns the english name
 	QString getEnglishName() const;
 
-	//! Returns the native name
+	/// Returns the native name
 	std::optional<QString> getNativeName() const;
 
-	//! Returns the native name in European glyphs or Pinyin for Chinese.
+	/// Returns the native name in European glyphs or Pinyin for Chinese.
 	std::optional<QString> getPronounce() const;
 
-	//! Returns the native name in IPA (International Phonetic Alphabet)
+	/// Returns the native name in IPA (International Phonetic Alphabet)
 	std::optional<QString> getIpa() const;
 
-	//! Returns the references to the sources of the name spellings
+	/// Returns the references to the sources of the name spellings
 	std::optional<std::vector<int>> getReferences() const;
 
-	//! Returns the common name as a JSON object
+	/// Returns the common name as a JSON object
 	QJsonObject toJson() const;
 
 private:
@@ -64,19 +64,19 @@ private:
 	 */
 	QString id;
 
-	//! The english name
+	/// The english name
 	QString englishName;
 
-	//! The native name
+	/// The native name
 	std::optional<QString> nativeName;
 
-	//! Native name in European glyphs, if needed. For Chinese, expect Pinyin here.
+	/// Native name in European glyphs, if needed. For Chinese, expect Pinyin here.
 	std::optional<QString> pronounce;
 
-	//! The native name in IPA (International Phonetic Alphabet)
+	/// The native name in IPA (International Phonetic Alphabet)
 	std::optional<QString> ipa;
 
-	//! References to the sources of the name spellings
+	/// References to the sources of the name spellings
 	std::optional<std::vector<int>> references;
 };
 
