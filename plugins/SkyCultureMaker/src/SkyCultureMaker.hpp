@@ -65,6 +65,9 @@ public:
 	//! @brief Triggers a single undo operation in the line draw.
 	void triggerDrawUndo();
 
+	//! @brief Sets the active used draw tool.
+	void setDrawTool(scm::DrawTools tool);
+
 	//! @brief Sets a new sky culture object
 	void setNewSkyCulture();
 

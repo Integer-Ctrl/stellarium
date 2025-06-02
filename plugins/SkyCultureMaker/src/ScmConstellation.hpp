@@ -24,6 +24,7 @@ class ScmConstellation
 public:
 	//! @brief The frame that is used for calculation and is drawn on.
 	static const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
+	static const Vec3f colorDrawDefault;
 
 	ScmConstellation(std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars);
 
@@ -41,7 +42,7 @@ public:
 	 *
 	 * @param core The core used for drawing.
 	 */
-	void drawConstellation(StelCore *core) const;
+	void drawConstellation(StelCore *core, Vec3f color = colorDrawDefault) const;
 
 private:
 	//! Identifier of the constellation

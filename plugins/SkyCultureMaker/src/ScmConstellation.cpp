@@ -1,5 +1,7 @@
 #include "ScmConstellation.hpp"
 
+const Vec3f scm::ScmConstellation::colorDrawDefault(0.3f, 1.f, 0.f);
+
 scm::ScmConstellation::ScmConstellation(std::vector<scm::CoordinateLine> coordinates, std::vector<scm::StarLine> stars)
 	: constellationCoordinates(coordinates)
 	, constellationStars(stars)
@@ -42,12 +44,11 @@ void scm::ScmConstellation::setConstellation(std::vector<CoordinateLine> coordin
 	constellationStars = stars;
 }
 
-void scm::ScmConstellation::drawConstellation(StelCore *core) const
+void scm::ScmConstellation::drawConstellation(StelCore *core, Vec3f color) const
 {
 	StelPainter painter(core->getProjection(drawFrame));
 	painter.setBlending(true);
 	painter.setLineSmooth(true);
-	Vec3f color = {0.3f, 1.f, 0.f};
 	bool alpha = 1.0f;
 	painter.setColor(color, alpha);
 

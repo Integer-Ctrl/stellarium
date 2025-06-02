@@ -53,14 +53,31 @@ enum class Drawing
 {
 	//! @brief No line is available.
 	None = 1,
+
 	//! @brief The line as a starting point.
 	hasStart = 2,
+
 	//! @brief The line has a not placed end that is attached to the cursor.
 	hasFloatingEnd = 4,
+
 	//! @brief The line is complete i.e. has start and end point.
 	hasEnd = 8,
+
 	//! @brief The end is an already existing point.
 	hasEndExistingPoint = 16,
+};
+
+//! @brief The possibles tools used for drawing.
+enum class DrawTools
+{
+	//! @brief No tool is active.
+	None,
+
+	//! @brief The pen tool is selected.
+	Pen,
+
+	//! @brief The eraser tool is selected.
+	Eraser,
 };
 }  // namespace scm
 

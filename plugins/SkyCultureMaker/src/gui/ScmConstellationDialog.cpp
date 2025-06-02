@@ -95,11 +95,13 @@ void ScmConstellationDialog::togglePen(bool checked)
 	if (checked)
 	{
 		ui->eraserBtn->setChecked(false);
-		activeTool = Tools::Pen;
+		activeTool = scm::DrawTools::Pen;
+		maker->setDrawTool(activeTool);
 	}
 	else
 	{
-		activeTool = Tools::None;
+		activeTool = scm::DrawTools::None;
+		maker->setDrawTool(activeTool);
 	}
 }
 
@@ -108,17 +110,20 @@ void ScmConstellationDialog::toggleEraser(bool checked)
 	if (checked)
 	{
 		ui->penBtn->setChecked(false);
-		activeTool = Tools::Eraser;
+		activeTool = scm::DrawTools::Eraser;
+		maker->setDrawTool(activeTool);
 	}
 	else
 	{
-		activeTool = Tools::None;
+		activeTool = scm::DrawTools::None;
+		maker->setDrawTool(activeTool);
 	}
 }
 
 void ScmConstellationDialog::triggerUndo()
 {
 	maker->triggerDrawUndo();
+	togglePen(true);
 }
 
 bool ScmConstellationDialog::canConstellationBeSaved()
@@ -126,7 +131,7 @@ bool ScmConstellationDialog::canConstellationBeSaved()
 	// shouldnt happen
 	if (nullptr == maker->getCurrentSkyCulture())
 	{
-		
+
 		return false;
 	}
 
@@ -159,7 +164,6 @@ void ScmConstellationDialog::cancel()
 	ScmConstellationDialog::close();
 }
 
-
 void ScmConstellationDialog::saveConstellation()
 {
 	if (canConstellationBeSaved())
@@ -182,7 +186,7 @@ void ScmConstellationDialog::saveConstellation()
 
 void ScmConstellationDialog::resetDialog()
 {
-	activeTool = Tools::None;
+	activeTool = scm::DrawTools::None;
 
 	constellationId.clear();
 	ui->idTE->clear();

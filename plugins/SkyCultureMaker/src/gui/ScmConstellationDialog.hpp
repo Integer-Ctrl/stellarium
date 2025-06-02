@@ -6,19 +6,13 @@
 #include <optional>
 #include "StelDialogSeparate.hpp"
 #include "../SkyCultureMaker.hpp"
+#include "../ScmTypes.hpp"
 
 class Ui_scmConstellationDialog;
 
 class ScmConstellationDialog : public StelDialogSeparate
 {
 public:
-	enum class Tools
-	{
-		None,
-		Pen,
-		Eraser,
-	};
-
 protected:
 	void createDialogContent() override;
 
@@ -38,7 +32,7 @@ private slots:
 private:
 	Ui_scmConstellationDialog *ui;
 	SkyCultureMaker *maker;
-	Tools activeTool = Tools::None;
+	scm::DrawTools activeTool = scm::DrawTools::None;
 
 	/// Identifier of the constellation
 	QString constellationId;

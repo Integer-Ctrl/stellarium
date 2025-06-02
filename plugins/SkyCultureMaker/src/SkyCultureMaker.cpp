@@ -288,6 +288,11 @@ void SkyCultureMaker::triggerDrawUndo()
 	}
 }
 
+void SkyCultureMaker::setDrawTool(scm::DrawTools tool)
+{
+	drawObj->setTool(tool);
+}
+
 void SkyCultureMaker::setNewSkyCulture()
 {
 	if (currentSkyCulture)

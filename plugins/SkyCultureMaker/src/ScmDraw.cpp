@@ -48,81 +48,84 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 	qreal x = event->x(), y = event->y();
 #endif
 
-	// Draw line
-	if (event->button() == Qt::RightButton && event->type() == QEvent::MouseButtonPress)
+	if (activeTool == DrawTools::Pen)
 	{
-		StelApp &app = StelApp::getInstance();
-		StelCore *core = app.getCore();
-		StelProjectorP prj = core->getProjection(drawFrame);
-		Vec3d point;
-		std::optional<QString> starID;
-		prj->unProject(x, y, point);
+		// Draw line
+		if (event->button() == Qt::RightButton && event->type() == QEvent::MouseButtonPress)
+		{
+			StelApp &app = StelApp::getInstance();
+			StelCore *core = app.getCore();
+			StelProjectorP prj = core->getProjection(drawFrame);
+			Vec3d point;
+			std::optional<QString> starID;
+			prj->unProject(x, y, point);
 
-		// We want to combine any near start point to an existing point so that we don't create
-		// duplicates.
-		std::optional<StarPoint> nearest = findNearestPoint(x, y, prj);
-		if (nearest.has_value())
-		{
-			point = nearest.value().coordinate;
-			starID = nearest.value().star;
-		}
-		else if (snapToStar)
-		{
-			if (hasFlag(drawState, Drawing::hasEndExistingPoint))
+			// We want to combine any near start point to an existing point so that we don't create
+			// duplicates.
+			std::optional<StarPoint> nearest = findNearestPoint(x, y, prj);
+			if (nearest.has_value())
 			{
-				point = std::get<CoordinateLine>(currentLine).end;
-				starID = std::get<StarLine>(currentLine).end;
+				point = nearest.value().coordinate;
+				starID = nearest.value().star;
+			}
+			else if (snapToStar)
+			{
+				if (hasFlag(drawState, Drawing::hasEndExistingPoint))
+				{
+					point = std::get<CoordinateLine>(currentLine).end;
+					starID = std::get<StarLine>(currentLine).end;
+				}
+				else
+				{
+					StelObjectMgr &objectMgr = app.getStelObjectMgr();
+
+					objectMgr.findAndSelect(core, x, y);
+					if (objectMgr.getWasSelected())
+					{
+						StelObjectP stelObj = objectMgr.getLastSelectedObject();
+						Vec3d stelPos = stelObj->getJ2000EquatorialPos(core);
+						point = stelPos;
+						starID = stelObj->getID();
+					}
+				}
+			}
+
+			if (hasFlag(drawState, (Drawing::hasStart | Drawing::hasFloatingEnd)))
+			{
+				std::get<CoordinateLine>(currentLine).end = point;
+				std::get<StarLine>(currentLine).end = starID;
+				drawState = Drawing::hasEnd;
+
+				drawnLines.coordinates.push_back(std::get<CoordinateLine>(currentLine));
+				drawnLines.stars.push_back(std::get<StarLine>(currentLine));
+				std::get<CoordinateLine>(currentLine).start = point;
+				std::get<StarLine>(currentLine).start = starID;
+				drawState = Drawing::hasStart;
 			}
 			else
 			{
-				StelObjectMgr &objectMgr = app.getStelObjectMgr();
-
-				objectMgr.findAndSelect(core, x, y);
-				if (objectMgr.getWasSelected())
-				{
-					StelObjectP stelObj = objectMgr.getLastSelectedObject();
-					Vec3d stelPos = stelObj->getJ2000EquatorialPos(core);
-					point = stelPos;
-					starID = stelObj->getID();
-				}
+				std::get<CoordinateLine>(currentLine).start = point;
+				std::get<StarLine>(currentLine).start = starID;
+				drawState = Drawing::hasStart;
 			}
+
+			event->accept();
+			return;
 		}
 
-		if (hasFlag(drawState, (Drawing::hasStart | Drawing::hasFloatingEnd)))
+		// Reset line drawing
+		// Also works as a Undo feature.
+		if (event->button() == Qt::RightButton && event->type() == QEvent::MouseButtonDblClick)
 		{
-			std::get<CoordinateLine>(currentLine).end = point;
-			std::get<StarLine>(currentLine).end = starID;
-			drawState = Drawing::hasEnd;
-
-			drawnLines.coordinates.push_back(std::get<CoordinateLine>(currentLine));
-			drawnLines.stars.push_back(std::get<StarLine>(currentLine));
-			std::get<CoordinateLine>(currentLine).start = point;
-			std::get<StarLine>(currentLine).start = starID;
-			drawState = Drawing::hasStart;
+			if (!drawnLines.coordinates.empty())
+			{
+				drawnLines.coordinates.pop_back();
+				drawnLines.stars.pop_back();
+			}
+			drawState = Drawing::None;
+			event->accept();
+			return;
 		}
-		else
-		{
-			std::get<CoordinateLine>(currentLine).start = point;
-			std::get<StarLine>(currentLine).start = starID;
-			drawState = Drawing::hasStart;
-		}
-
-		event->accept();
-		return;
-	}
-
-	// Reset line drawing
-	// Also works as a Undo feature.
-	if (event->button() == Qt::RightButton && event->type() == QEvent::MouseButtonDblClick)
-	{
-		if (!drawnLines.coordinates.empty())
-		{
-			drawnLines.coordinates.pop_back();
-			drawnLines.stars.pop_back();
-		}
-		drawState = Drawing::None;
-		event->accept();
-		return;
 	}
 }
 
@@ -131,37 +134,40 @@ bool scm::ScmDraw::handleMouseMoves(int x, int y, Qt::MouseButtons b)
 	StelApp &app = StelApp::getInstance();
 	StelCore *core = app.getCore();
 
-	if (snapToStar)
+	if (activeTool == DrawTools::Pen)
 	{
-		StelObjectMgr &objectMgr = app.getStelObjectMgr();
-		objectMgr.findAndSelect(core, x, y);
-	}
-
-	if (hasFlag(drawState, (Drawing::hasStart | Drawing::hasFloatingEnd)))
-	{
-		StelProjectorP prj = core->getProjection(drawFrame);
-		Vec3d position;
-		prj->unProject(x, y, position);
 		if (snapToStar)
 		{
 			StelObjectMgr &objectMgr = app.getStelObjectMgr();
-			if (objectMgr.getWasSelected())
+			objectMgr.findAndSelect(core, x, y);
+		}
+
+		if (hasFlag(drawState, (Drawing::hasStart | Drawing::hasFloatingEnd)))
+		{
+			StelProjectorP prj = core->getProjection(drawFrame);
+			Vec3d position;
+			prj->unProject(x, y, position);
+			if (snapToStar)
 			{
-				StelObjectP stelObj = objectMgr.getLastSelectedObject();
-				Vec3d stelPos = stelObj->getJ2000EquatorialPos(core);
-				std::get<CoordinateLine>(currentLine).end = stelPos;
+				StelObjectMgr &objectMgr = app.getStelObjectMgr();
+				if (objectMgr.getWasSelected())
+				{
+					StelObjectP stelObj = objectMgr.getLastSelectedObject();
+					Vec3d stelPos = stelObj->getJ2000EquatorialPos(core);
+					std::get<CoordinateLine>(currentLine).end = stelPos;
+				}
+				else
+				{
+					std::get<CoordinateLine>(currentLine).end = position;
+				}
 			}
 			else
 			{
 				std::get<CoordinateLine>(currentLine).end = position;
 			}
-		}
-		else
-		{
-			std::get<CoordinateLine>(currentLine).end = position;
-		}
 
-		drawState = Drawing::hasFloatingEnd;
+			drawState = Drawing::hasFloatingEnd;
+		}
 	}
 
 	// We always return false as we still want to navigate in Stellarium with left mouse button
@@ -170,17 +176,20 @@ bool scm::ScmDraw::handleMouseMoves(int x, int y, Qt::MouseButtons b)
 
 void scm::ScmDraw::handleKeys(QKeyEvent *e)
 {
-	if (e->key() == Qt::Key::Key_Control)
+	if (activeTool == DrawTools::Pen)
 	{
-		snapToStar = e->type() != QEvent::KeyPress;
+		if (e->key() == Qt::Key::Key_Control)
+		{
+			snapToStar = e->type() != QEvent::KeyPress;
 
-		e->accept();
-	}
+			e->accept();
+		}
 
-	if (e->key() == Qt::Key::Key_Z && e->modifiers() == Qt::Modifier::CTRL)
-	{
-		undoLastLine();
-		e->accept();
+		if (e->key() == Qt::Key::Key_Z && e->modifiers() == Qt::Modifier::CTRL)
+		{
+			undoLastLine();
+			e->accept();
+		}
 	}
 }
 
@@ -218,6 +227,11 @@ std::vector<scm::StarLine> scm::ScmDraw::getStars()
 std::vector<scm::CoordinateLine> scm::ScmDraw::getCoordinates()
 {
 	return drawnLines.coordinates;
+}
+
+void scm::ScmDraw::setTool(scm::DrawTools tool)
+{
+	activeTool = tool;
 }
 
 std::optional<scm::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelProjectorP prj)

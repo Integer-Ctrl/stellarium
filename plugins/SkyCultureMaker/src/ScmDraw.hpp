@@ -41,6 +41,9 @@ private:
 	//! @brief The fixed points.
 	Lines drawnLines;
 
+	//! @brief The current active tool
+	DrawTools activeTool = DrawTools::None;
+
 public:
 	//! @brief The frame that is used for calculation and is drawn on.
 	static const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
@@ -93,6 +96,13 @@ public:
 	 * @return std::vector<CoordinateLine> The drawn coordinates.
 	 */
 	std::vector<CoordinateLine> getCoordinates();
+
+	/**
+	 * @brief Set the active draw tool
+	 *
+	 * @param tool The tool to be used.
+	 */
+	void setTool(DrawTools tool);
 };
 
 }  // namespace scm
