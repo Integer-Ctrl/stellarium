@@ -40,6 +40,7 @@ void ScmConstellationDialog::createDialogContent()
 	connect(ui->undoBtn, &QPushButton::clicked, this, &ScmConstellationDialog::triggerUndo);
 
 	connect(ui->saveBtn, &QPushButton::clicked, this, &ScmConstellationDialog::saveConstellation);
+	connect(ui->cancelBtn, &QPushButton::clicked, this, &ScmConstellationDialog::cancel);
 
 	// LABELS TAB
 	connect(ui->enNameTE,
@@ -152,6 +153,13 @@ bool ScmConstellationDialog::canConstellationBeSaved()
 	return true;
 }
 
+void ScmConstellationDialog::cancel()
+{
+	resetDialog();
+	ScmConstellationDialog::close();
+}
+
+
 void ScmConstellationDialog::saveConstellation()
 {
 	if (canConstellationBeSaved())
@@ -166,13 +174,32 @@ void ScmConstellationDialog::saveConstellation()
 		constellationObj->setNativeName(constellationNativeName);
 		constellationObj->setPronounce(constellationPronounce);
 		constellationObj->setIPA(constellationIPA);
-		// resetDialog();
+
+		resetDialog();
+		ScmConstellationDialog::close();
 	}
 }
 
 void ScmConstellationDialog::resetDialog()
 {
-	// TODO
-	// reset ScmDraw as well?
-	// reset labels, artwork etc
+	activeTool = Tools::None;
+
+	constellationId.clear();
+	ui->idTE->clear();
+
+	constellationPlaceholderId.clear();
+	ui->idTE->clear();
+	ui->idTE->setPlaceholderText("");
+
+	constellationEnglishName.clear();
+	ui->enNameTE->clear();
+
+	constellationNativeName = std::nullopt;
+	ui->natNameTE->clear();
+
+	constellationPronounce = std::nullopt;
+	ui->pronounceTE->clear();
+
+	constellationIPA = std::nullopt;
+	ui->ipaTE->clear();
 }

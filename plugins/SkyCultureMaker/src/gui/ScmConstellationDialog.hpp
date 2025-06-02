@@ -64,6 +64,11 @@ private:
 	void saveConstellation();
 
 	/**
+	 * @brief Resets and closes the dialog.
+	 */
+	void cancel();
+
+	/**
 	 * @brief Resets the constellation dialog data.
 	 */
 	void resetDialog();
