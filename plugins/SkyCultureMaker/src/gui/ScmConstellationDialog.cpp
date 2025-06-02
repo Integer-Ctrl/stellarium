@@ -47,6 +47,19 @@ void ScmConstellationDialog::createDialogContent()
 		[this]()
 		{
 			constellationEnglishName = ui->enNameTE->toPlainText();
+
+			QString newConstId = constellationEnglishName.toLower().replace(" ","_");
+			constellationPlaceholderId = newConstId;
+			ui->idTE->setPlaceholderText(newConstId);
+
+			updateCanBeSavedState();
+		});
+	connect(ui->idTE,
+		&QTextEdit::textChanged,
+		this,
+		[this]()
+		{
+			constellationId = ui->idTE->toPlainText();
 			updateCanBeSavedState();
 		});
 	connect(ui->natNameTE,
@@ -131,6 +144,10 @@ void ScmConstellationDialog::updateCanBeSavedState()
 	{
 		canBeSaved = false;
 	}
+	if (constellationId.isEmpty() && constellationPlaceholderId.isEmpty())
+	{
+		canBeSaved = false;
+	}
 	if (constellationEnglishName.isEmpty())
 	{
 		canBeSaved = false;
@@ -151,9 +168,9 @@ void ScmConstellationDialog::updateCanBeSavedState()
 
 void ScmConstellationDialog::saveConstellation()
 {
-	QString id = constellationEnglishName.toLower().replace(" ", "_");
 	auto coordinates = maker->getScmDraw()->getCoordinates();
 	auto stars = maker->getScmDraw()->getStars();
+	QString id = constellationId.isEmpty() ? constellationPlaceholderId : constellationId;
 	maker->getCurrentSkyCulture()->addConstellation(id, coordinates, stars);
 	scm::ScmConstellation *constellationObj = maker->getCurrentSkyCulture()->getConstellation(id);
 
@@ -161,6 +178,8 @@ void ScmConstellationDialog::saveConstellation()
 	constellationObj->setNativeName(constellationNativeName);
 	constellationObj->setPronounce(constellationPronounce);
 	constellationObj->setIPA(constellationIPA);
+
+	// resetDialog();
 }
 
 void ScmConstellationDialog::resetDialog()

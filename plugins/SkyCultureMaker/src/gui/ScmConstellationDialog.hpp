@@ -43,9 +43,17 @@ private:
 	SkyCultureMaker *maker;
 	Tools activeTool = Tools::None;
 
+	/// Identifier of the constellation
+	QString constellationId;
+	/// Placeholder identifier of the constellation
+	QString constellationPlaceholderId;
+	/// English name of the constellation
 	QString constellationEnglishName;
+	/// Native name of the constellation
 	std::optional<QString> constellationNativeName;
+	/// Pronounciation of the constellation
 	std::optional<QString> constellationPronounce;
+	/// IPA representation of the constellation
 	std::optional<QString> constellationIPA;
 
 	/**
@@ -53,8 +61,14 @@ private:
 	 */
 	void updateCanBeSavedState();
 
+	/**
+	 * @brief Saves the constellation data as an object in the current sky culture.
+	 */
 	void saveConstellation();
 
+	/**
+	 * @brief Resets the constellation dialog data.
+	 */
 	void resetDialog();
 };
 
