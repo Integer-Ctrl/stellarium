@@ -29,8 +29,8 @@ private slots:
 	void triggerUndo();
 
 private:
-	Ui_scmConstellationDialog *ui;
-	SkyCultureMaker *maker;
+	Ui_scmConstellationDialog *ui = nullptr;
+	SkyCultureMaker *maker = nullptr;
 	scm::DrawTools activeTool = scm::DrawTools::None;
 
 	/// Identifier of the constellation

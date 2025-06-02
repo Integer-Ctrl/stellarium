@@ -30,7 +30,7 @@ public:
 	void setNativeName(QString name);
 
 	/// Sets the native name in European glyphs or Pinyin for Chinese.
-	void setPronounce(QString name);
+	void setPronounce(QString pronounce);
 
 	/// Sets the native name in IPA (International Phonetic Alphabet)
 	void setIpa(QString name);

@@ -29,8 +29,8 @@ private slots:
 	void removeConstellation();
 
 private:
-	Ui_scmSkyCultureDialog *ui;
-	SkyCultureMaker *maker;
+	Ui_scmSkyCultureDialog *ui = nullptr;
+	SkyCultureMaker *maker = nullptr;
 
 	QString name;
 	std::vector<QString> constellationList;

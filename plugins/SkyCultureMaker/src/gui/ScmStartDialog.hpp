@@ -14,7 +14,7 @@ protected:
 	void createDialogContent() override;
 
 public:
-	ScmStartDialog(SkyCultureMaker* maker);
+	ScmStartDialog(SkyCultureMaker *maker);
 	~ScmStartDialog() override;
 
 public slots:
@@ -25,8 +25,8 @@ private slots:
 	void closeDialog();
 
 private:
-	Ui_scmStartDialog* ui;
-	SkyCultureMaker* maker;
+	Ui_scmStartDialog *ui = nullptr;
+	SkyCultureMaker *maker = nullptr;
 };
 
-#endif // SCMSTARTDIALOG_HPP
+#endif	// SCMSTARTDIALOG_HPP
