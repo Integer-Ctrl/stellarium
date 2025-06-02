@@ -13,7 +13,7 @@
   <property name="minimumSize">
    <size>
     <width>360</width>
-    <height>412</height>
+    <height>454</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -48,7 +48,7 @@
      </property>
     </widget>
    </item>
-   <item>
+   <item alignment="Qt::AlignTop">
     <widget class="QFrame" name="Content">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -322,7 +322,16 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QHBoxLayout" name="bottomBtnLayout">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <property name="leftMargin">
+         <number>20</number>
+        </property>
+        <property name="rightMargin">
+         <number>20</number>
+        </property>
         <item>
          <widget class="QPushButton" name="saveBtn">
           <property name="text">
@@ -334,6 +343,35 @@
          <widget class="QPushButton" name="cancelBtn">
           <property name="text">
            <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="infoLayout">
+        <property name="leftMargin">
+         <number>20</number>
+        </property>
+        <property name="topMargin">
+         <number>5</number>
+        </property>
+        <property name="rightMargin">
+         <number>20</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="infoLbl">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

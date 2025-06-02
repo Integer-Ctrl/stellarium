@@ -30,7 +30,6 @@ void ScmConstellationDialog::close()
 void ScmConstellationDialog::createDialogContent()
 {
 	ui->setupUi(dialog);
-	ui->saveBtn->setEnabled(false);
 
 	connect(&StelApp::getInstance(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
 	connect(ui->titleBar, SIGNAL(movedTo(QPoint)), this, SLOT(handleMovedTo(QPoint)));
@@ -40,6 +39,8 @@ void ScmConstellationDialog::createDialogContent()
 	connect(ui->eraserBtn, &QPushButton::toggled, this, &ScmConstellationDialog::toggleEraser);
 	connect(ui->undoBtn, &QPushButton::clicked, this, &ScmConstellationDialog::triggerUndo);
 
+	connect(ui->saveBtn, &QPushButton::clicked, this, &ScmConstellationDialog::saveConstellation);
+
 	// LABELS TAB
 	connect(ui->enNameTE,
 		&QTextEdit::textChanged,
@@ -48,20 +49,11 @@ void ScmConstellationDialog::createDialogContent()
 		{
 			constellationEnglishName = ui->enNameTE->toPlainText();
 
-			QString newConstId = constellationEnglishName.toLower().replace(" ","_");
+			QString newConstId = constellationEnglishName.toLower().replace(" ", "_");
 			constellationPlaceholderId = newConstId;
 			ui->idTE->setPlaceholderText(newConstId);
-
-			updateCanBeSavedState();
 		});
-	connect(ui->idTE,
-		&QTextEdit::textChanged,
-		this,
-		[this]()
-		{
-			constellationId = ui->idTE->toPlainText();
-			updateCanBeSavedState();
-		});
+	connect(ui->idTE, &QTextEdit::textChanged, this, [this]() { constellationId = ui->idTE->toPlainText(); });
 	connect(ui->natNameTE,
 		&QTextEdit::textChanged,
 		this,
@@ -108,7 +100,6 @@ void ScmConstellationDialog::togglePen(bool checked)
 	{
 		activeTool = Tools::None;
 	}
-	updateCanBeSavedState();
 }
 
 void ScmConstellationDialog::toggleEraser(bool checked)
@@ -122,7 +113,6 @@ void ScmConstellationDialog::toggleEraser(bool checked)
 	{
 		activeTool = Tools::None;
 	}
-	updateCanBeSavedState();
 }
 
 void ScmConstellationDialog::triggerUndo()
@@ -130,56 +120,54 @@ void ScmConstellationDialog::triggerUndo()
 	maker->triggerDrawUndo();
 }
 
-void ScmConstellationDialog::updateCanBeSavedState()
+bool ScmConstellationDialog::canConstellationBeSaved()
 {
-	bool canBeSaved = true;
-
-	////////////////////////////////////////////////////
-	// check criteria here which if not met, will set
-	// canBeSaved to false
-	////////////////////////////////////////////////////
-
 	// shouldnt happen
 	if (nullptr == maker->getCurrentSkyCulture())
 	{
-		canBeSaved = false;
+		
+		return false;
 	}
-	if (constellationId.isEmpty() && constellationPlaceholderId.isEmpty())
-	{
-		canBeSaved = false;
-	}
+
 	if (constellationEnglishName.isEmpty())
 	{
-		canBeSaved = false;
+		ui->infoLbl->setText("WARNING: Could not save: English name is empty");
+		return false;
 	}
+
+	if (constellationId.isEmpty() && constellationPlaceholderId.isEmpty())
+	{
+		ui->infoLbl->setText("WARNING: Could not save: Constellation ID is empty");
+		return false;
+	}
+
 	// Check if drawnStars is empty
 	auto drawnConstellation = maker->getScmDraw()->getCoordinates();
 	if (drawnConstellation.empty())
 	{
-		canBeSaved = false;
+		ui->infoLbl->setText("WARNING: Could not save: The constellation does not contain any drawings");
+		return false;
 	}
 
-	// Update UI here
-	ui->saveBtn->setEnabled(canBeSaved);
-
-	// Set final state
-	ScmConstellationDialog::canBeSaved = canBeSaved;
+	return true;
 }
 
 void ScmConstellationDialog::saveConstellation()
 {
-	auto coordinates = maker->getScmDraw()->getCoordinates();
-	auto stars = maker->getScmDraw()->getStars();
-	QString id = constellationId.isEmpty() ? constellationPlaceholderId : constellationId;
-	maker->getCurrentSkyCulture()->addConstellation(id, coordinates, stars);
-	scm::ScmConstellation *constellationObj = maker->getCurrentSkyCulture()->getConstellation(id);
+	if (canConstellationBeSaved())
+	{
+		auto coordinates = maker->getScmDraw()->getCoordinates();
+		auto stars = maker->getScmDraw()->getStars();
+		QString id = constellationId.isEmpty() ? constellationPlaceholderId : constellationId;
+		maker->getCurrentSkyCulture()->addConstellation(id, coordinates, stars);
+		scm::ScmConstellation *constellationObj = maker->getCurrentSkyCulture()->getConstellation(id);
 
-	constellationObj->setEnglishName(constellationEnglishName);
-	constellationObj->setNativeName(constellationNativeName);
-	constellationObj->setPronounce(constellationPronounce);
-	constellationObj->setIPA(constellationIPA);
-
-	// resetDialog();
+		constellationObj->setEnglishName(constellationEnglishName);
+		constellationObj->setNativeName(constellationNativeName);
+		constellationObj->setPronounce(constellationPronounce);
+		constellationObj->setIPA(constellationIPA);
+		// resetDialog();
+	}
 }
 
 void ScmConstellationDialog::resetDialog()
