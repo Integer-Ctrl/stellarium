@@ -157,8 +157,6 @@ void ScmEditorDialog::createDialogContent()
 	/* ============================================= SCM importer/converter */
 	auto fsModel = new QFileSystemModel(this);
 	fsModel->setRootPath(QDir::homePath());
-	//ui->fileSystem->setModel(fsModel);
-	//ui->fileSystem->setRootIndex(fsModel->index(QDir::homePath()));
 
 	connect(ui->browseButton,
 		&QPushButton::clicked,
@@ -166,7 +164,7 @@ void ScmEditorDialog::createDialogContent()
 		[this]()
 		{
 			const QString file = QFileDialog::getOpenFileName(
-			    dialog, tr("Select an archive"), QDir::homePath(), tr("Archives (*.zip *.rar *.7z *.tar)"));
+			    nullptr, tr("Select an archive"), QDir::homePath(), tr("Archives (*.zip *.rar *.7z *.tar)"));
 			if (!file.isEmpty())
 			{
 				ui->filePathLineEdit->setText(file);
