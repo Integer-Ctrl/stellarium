@@ -163,8 +163,10 @@ void ScmEditorDialog::createDialogContent()
 		this,
 		[this]()
 		{
-			const QString file = QFileDialog::getOpenFileName(
-			    nullptr, tr("Select an archive"), QDir::homePath(), tr("Archives (*.zip *.rar *.7z *.tar)"));
+			const QString file = QFileDialog::getOpenFileName(nullptr,
+									  tr("Select an archive"),
+									  QDir::homePath(),
+									  tr("Archives (*.zip *.rar *.7z *.tar)"));
 			if (!file.isEmpty())
 			{
 				ui->filePathLineEdit->setText(file);
@@ -191,15 +193,20 @@ void ScmEditorDialog::createDialogContent()
 		    int dotPos = baseName.indexOf('.');
 		    QString stem =
 			(dotPos == -1) ? baseName : baseName.left(dotPos);  // Extract the part before the first dot
+
 		    const QString tempDir = QDir::tempPath() + "/skycultures/" + stem;
 		    QDir().mkpath(tempDir);
 		    QDir tempFolder(tempDir);
+
+		    // Destination is where the converted files will be saved temporarily
+		    const QString tempDestDir = QDir::tempPath() + "/skycultures/results/" + stem;
+		    QDir tempDestFolder(tempDestDir);
 
 		    ui->importButton->setEnabled(false);
 
 		    // Run conversion in a background thread
 		    QFuture<QString> future = QtConcurrent::run(
-			[path, tempDir, tempFolder]() mutable -> QString
+			[path, tempDir, tempFolder, tempDestDir, tempDestFolder, stem]() mutable -> QString
 			{
 				// Check if the file is a valid archive
 				QMimeDatabase db;
@@ -258,18 +265,13 @@ void ScmEditorDialog::createDialogContent()
 					return "Invalid archive structure. Expected 'info.ini' or a single subfolder.";
 
 				qDebug() << "Source for conversion:" << source;
-
-				// Destination is where the converted files will be saved
-				QString destDir =
-				    QDir::homePath() + "/Documents/SkyCultureConverter/" +
-				    QFileInfo(path).fileName().left(QFileInfo(path).fileName().lastIndexOf('.'));
-				qDebug() << "Destination for conversion:" << destDir;
+				qDebug() << "Destination for conversion:" << tempDestDir;
 
 				SkyCultureConverter::ReturnValue result;
 
 				try
 				{
-					result = SkyCultureConverter::convert(source, destDir);
+					result = SkyCultureConverter::convert(source, tempDestDir);
 				}
 				catch (const std::exception &e)
 				{
@@ -298,20 +300,80 @@ void ScmEditorDialog::createDialogContent()
 						msg = "Unknown error.";
 						break;
 				}
+
 				qDebug() << "Conversion result:" << msg;
 				return msg;
 			});
+
+		    // Prompt for explorer view for the destination folder
+			const QString destDir = QFileDialog::getExistingDirectory(
+			nullptr, tr("Select a directory to save the converted files"), QDir::homePath());
+
+			bool moveOperationCompleted = false; // This boolean tracks the outcome
+
+			if (!destDir.isEmpty())
+			{
+				// Construct the target path for the folder using 'stem'
+				QString targetFolderPath = QDir(destDir).filePath(stem);
+				QDir targetDir(targetFolderPath); // QDir object for checking existence
+
+				if (targetDir.exists())
+				{
+					// Target folder already exists. Do not copy/move.
+					moveOperationCompleted = false;
+					qDebug() << "Target folder" << targetFolderPath << "already exists. No move operation performed.";
+				}
+				else
+				{
+					// Target folder does not exist, attempt to move/rename tempDestFolder.
+					// tempDestFolder.path() gives the full path to the source directory.
+					// QDir().rename is a common way to move/rename a directory.
+					if (QDir().rename(tempDestFolder.path(), targetFolderPath))
+					{
+						moveOperationCompleted = true;
+						qDebug() << "Successfully moved contents of" << tempDestFolder.path() << "to" << targetFolderPath;
+					}
+					else
+					{
+						moveOperationCompleted = false;
+						qWarning() << "Failed to move" << tempDestFolder.path() << "to" << targetFolderPath;
+						// The original code had a comment about attempting to copy if rename fails.
+						// This fallback is not included here as per the new requirements.
+					}
+				}
+			}
+			else
+			{
+				// User cancelled the dialog or selected nothing
+			    qDebug() << "Conversion aborted. No destination directory selected.";
+		    }
+
+			// At this point, 'moveOperationCompleted' holds the status of the operation.
+			// The original 'else' for if (!destDir.isEmpty()) was:
+			// }
+			// else
+			// {
+				// User cancelled the dialog or selected nothing
+				// qDebug() << "Conversion aborted. No destination directory selected.";
+			// }
+			// This is covered by the logic above. The qDebug message for cancellation is present.
+			    // User cancelled the dialog or selected nothing
+				
 
 		    // Watcher to re-enable the button & report result on UI thread
 		    auto *watcher = new QFutureWatcher<QString>(this);
 		    connect(watcher,
 			    &QFutureWatcher<QString>::finished,
 			    this,
-			    [this, watcher, tempFolder]() mutable
+			    [this, watcher, tempFolder, tempDestFolder, moveOperationCompleted]() mutable
 			    {
 				    QString resultText = watcher->future().result();
+					if (!moveOperationCompleted) {
+						resultText = "Output directory already exists.";
+					}
 				    ui->filePathLineEdit->setText(resultText);
 				    tempFolder.removeRecursively();
+				    tempDestFolder.removeRecursively();
 				    ui->importButton->setEnabled(true);
 				    watcher->deleteLater();
 			    });
