@@ -1,7 +1,7 @@
 #include "ScmConstellation.hpp"
 
-const Vec3f scm::ScmConstellation::colorDrawDefault(0.3f, 1.f, 0.f);
-const Vec3f scm::ScmConstellation::colorLabelDefault(0.3f, 1.f, 0.f);
+const Vec3f scm::ScmConstellation::colorDrawDefault(0.2f,0.2f,0.6f);
+const Vec3f scm::ScmConstellation::colorLabelDefault(0.4f,0.6f,0.9f);
 
 scm::ScmConstellation::ScmConstellation(std::vector<scm::CoordinateLine> coordinates, std::vector<scm::StarLine> stars)
 	: constellationCoordinates(coordinates)
