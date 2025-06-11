@@ -152,10 +152,10 @@ private:
 	QFont constellationLabelFont;
 
 	/// The default color used for drawing the constellation
-	Vec3f colorDrawDefault;
+	Vec3f colorDrawDefault = Vec3f(0.0f, 0.0f, 0.0f);
 
 	/// The default color used for drawing the constellation label
-	Vec3f colorLabelDefault;
+	Vec3f colorLabelDefault = Vec3f(0.0f, 0.0f, 0.0f);
 };
 
 }  // namespace scm
