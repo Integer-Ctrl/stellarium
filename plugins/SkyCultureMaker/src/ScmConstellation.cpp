@@ -1,7 +1,7 @@
 #include "ScmConstellation.hpp"
 
-scm::ScmConstellation::ScmConstellation(std::vector<scm::CoordinateLine> coordinates)
-	: constellationCoordinates(coordinates)
+scm::ScmConstellation::ScmConstellation(std::vector<scm::ConstellationLine> constellationLines)
+	: constellationLines(constellationLines)
 {
 	QSettings* conf = StelApp::getInstance().getSettings();
 	constellationLabelFont.setPixelSize(conf->value("viewing/constellation_font_size", 15).toInt());
@@ -46,9 +46,9 @@ void scm::ScmConstellation::setIPA(std::optional<QString> ipa)
 	ScmConstellation::ipa = ipa;
 }
 
-void scm::ScmConstellation::setConstellation(std::vector<CoordinateLine> coordinates)
+void scm::ScmConstellation::setConstellation(std::vector<ConstellationLine> constellationLines)
 {
-	constellationCoordinates = coordinates;
+	constellationLines = constellationLines;
 }
 
 void scm::ScmConstellation::drawConstellation(StelCore *core, Vec3f color)
@@ -62,11 +62,11 @@ void scm::ScmConstellation::drawConstellation(StelCore *core, Vec3f color)
 	painter.setColor(color, alpha);
 
 	XYZname.set(0.,0.,0.);
-	for (CoordinateLine p : constellationCoordinates)
+	for (ConstellationLine p : constellationLines)
 	{
-		painter.drawGreatCircleArc(p.start, p.end);
-		XYZname += p.end;
-		XYZname += p.start;
+		painter.drawGreatCircleArc(p.startCoordinate, p.endCoordinate);
+		XYZname += p.endCoordinate;
+		XYZname += p.startCoordinate;
 	}
 
 	XYZname.normalize();
@@ -115,7 +115,7 @@ QJsonObject scm::ScmConstellation::toJson(QString &skyCultureName) const
 
 	// Assemble lines object
 	QJsonArray linesArray;
-	for (const auto& line : constellationCoordinates)
+	for (const auto& line : constellationLines)
 	{
 		QJsonArray lineJson = line.toJson();
 		if (!lineJson.isEmpty())

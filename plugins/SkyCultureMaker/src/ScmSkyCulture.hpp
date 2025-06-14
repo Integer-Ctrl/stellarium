@@ -18,7 +18,7 @@
 #include "StelSkyCultureMgr.hpp"
 #include "ScmConstellation.hpp"
 #include "ScmAsterism.hpp"
-#include "types/CoordinateLine.hpp"
+#include "types/ConstellationLine.hpp"
 #include "ScmCommonName.hpp"
 #include "StelCore.hpp"
 
@@ -47,7 +47,7 @@ public:
 	void removeAsterism(QString id);
 
 	/// Adds a constellation to the sky culture
-	void addConstellation(QString id, std::vector<CoordinateLine> coordinates);
+	void addConstellation(QString id, std::vector<ConstellationLine> constellationLines);
 
 	/// Removes a constellation from the sky culture by its ID
 	void removeConstellation(QString id);

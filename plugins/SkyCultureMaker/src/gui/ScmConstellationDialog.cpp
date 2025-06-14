@@ -155,9 +155,9 @@ bool ScmConstellationDialog::canConstellationBeSaved()
 		return false;
 	}
 
-	// Check if drawnStars is empty
-	auto drawnConstellation = maker->getScmDraw()->getCoordinates();
-	if (drawnConstellation.empty())
+	// Check if drawnLines is empty
+	auto drawnLines = maker->getScmDraw()->getConstellationLines();
+	if (drawnLines.empty())
 	{
 		ui->infoLbl->setText("WARNING: Could not save: The constellation does not contain any drawings");
 		return false;
@@ -176,9 +176,9 @@ void ScmConstellationDialog::saveConstellation()
 {
 	if (canConstellationBeSaved())
 	{
-		auto coordinates = maker->getScmDraw()->getCoordinates();
+		auto lines = maker->getScmDraw()->getConstellationLines();
 		QString id = constellationId.isEmpty() ? constellationPlaceholderId : constellationId;
-		maker->getCurrentSkyCulture()->addConstellation(id, coordinates);
+		maker->getCurrentSkyCulture()->addConstellation(id, lines);
 		scm::ScmConstellation *constellationObj = maker->getCurrentSkyCulture()->getConstellation(id);
 
 		constellationObj->setEnglishName(constellationEnglishName);

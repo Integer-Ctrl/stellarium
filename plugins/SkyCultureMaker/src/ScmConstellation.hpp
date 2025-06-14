@@ -15,7 +15,7 @@
 #include <optional>
 #include <variant>
 #include <StelCore.hpp>
-#include "types/CoordinateLine.hpp"
+#include "types/ConstellationLine.hpp"
 #include "VecMath.hpp"
 #include <QJsonObject>
 #include <QJsonArray>
@@ -26,7 +26,7 @@ namespace scm
 class ScmConstellation
 {
 public:
-	ScmConstellation(std::vector<CoordinateLine> coordinates);
+	ScmConstellation(std::vector<ConstellationLine> constellationLines);
 
 	/// The frame that is used for calculation and is drawn on.
 	static const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
@@ -81,12 +81,11 @@ public:
 	void setIPA(std::optional<QString> ipa);
 
 	/**
-    * @brief Sets the coordinate lines and star lines of the constellation.
+    * @brief Sets the lines of the constellation.
     * 
-    * @param coordinates The coordinates of the constellation. 
-	* @param stars The equivalent stars to the coordinates.
+    * @param lines The lines of the constellation.
     */
-	void setConstellation(std::vector<CoordinateLine> coordinates);
+	void setConstellation(std::vector<ConstellationLine> coordinates);
 
 	/**
 	 * @brief Draws the constellation based on the coordinates.
@@ -144,8 +143,8 @@ private:
 	/// References to the sources of the name spellings
 	std::optional<QVector<int>> references;
 
-	/// List of coordinates forming the segments.
-	std::vector<CoordinateLine> constellationCoordinates;
+	/// List of lines that make up the constellation
+	std::vector<ConstellationLine> constellationLines;
 
 	/// Direction vector pointing on constellation name drawing position
 	Vec3d XYZname;

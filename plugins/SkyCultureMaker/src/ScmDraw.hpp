@@ -13,7 +13,7 @@
 #include "StelObjectMgr.hpp"
 #include "StelObjectType.hpp"
 #include "enumBitops.hpp"
-#include "types/CoordinateLine.hpp"
+#include "types/ConstellationLine.hpp"
 #include "types/DrawTools.hpp"
 #include "types/Drawing.hpp"
 #include "types/StarPoint.hpp"
@@ -44,10 +44,10 @@ private:
 	bool snapToStar = false;
 
 	/// The current pending point.
-	CoordinateLine currentLine;
+	ConstellationLine currentLine;
 
 	/// The fixed points.
-	std::vector<CoordinateLine> drawnLines;
+	std::vector<ConstellationLine> drawnLines;
 
 	/// The current active tool.
 	DrawTools activeTool = DrawTools::None;
@@ -151,11 +151,11 @@ public:
 	void undoLastLine();
 
 	/**
-	 * @brief Get the drawn stick figures as coordinates.
+	 * @brief Get the lines that are currently drawn.
 	 *
-	 * @return std::vector<CoordinateLine> The drawn coordinates.
+	 * @return std::vector<ConstellationLine> The drawn lines.
 	 */
-	std::vector<CoordinateLine> getCoordinates();
+	std::vector<ConstellationLine> getConstellationLines();
 
 	/**
 	 * @brief Set the active draw tool
