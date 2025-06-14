@@ -13,11 +13,9 @@
 #include "StelObjectMgr.hpp"
 #include "StelObjectType.hpp"
 #include "enumBitops.hpp"
-#include "types/CoordinateLine.hpp"
+#include "types/ConstellationLine.hpp"
 #include "types/DrawTools.hpp"
 #include "types/Drawing.hpp"
-#include "types/Lines.hpp"
-#include "types/StarLine.hpp"
 #include "types/StarPoint.hpp"
 #include <cmath>
 #include <optional>
@@ -46,10 +44,10 @@ private:
 	bool snapToStar = false;
 
 	/// The current pending point.
-	std::tuple<CoordinateLine, StarLine> currentLine;
+	ConstellationLine currentLine;
 
 	/// The fixed points.
-	Lines drawnLines;
+	std::vector<ConstellationLine> drawnLines;
 
 	/// The current active tool.
 	DrawTools activeTool = DrawTools::None;
@@ -71,8 +69,10 @@ private:
 	 * 
 	 * @param point The coordinate in J2000 frame.
 	 * @param starID The id of the star to use.
+	 * @param raJ2000 The right ascension angle in decimal degrees.
+	 * @param decJ2000 The declination angle in decimal degrees.
 	 */
-	void appendDrawPoint(Vec3d point, std::optional<QString> starID);
+	void appendDrawPoint(Vec3d point, std::optional<QString> starID, float raJ2000, float decJ2000);
 
 	/**
 	 * @brief Indicates if two segments intersect.
@@ -151,18 +151,11 @@ public:
 	void undoLastLine();
 
 	/**
-	 * @brief Get the drawn stick figures as stars if available.
+	 * @brief Get the lines that are currently drawn.
 	 *
-	 * @return std::vector<StarLine> The optional filled vector of stars matching the coordinates.
+	 * @return std::vector<ConstellationLine> The drawn lines.
 	 */
-	std::vector<StarLine> getStars();
-
-	/**
-	 * @brief Get the drawn stick figures as coordinates.
-	 *
-	 * @return std::vector<CoordinateLine> The drawn coordinates.
-	 */
-	std::vector<CoordinateLine> getCoordinates();
+	std::vector<ConstellationLine> getConstellationLines();
 
 	/**
 	 * @brief Set the active draw tool

@@ -29,11 +29,9 @@ SET( SkyCultureMaker_SRCS
      gui/ScmSkyCultureDialog.hpp
      gui/ScmSkyCultureDialog.cpp
 
-     types/CoordinateLine.hpp
+     types/ConstellationLine.hpp
      types/Drawing.hpp
      types/DrawTools.hpp
-     types/Lines.hpp
-     types/StarLine.hpp
      types/StarPoint.hpp
 )
 

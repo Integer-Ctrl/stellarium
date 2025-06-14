@@ -1,8 +1,7 @@
 #include "ScmConstellation.hpp"
 
-scm::ScmConstellation::ScmConstellation(std::vector<scm::CoordinateLine> coordinates, std::vector<scm::StarLine> stars)
-	: constellationCoordinates(coordinates)
-	, constellationStars(stars)
+scm::ScmConstellation::ScmConstellation(std::vector<scm::ConstellationLine> constellationLines)
+	: constellationLines(constellationLines)
 {
 	QSettings* conf = StelApp::getInstance().getSettings();
 	constellationLabelFont.setPixelSize(conf->value("viewing/constellation_font_size", 15).toInt());
@@ -47,10 +46,9 @@ void scm::ScmConstellation::setIPA(std::optional<QString> ipa)
 	ScmConstellation::ipa = ipa;
 }
 
-void scm::ScmConstellation::setConstellation(std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars)
+void scm::ScmConstellation::setConstellation(std::vector<ConstellationLine> constellationLines)
 {
-	constellationCoordinates = coordinates;
-	constellationStars = stars;
+	constellationLines = constellationLines;
 }
 
 void scm::ScmConstellation::drawConstellation(StelCore *core, Vec3f color)
@@ -64,11 +62,11 @@ void scm::ScmConstellation::drawConstellation(StelCore *core, Vec3f color)
 	painter.setColor(color, alpha);
 
 	XYZname.set(0.,0.,0.);
-	for (CoordinateLine p : constellationCoordinates)
+	for (ConstellationLine p : constellationLines)
 	{
-		painter.drawGreatCircleArc(p.start, p.end);
-		XYZname += p.end;
-		XYZname += p.start;
+		painter.drawGreatCircleArc(p.startCoordinate, p.endCoordinate);
+		XYZname += p.endCoordinate;
+		XYZname += p.startCoordinate;
 	}
 
 	XYZname.normalize();
@@ -107,4 +105,51 @@ void scm::ScmConstellation::drawNames(StelCore *core, StelPainter sPainter, Vec3
 void scm::ScmConstellation::drawNames(StelCore *core, StelPainter sPainter)
 {
 	drawNames(core, sPainter, colorLabelDefault);
+}
+
+QJsonObject scm::ScmConstellation::toJson(QString &skyCultureName) const
+{
+	QJsonObject json;
+
+	json["id"] = "CON " + skyCultureName + " " + id;
+
+	// Assemble lines object
+	QJsonArray linesArray;
+	for (const auto& line : constellationLines)
+	{
+		QJsonArray lineJson = line.toJson();
+		if (!lineJson.isEmpty())
+		{
+			linesArray.append(lineJson);
+		}
+	}
+	json["lines"] = linesArray;
+
+	// Assemble common name object
+	QJsonObject commonNameObj;
+	commonNameObj["english"] = englishName;
+	if (nativeName.has_value())
+	{
+		commonNameObj["native"] = nativeName.value();
+	}
+	if (pronounce.has_value())
+	{
+		commonNameObj["pronounce"] = pronounce.value();
+	}
+	if (ipa.has_value())
+	{
+		commonNameObj["ipa"] = ipa.value();
+	}
+	if (references.has_value() && !references->isEmpty())
+	{
+		QJsonArray refsArray;
+		for (const auto& ref : references.value())
+		{
+			refsArray.append(ref);
+		}
+		commonNameObj["references"] = refsArray;
+	}
+	json["common_name"] = commonNameObj;
+
+	return json;
 }
