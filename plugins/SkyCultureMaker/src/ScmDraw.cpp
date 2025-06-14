@@ -33,29 +33,32 @@ void scm::ScmDraw::setSearchMode(bool active)
 	inSearchMode = active;
 }
 
-void scm::ScmDraw::appendDrawPoint(Vec3d point, std::optional<QString> starID, float raJ2000, float decJ2000)
+void scm::ScmDraw::appendDrawPoint(Vec3d point, QString starId, double raJ2000, double decJ2000)
 {
 	if (hasFlag(drawState, (Drawing::hasStart | Drawing::hasFloatingEnd)))
 	{
 		currentLine.endCoordinate = point;
-		currentLine.endName       = starID;
+		currentLine.endId         = starId;
 		currentLine.endRAJ2000    = raJ2000;
 		currentLine.endDecJ2000   = decJ2000;
+		currentLine.endIdNumber	  = ConstellationLine::getStarIdNumber(starId);	
 		drawState          		  = Drawing::hasEnd;
 
 		drawnLines.push_back(currentLine);
 		currentLine.startCoordinate = point;
-		currentLine.startName     	= starID;
+		currentLine.startId     	= starId;
 		currentLine.startRAJ2000  	= raJ2000;
 		currentLine.startDecJ2000 	= decJ2000;
+		currentLine.startIdNumber = ConstellationLine::getStarIdNumber(starId);
 		drawState             		= drawState | Drawing::hasStart;
 	}
 	else
 	{
 		currentLine.startCoordinate = point;
-		currentLine.startName     	= starID;
+		currentLine.startId     	= starId;
 		currentLine.startRAJ2000  	= raJ2000;
 		currentLine.startDecJ2000 	= decJ2000;
+		currentLine.startIdNumber	= ConstellationLine::getStarIdNumber(starId);
 		drawState             		= Drawing::hasStart;
 	}
 }
@@ -75,8 +78,8 @@ void scm::ScmDraw::setMoveToAnotherStart()
 			{
 				StelObjectP stelObj = objectMgr.getLastSelectedObject();
 				Vec3d stelPos       = stelObj->getJ2000EquatorialPos(core);
-				float raJ2000       = stelObj->getInfoMap(core).value("raJ2000").toFloat();
-				float decJ2000      = stelObj->getInfoMap(core).value("decJ2000").toFloat();
+				double raJ2000      = stelObj->getInfoMap(core).value("raJ2000").toDouble();
+				double decJ2000     = stelObj->getInfoMap(core).value("decJ2000").toDouble();
 				appendDrawPoint(stelPos, stelObj->getID(), raJ2000, decJ2000);
 			}
 		}
@@ -179,8 +182,9 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 			StelCore *core     = app.getCore();
 			StelProjectorP prj = core->getProjection(drawFrame);
 			Vec3d point;
-			float raJ2000 = 0.0f, decJ2000 = 0.0f;
-			std::optional<QString> starID;
+			double raJ2000 = scm::ConstellationLine::DEFAULT_RA_DEC;
+			double decJ2000 = scm::ConstellationLine::DEFAULT_RA_DEC;
+			QString starId;
 			prj->unProject(x, y, point);
 
 			// We want to combine any near start point to an existing point so that we don't create
@@ -188,18 +192,18 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 			std::optional<StarPoint> nearest = findNearestPoint(x, y, prj);
 			if (nearest.has_value())
 			{
-				point  = nearest.value().coordinate;
-				starID = nearest.value().starName;
-				raJ2000 = nearest.value().raJ2000;
+				point    = nearest.value().coordinate;
+				starId   = nearest.value().starId;
+				raJ2000  = nearest.value().raJ2000;
 				decJ2000 = nearest.value().decJ2000;
 			}
 			else if (snapToStar)
 			{
 				if (hasFlag(drawState, Drawing::hasEndExistingPoint))
 				{
-					point  = currentLine.endCoordinate;
-					starID = currentLine.endName;
-					raJ2000 = currentLine.endRAJ2000;
+					point    = currentLine.endCoordinate;
+					starId   = currentLine.endId;
+					raJ2000  = currentLine.endRAJ2000;
 					decJ2000 = currentLine.endDecJ2000;
 				}
 				else
@@ -212,14 +216,14 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 						StelObjectP stelObj = objectMgr.getLastSelectedObject();
 						Vec3d stelPos       = stelObj->getJ2000EquatorialPos(core);
 						point               = stelPos;
-						starID              = stelObj->getID();
-						raJ2000			 	= stelObj->getInfoMap(core).value("raJ2000").toFloat();
-						decJ2000			= stelObj->getInfoMap(core).value("decJ2000").toFloat();
+						starId              = stelObj->getID();
+						raJ2000			 	= stelObj->getInfoMap(core).value("raJ2000").toDouble();
+						decJ2000			= stelObj->getInfoMap(core).value("decJ2000").toDouble();
 					}
 				}
 			}
 
-			appendDrawPoint(point, starID, raJ2000, decJ2000);
+			appendDrawPoint(point, starId, raJ2000, decJ2000);
 
 			event->accept();
 			return;
@@ -434,7 +438,7 @@ std::optional<scm::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelP
 		if (isStartPoint)
 		{
 			StarPoint point = {min->startCoordinate,
-			                   min->startName,
+			                   min->startId,
 							   min->startRAJ2000,
 							   min->startDecJ2000};
 			return point;
@@ -442,7 +446,7 @@ std::optional<scm::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelP
 		else
 		{
 			StarPoint point = {min->endCoordinate,
-			                   min->endName,
+			                   min->endId,
 							   min->endRAJ2000,
 							   min->endDecJ2000};
 			return point;
@@ -458,10 +462,12 @@ void scm::ScmDraw::resetDrawing()
 	drawState = Drawing::None;
 	currentLine.startCoordinate.set(0, 0, 0);
 	currentLine.endCoordinate.set(0, 0, 0);
-	currentLine.startName.reset();
-	currentLine.endName.reset();
-	currentLine.startRAJ2000 = 0.0f;
-	currentLine.startDecJ2000 = 0.0f;
-	currentLine.endRAJ2000 = 0.0f;
-	currentLine.endDecJ2000 = 0.0f;
+	currentLine.startId.clear();
+	currentLine.endId.clear();
+	currentLine.startIdNumber = "-1";
+	currentLine.endIdNumber = "-1";
+	currentLine.startRAJ2000 = scm::ConstellationLine::DEFAULT_RA_DEC;
+	currentLine.startDecJ2000 = scm::ConstellationLine::DEFAULT_RA_DEC;
+	currentLine.endRAJ2000 = scm::ConstellationLine::DEFAULT_RA_DEC;
+	currentLine.endDecJ2000 = scm::ConstellationLine::DEFAULT_RA_DEC;
 }

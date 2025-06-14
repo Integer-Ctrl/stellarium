@@ -61,18 +61,18 @@ private:
 	/// Indicates if the currently selected star was searched.
 	bool selectedStarIsSearched = false;
   
-  /// Holds the position of the eraser on the last frame.
+  	/// Holds the position of the eraser on the last frame.
 	Vec2d lastEraserPos = ScmDraw::defaultLastEraserPos;
 
 	/**
 	 * @brief Appends a draw point to the list of drawn points.
 	 * 
 	 * @param point The coordinate in J2000 frame.
-	 * @param starID The id of the star to use.
+	 * @param starId The ID of the star to use.
 	 * @param raJ2000 The right ascension angle in decimal degrees.
 	 * @param decJ2000 The declination angle in decimal degrees.
 	 */
-	void appendDrawPoint(Vec3d point, std::optional<QString> starID, float raJ2000, float decJ2000);
+	void appendDrawPoint(Vec3d point, QString starId, double raJ2000, double decJ2000);
 
 	/**
 	 * @brief Indicates if two segments intersect.

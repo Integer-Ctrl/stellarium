@@ -11,6 +11,7 @@
 #include <optional>
 #include <QString>
 #include "VecMath.hpp"
+#include "ConstellationLine.hpp"
 
 namespace scm
 {
@@ -20,16 +21,14 @@ struct StarPoint
 	//! The coordinate of a single point.
 	Vec3d coordinate;
 
-	//! The optional star at that coordinate.
-	std::optional<QString> starName;
+	//! The optional star ID at that coordinate.
+	QString starId;
 
 	//! Right ascension angle (J2000 frame) in decimal degrees for the star.
-	float raJ2000 = 0.0f;
+	double raJ2000 = scm::ConstellationLine::DEFAULT_RA_DEC;
 
 	//! Declination angle (J2000 frame) in decimal degrees for the star.
-	float decJ2000 = 0.0f;
-
-
+	double decJ2000 = scm::ConstellationLine::DEFAULT_RA_DEC;
 };
 }  // namespace scm
 

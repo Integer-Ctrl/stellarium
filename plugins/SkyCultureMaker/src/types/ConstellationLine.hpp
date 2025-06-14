@@ -12,52 +12,65 @@
 #include <optional>
 #include <QJsonArray>
 #include <QString>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
 namespace scm
 {
 struct ConstellationLine
 {
-	//! The coordinate of the start point of the line.
-	Vec3d startCoordinate;
+	//! Default value for right ascension and declination angles.
+	static constexpr double DEFAULT_RA_DEC = 361.0;
 
-	//! Optional name of the start point, e.g. a star name.
-	std::optional<QString> startName;
+	//! The coordinate of the start point of the line.
+	Vec3d startCoordinate = Vec3d(0.0, 0.0, 0.0);
+
+	//! Optional ID of the start point, e.g. a star name.
+	QString startId;
 
 	//! Right ascension angle (J2000 frame) in decimal degrees for the start point.
-	float startRAJ2000 = 0.0f;
+	double startRAJ2000 = DEFAULT_RA_DEC;
 
 	//! Declination angle (J2000 frame) in decimal degrees for the start point.
-	float startDecJ2000 = 0.0f;
+	double startDecJ2000 = DEFAULT_RA_DEC;
+
+	//! Star ID number for the start point.
+	QString startIdNumber = "-1";
 
 	//! The coordinate of the end point of the line.
-	Vec3d endCoordinate;
+	Vec3d endCoordinate = Vec3d(0.0, 0.0, 0.0);
 
-	//! Optional name of the end point, e.g. a star name.
-	std::optional<QString> endName;
+	//! Optional ID of the end point, e.g. a star name.
+	QString endId;
 
 	//! Right ascension angle (J2000 frame) in decimal degrees for the end point.
-	float endRAJ2000 = 0.0f;
+	double endRAJ2000 = DEFAULT_RA_DEC;
 
 	//! Declination angle (J2000 frame) in decimal degrees for the end point.
-	float endDecJ2000 = 0.0f;
+	double endDecJ2000 = DEFAULT_RA_DEC;
 
-	inline QString getStarId(const std::optional<QString> &starName) const
+	//! Star ID number for the end point.
+	QString endIdNumber = "-1";
+
+	/**
+	 * @brief Gets the star ID from the name.
+	 * 
+	 * @param starId The ID of the star, which may contain identifiers like "HIP" or "Gaia DR3".
+	 */
+	static QString getStarIdNumber(QString starId)
 	{
-		if (starName.has_value())
-		{
-			QRegularExpression hipExpression(R"(HIP\s+(\d+))");
-			QRegularExpression gaiaExpression(R"(Gaia DR3\s+(\d+))");
+		QRegularExpression hipExpression(R"(HIP\s+(\d+))");
+		QRegularExpression gaiaExpression(R"(Gaia DR3\s+(\d+))");
 
-			QRegularExpressionMatch hipMatch = hipExpression.match(starName.value());
-			if (hipMatch.hasMatch())
-			{
-				return hipMatch.captured(1);
-			}
-			QRegularExpressionMatch gaiaMatch = gaiaExpression.match(starName.value());
-			if (gaiaMatch.hasMatch())
-			{
-				return gaiaMatch.captured(1);
-			}
+		QRegularExpressionMatch hipMatch = hipExpression.match(starId);
+		if (hipMatch.hasMatch())
+		{
+			return hipMatch.captured(1);
+		}
+		QRegularExpressionMatch gaiaMatch = gaiaExpression.match(starId);
+		if (gaiaMatch.hasMatch())
+		{
+			return gaiaMatch.captured(1);
 		}
 		return "-1";
 	}
@@ -71,37 +84,34 @@ struct ConstellationLine
 	{
 		QJsonArray json;
 
-        // get ids
-        QString startId = getStarId(startName);
-        QString endId = getStarId(endName);
-
         // only save names if both are not empty
-        if (startId != "-1" && endId != "-1")
+        if (startIdNumber != "-1" && endIdNumber != "-1")
 		{
 			// START POINT
-			if (startName.value().contains("HIP"))
+			if (startId.contains("HIP"))
 			{
                 // save HIP as int
-				json.append(startId.toInt());
+				json.append(startIdNumber.toInt());
 			}
 			else
 			{
 				// save other numbers as string (Gaia DR3)
-				json.append(startId);
+				json.append(startIdNumber);
 			}
             // END POINT
-			if (endName.value().contains("HIP"))
+			if (endId.contains("HIP"))
 			{
                 // save HIP as int
-				json.append(endId.toInt());
+				json.append(endIdNumber.toInt());
 			}
 			else
 			{
 				// save other numbers as string (Gaia DR3)
-				json.append(endId);
+				json.append(endIdNumber);
 			}
 		}
-		else
+		else if(startRAJ2000 != DEFAULT_RA_DEC && startDecJ2000 != DEFAULT_RA_DEC &&
+				endRAJ2000 != DEFAULT_RA_DEC && endDecJ2000 != DEFAULT_RA_DEC)
 		{
             // Only if both start and end points do not have names, we save the coordinates
 			QJsonArray startCoordinateArray;
@@ -113,6 +123,11 @@ struct ConstellationLine
 			endCoordinateArray.append(endRAJ2000);
 			endCoordinateArray.append(endDecJ2000);
 			json.append(endCoordinateArray);
+		}
+		else
+		{
+			// If no names or coordinates are available, return empty array
+			return QJsonArray();
 		}
 		return json;
 	}

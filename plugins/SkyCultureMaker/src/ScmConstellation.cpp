@@ -132,10 +132,16 @@ QJsonObject scm::ScmConstellation::toJson(QString &skyCultureName) const
 				containsName = true;
 			}
 		}
+		else
+		{
+			// TODO: invalid line
+			qWarning() << "Invalid constellation line found";
+		}
 	}
 
 	if(containsName && containsCoordinates)
 	{
+		qWarning() << "Invalid constellation: A constellation can not have both names and coordinates as lines.";
 		return QJsonObject(); // Invalid constellation, return empty JSON object
 	}
 
