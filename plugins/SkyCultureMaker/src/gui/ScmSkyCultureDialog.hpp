@@ -8,6 +8,12 @@
 #include "../SkyCultureMaker.hpp"
 #include "../ScmConstellation.hpp"
 
+
+#ifdef SCM_IMPORTER_ENABLED_CPP
+# include "SkyCultureConverter.hpp"
+# include "unarr.h"
+#endif
+
 class Ui_scmSkyCultureDialog;
 
 class ScmSkyCultureDialog : public StelDialogSeparate

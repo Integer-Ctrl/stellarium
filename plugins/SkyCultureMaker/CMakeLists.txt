@@ -11,32 +11,46 @@ file(
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
 
-# download https://github.com/Stellarium/stellarium-skyculture-converter
-CPMAddPackage(
-  NAME              StellariumSkyCultureConverter
-  GITHUB_REPOSITORY Stellarium/stellarium-skyculture-converter
-  GIT_TAG           master
-  OPTIONS
-    "SKYCULTURE_CONVERTER_BUILD_TESTS OFF"
-)
+# Option to manually control importer, defaults to TRUE, but overridden by Qt version
+option(SCM_SHOULD_ENABLE_IMPORTER "Attempt to enable Sky Culture Importer" TRUE)
+set(SCM_IMPORTER_ENABLED FALSE) # Default to disabled
 
-# download https://github.com/selmf/unarr for archives
-CPMAddPackage(
-  NAME              unarr
-  GITHUB_REPOSITORY selmf/unarr
-  GIT_TAG           v1.1.1
-)
+if(SCM_SHOULD_ENABLE_IMPORTER AND NOT (QT_VERSION_MAJOR EQUAL "5"))
+  set(SCM_IMPORTER_ENABLED TRUE)
+  message(STATUS "Sky Culture Importer will be enabled.")
+  # download https://github.com/Stellarium/stellarium-skyculture-converter
+  CPMAddPackage(
+    NAME              StellariumSkyCultureConverter
+    GITHUB_REPOSITORY Stellarium/stellarium-skyculture-converter
+    GIT_TAG           master
+    OPTIONS
+      "SKYCULTURE_CONVERTER_BUILD_TESTS OFF"
+  )
 
-if(WIN32)
-  # Patch unarr's common/stream.c to include <objidl.h> after windows.h
-  if(EXISTS "${unarr_SOURCE_DIR}/common/stream.c")
-    file(READ "${unarr_SOURCE_DIR}/common/stream.c" _stream_c_content)
-    string(REPLACE "#define COBJMACROS\n#include <windows.h>\n"
-                  "#define COBJMACROS\n#include <windows.h>\n#include <objidl.h>\n"
-                  _stream_c_content "${_stream_c_content}")
-    file(WRITE "${unarr_SOURCE_DIR}/common/stream.c" "${_stream_c_content}")
-  endif()
-endif(WIN32)
+  # download https://github.com/selmf/unarr for archives
+  CPMAddPackage(
+    NAME              unarr
+    GITHUB_REPOSITORY selmf/unarr
+    GIT_TAG           v1.1.1
+  )
+
+  if(WIN32)
+    # Patch unarr's common/stream.c to include <objidl.h> after windows.h
+    # Ensure this runs after unarr source is available
+    if(TARGET unarr AND EXISTS "${unarr_SOURCE_DIR}/common/stream.c")
+      file(READ "${unarr_SOURCE_DIR}/common/stream.c" _stream_c_content)
+      string(REPLACE "#define COBJMACROS\n#include <windows.h>\n"
+                    "#define COBJMACROS\n#include <windows.h>\n#include <objidl.h>\n"
+                    _stream_c_content "${_stream_c_content}")
+      file(WRITE "${unarr_SOURCE_DIR}/common/stream.c" "${_stream_c_content}")
+    else()
+      message(WARNING "unarr source directory or stream.c not found for patching. This might be an issue on Windows if importer is enabled.")
+    endif()
+  endif(WIN32)
+  ADD_DEFINITIONS(-DSCM_IMPORTER_ENABLED_CPP) # Define for C++
+else()
+  message(STATUS "Sky Culture Importer is DISABLED (Qt version 5 or SCM_SHOULD_ENABLE_IMPORTER is OFF).")
+endif()
 
 ADD_DEFINITIONS(-DSKYCULTUREMAKER_PLUGIN_VERSION="${SCM_VERSION}")
 ADD_DEFINITIONS(-DSKYCULTUREMAKER_PLUGIN_LICENSE="GNU GPLv2 or later")
