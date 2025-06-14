@@ -33,23 +33,29 @@ void scm::ScmDraw::setSearchMode(bool active)
 	inSearchMode = active;
 }
 
-void scm::ScmDraw::appendDrawPoint(Vec3d point, std::optional<QString> starID)
+void scm::ScmDraw::appendDrawPoint(Vec3d point, std::optional<QString> starID, float raJ2000, float decJ2000)
 {
 	if (hasFlag(drawState, (Drawing::hasStart | Drawing::hasFloatingEnd)))
 	{
-		currentLine.end 	= point;
-		currentLine.endName = starID;
+		currentLine.end 	    = point;
+		currentLine.endName     = starID;
+		currentLine.endRAJ2000  = raJ2000;
+		currentLine.endDecJ2000 = decJ2000;
 		drawState           = Drawing::hasEnd;
 
 		drawnLines.push_back(currentLine);
-		currentLine.start     = point;
-		currentLine.startName = starID;
+		currentLine.start         = point;
+		currentLine.startName     = starID;
+		currentLine.startRAJ2000  = raJ2000;
+		currentLine.startDecJ2000 = decJ2000;
 		drawState             = drawState | Drawing::hasStart;
 	}
 	else
 	{
-		currentLine.start     = point;
-		currentLine.startName = starID;
+		currentLine.start         = point;
+		currentLine.startName     = starID;
+		currentLine.startRAJ2000  = raJ2000;
+		currentLine.startDecJ2000 = decJ2000;
 		drawState             = Drawing::hasStart;
 	}
 }
@@ -69,7 +75,9 @@ void scm::ScmDraw::setMoveToAnotherStart()
 			{
 				StelObjectP stelObj = objectMgr.getLastSelectedObject();
 				Vec3d stelPos       = stelObj->getJ2000EquatorialPos(core);
-				appendDrawPoint(stelPos, stelObj->getID());
+				float raJ2000       = stelObj->getInfoMap(core).value("raJ2000").toFloat();
+				float decJ2000      = stelObj->getInfoMap(core).value("decJ2000").toFloat();
+				appendDrawPoint(stelPos, stelObj->getID(), raJ2000, decJ2000);
 			}
 		}
 
@@ -170,6 +178,7 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 			StelCore *core     = app.getCore();
 			StelProjectorP prj = core->getProjection(drawFrame);
 			Vec3d point;
+			float raJ2000 = 0.0f, decJ2000 = 0.0f;
 			std::optional<QString> starID;
 			prj->unProject(x, y, point);
 
@@ -179,7 +188,9 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 			if (nearest.has_value())
 			{
 				point  = nearest.value().coordinate;
-				starID = nearest.value().star;
+				starID = nearest.value().starName;
+				raJ2000 = nearest.value().raJ2000;
+				decJ2000 = nearest.value().decJ2000;
 			}
 			else if (snapToStar)
 			{
@@ -187,6 +198,8 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 				{
 					point  = currentLine.end;
 					starID = currentLine.endName;
+					raJ2000 = currentLine.endRAJ2000;
+					decJ2000 = currentLine.endDecJ2000;
 				}
 				else
 				{
@@ -199,11 +212,13 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 						Vec3d stelPos       = stelObj->getJ2000EquatorialPos(core);
 						point               = stelPos;
 						starID              = stelObj->getID();
+						raJ2000			 	= stelObj->getInfoMap(core).value("raJ2000").toFloat();
+						decJ2000			= stelObj->getInfoMap(core).value("decJ2000").toFloat();
 					}
 				}
 			}
 
-			appendDrawPoint(point, starID);
+			appendDrawPoint(point, starID, raJ2000, decJ2000);
 
 			event->accept();
 			return;
@@ -418,13 +433,17 @@ std::optional<scm::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelP
 		if (isStartPoint)
 		{
 			StarPoint point = {min->start,
-			                   min->startName};
+			                   min->startName,
+							   min->startRAJ2000,
+							   min->startDecJ2000};
 			return point;
 		}
 		else
 		{
 			StarPoint point = {min->end,
-			                   min->endName};
+			                   min->endName,
+							   min->endRAJ2000,
+							   min->endDecJ2000};
 			return point;
 		}
 	}
@@ -440,4 +459,8 @@ void scm::ScmDraw::resetDrawing()
 	currentLine.end.set(0, 0, 0);
 	currentLine.startName.reset();
 	currentLine.endName.reset();
+	currentLine.startRAJ2000 = 0.0f;
+	currentLine.startDecJ2000 = 0.0f;
+	currentLine.endRAJ2000 = 0.0f;
+	currentLine.endDecJ2000 = 0.0f;
 }

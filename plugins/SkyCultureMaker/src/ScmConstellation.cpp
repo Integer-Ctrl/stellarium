@@ -117,44 +117,12 @@ QJsonObject scm::ScmConstellation::toJson(QString &skyCultureName) const
 	QJsonArray linesArray;
 	for (const auto& line : constellationCoordinates)
 	{
-		QJsonArray lineObj;
-		// Check if we can save a star name	for the start point
-		if(line.startName.has_value())
+		QJsonArray lineJson = line.toJson();
+		if (!lineJson.isEmpty())
 		{
-			if(int hipId = extractHipNumber(line.startName.value()); hipId != -1)
-			{
-				// append HIP Id is available
-				lineObj.append(hipId);
-			}
-			else
-			{
-				lineObj.append(line.startName.value());
-			}
+			linesArray.append(lineJson);
 		}
-		else
-		{
-			lineObj.append(line.start.toString());
-		}
-		// Check if we can save a star name for the end point
-		if(line.endName.has_value())
-		{
-			if(int hipId = extractHipNumber(line.endName.value()); hipId != -1)
-			{
-				// append HIP Id is available
-				lineObj.append(hipId);
-			}
-			else
-			{
-				lineObj.append(line.endName.value());
-			}
-		}
-		else
-		{
-			lineObj.append(line.end.toString());
-		}
-		linesArray.append(lineObj);
 	}
-	/// Optional TODO: merge lines with the same start and end points?
 	json["lines"] = linesArray;
 
 	// Assemble common name object

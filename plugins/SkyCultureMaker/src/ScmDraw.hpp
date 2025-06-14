@@ -69,8 +69,10 @@ private:
 	 * 
 	 * @param point The coordinate in J2000 frame.
 	 * @param starID The id of the star to use.
+	 * @param raJ2000 The right ascension angle in decimal degrees.
+	 * @param decJ2000 The declination angle in decimal degrees.
 	 */
-	void appendDrawPoint(Vec3d point, std::optional<QString> starID);
+	void appendDrawPoint(Vec3d point, std::optional<QString> starID, float raJ2000, float decJ2000);
 
 	/**
 	 * @brief Indicates if two segments intersect.

@@ -21,7 +21,15 @@ struct StarPoint
 	Vec3d coordinate;
 
 	//! The optional star at that coordinate.
-	std::optional<QString> star;
+	std::optional<QString> starName;
+
+	//! Right ascension angle (J2000 frame) in decimal degrees for the star.
+	float raJ2000 = 0.0f;
+
+	//! Declination angle (J2000 frame) in decimal degrees for the star.
+	float decJ2000 = 0.0f;
+
+
 };
 }  // namespace scm
 
