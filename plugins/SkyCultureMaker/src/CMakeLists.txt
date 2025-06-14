@@ -32,8 +32,6 @@ SET( SkyCultureMaker_SRCS
      types/CoordinateLine.hpp
      types/Drawing.hpp
      types/DrawTools.hpp
-     types/Lines.hpp
-     types/StarLine.hpp
      types/StarPoint.hpp
 )
 

@@ -177,9 +177,8 @@ void ScmConstellationDialog::saveConstellation()
 	if (canConstellationBeSaved())
 	{
 		auto coordinates = maker->getScmDraw()->getCoordinates();
-		auto stars = maker->getScmDraw()->getStars();
 		QString id = constellationId.isEmpty() ? constellationPlaceholderId : constellationId;
-		maker->getCurrentSkyCulture()->addConstellation(id, coordinates, stars);
+		maker->getCurrentSkyCulture()->addConstellation(id, coordinates);
 		scm::ScmConstellation *constellationObj = maker->getCurrentSkyCulture()->getConstellation(id);
 
 		constellationObj->setEnglishName(constellationEnglishName);

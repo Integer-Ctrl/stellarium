@@ -16,8 +16,6 @@
 #include "types/CoordinateLine.hpp"
 #include "types/DrawTools.hpp"
 #include "types/Drawing.hpp"
-#include "types/Lines.hpp"
-#include "types/StarLine.hpp"
 #include "types/StarPoint.hpp"
 #include <cmath>
 #include <optional>
@@ -46,10 +44,10 @@ private:
 	bool snapToStar = false;
 
 	/// The current pending point.
-	std::tuple<CoordinateLine, StarLine> currentLine;
+	CoordinateLine currentLine;
 
 	/// The fixed points.
-	Lines drawnLines;
+	std::vector<CoordinateLine> drawnLines;
 
 	/// The current active tool.
 	DrawTools activeTool = DrawTools::None;
@@ -149,13 +147,6 @@ public:
 
 	/// Undo the last drawn line.
 	void undoLastLine();
-
-	/**
-	 * @brief Get the drawn stick figures as stars if available.
-	 *
-	 * @return std::vector<StarLine> The optional filled vector of stars matching the coordinates.
-	 */
-	std::vector<StarLine> getStars();
 
 	/**
 	 * @brief Get the drawn stick figures as coordinates.

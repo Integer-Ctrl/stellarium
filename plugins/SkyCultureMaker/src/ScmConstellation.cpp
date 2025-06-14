@@ -1,8 +1,7 @@
 #include "ScmConstellation.hpp"
 
-scm::ScmConstellation::ScmConstellation(std::vector<scm::CoordinateLine> coordinates, std::vector<scm::StarLine> stars)
+scm::ScmConstellation::ScmConstellation(std::vector<scm::CoordinateLine> coordinates)
 	: constellationCoordinates(coordinates)
-	, constellationStars(stars)
 {
 	QSettings* conf = StelApp::getInstance().getSettings();
 	constellationLabelFont.setPixelSize(conf->value("viewing/constellation_font_size", 15).toInt());
@@ -47,10 +46,9 @@ void scm::ScmConstellation::setIPA(std::optional<QString> ipa)
 	ScmConstellation::ipa = ipa;
 }
 
-void scm::ScmConstellation::setConstellation(std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars)
+void scm::ScmConstellation::setConstellation(std::vector<CoordinateLine> coordinates)
 {
 	constellationCoordinates = coordinates;
-	constellationStars = stars;
 }
 
 void scm::ScmConstellation::drawConstellation(StelCore *core, Vec3f color)
@@ -107,4 +105,83 @@ void scm::ScmConstellation::drawNames(StelCore *core, StelPainter sPainter, Vec3
 void scm::ScmConstellation::drawNames(StelCore *core, StelPainter sPainter)
 {
 	drawNames(core, sPainter, colorLabelDefault);
+}
+
+QJsonObject scm::ScmConstellation::toJson(QString &skyCultureName) const
+{
+	QJsonObject json;
+
+	json["id"] = "CON " + skyCultureName + " " + id;
+
+	// Assemble lines object
+	QJsonArray linesArray;
+	for (const auto& line : constellationCoordinates)
+	{
+		QJsonArray lineObj;
+		// Check if we can save a star name	for the start point
+		if(line.startName.has_value())
+		{
+			if(int hipId = extractHipNumber(line.startName.value()); hipId != -1)
+			{
+				// append HIP Id is available
+				lineObj.append(hipId);
+			}
+			else
+			{
+				lineObj.append(line.startName.value());
+			}
+		}
+		else
+		{
+			lineObj.append(line.start.toString());
+		}
+		// Check if we can save a star name for the end point
+		if(line.endName.has_value())
+		{
+			if(int hipId = extractHipNumber(line.endName.value()); hipId != -1)
+			{
+				// append HIP Id is available
+				lineObj.append(hipId);
+			}
+			else
+			{
+				lineObj.append(line.endName.value());
+			}
+		}
+		else
+		{
+			lineObj.append(line.end.toString());
+		}
+		linesArray.append(lineObj);
+	}
+	/// Optional TODO: merge lines with the same start and end points?
+	json["lines"] = linesArray;
+
+	// Assemble common name object
+	QJsonObject commonNameObj;
+	commonNameObj["english"] = englishName;
+	if (nativeName.has_value())
+	{
+		commonNameObj["native"] = nativeName.value();
+	}
+	if (pronounce.has_value())
+	{
+		commonNameObj["pronounce"] = pronounce.value();
+	}
+	if (ipa.has_value())
+	{
+		commonNameObj["ipa"] = ipa.value();
+	}
+	if (references.has_value() && !references->isEmpty())
+	{
+		QJsonArray refsArray;
+		for (const auto& ref : references.value())
+		{
+			refsArray.append(ref);
+		}
+		commonNameObj["references"] = refsArray;
+	}
+	json["common_name"] = commonNameObj;
+
+	return json;
 }

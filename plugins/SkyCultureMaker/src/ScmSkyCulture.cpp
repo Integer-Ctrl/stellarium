@@ -33,10 +33,9 @@ void scm::ScmSkyCulture::removeAsterism(QString id)
 }
 
 void scm::ScmSkyCulture::addConstellation(QString id,
-					  std::vector<CoordinateLine> coordinates,
-					  std::vector<StarLine> stars)
+					  std::vector<CoordinateLine> coordinates)
 {
-	scm::ScmConstellation constellationObj(coordinates, stars);
+	scm::ScmConstellation constellationObj(coordinates);
 	constellationObj.setId(id);
 	constellations.push_back(constellationObj);
 }

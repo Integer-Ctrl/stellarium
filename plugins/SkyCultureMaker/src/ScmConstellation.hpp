@@ -16,8 +16,9 @@
 #include <variant>
 #include <StelCore.hpp>
 #include "types/CoordinateLine.hpp"
-#include "types/StarLine.hpp"
 #include "VecMath.hpp"
+#include <QJsonObject>
+#include <QJsonArray>
 
 namespace scm
 {
@@ -25,7 +26,7 @@ namespace scm
 class ScmConstellation
 {
 public:
-	ScmConstellation(std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars);
+	ScmConstellation(std::vector<CoordinateLine> coordinates);
 
 	/// The frame that is used for calculation and is drawn on.
 	static const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
@@ -85,7 +86,7 @@ public:
     * @param coordinates The coordinates of the constellation. 
 	* @param stars The equivalent stars to the coordinates.
     */
-	void setConstellation(std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars);
+	void setConstellation(std::vector<CoordinateLine> coordinates);
 
 	/**
 	 * @brief Draws the constellation based on the coordinates.
@@ -119,6 +120,11 @@ public:
 	 */
 	void drawNames(StelCore *core, StelPainter painter);
 
+	/**
+	 * @brief Returns the constellation data as a JSON object.
+	 */
+	QJsonObject toJson(QString &skyCultureName) const;
+
 private:
 	/// Identifier of the constellation
 	QString id;
@@ -140,9 +146,6 @@ private:
 
 	/// List of coordinates forming the segments.
 	std::vector<CoordinateLine> constellationCoordinates;
-
-	/// List of stars forming the segments. Might be empty.
-	std::vector<StarLine> constellationStars;
 
 	/// Direction vector pointing on constellation name drawing position
 	Vec3d XYZname;
