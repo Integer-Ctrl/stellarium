@@ -48,7 +48,7 @@ void scm::ScmConstellation::setIPA(std::optional<QString> ipa)
 
 void scm::ScmConstellation::setConstellation(std::vector<ConstellationLine> constellationLines)
 {
-	constellationLines = constellationLines;
+	ScmConstellation::constellationLines = constellationLines;
 }
 
 void scm::ScmConstellation::drawConstellation(StelCore *core, Vec3f color)
@@ -111,18 +111,35 @@ QJsonObject scm::ScmConstellation::toJson(QString &skyCultureName) const
 {
 	QJsonObject json;
 
-	json["id"] = "CON " + skyCultureName + " " + id;
-
 	// Assemble lines object
 	QJsonArray linesArray;
+	// A constellation can not have both names and coordinates as lines
+	bool containsName = false;
+	bool containsCoordinates = false;
 	for (const auto& line : constellationLines)
 	{
 		QJsonArray lineJson = line.toJson();
 		if (!lineJson.isEmpty())
 		{
 			linesArray.append(lineJson);
+			// check whether the line contains coordinates or a name
+			if(lineJson[0].isArray() || lineJson[1].isArray())
+			{
+				containsCoordinates = true;
+			}
+			else
+			{
+				containsName = true;
+			}
 		}
 	}
+
+	if(containsName && containsCoordinates)
+	{
+		return QJsonObject(); // Invalid constellation, return empty JSON object
+	}
+
+	json["id"] = "CON " + skyCultureName + " " + id;
 	json["lines"] = linesArray;
 
 	// Assemble common name object

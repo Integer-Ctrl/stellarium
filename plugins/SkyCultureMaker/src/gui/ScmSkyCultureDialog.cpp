@@ -75,6 +75,7 @@ void ScmSkyCultureDialog::createDialogContent()
 
 void ScmSkyCultureDialog::saveSkyCulture()
 {
+	// only for debugging purposes
 	if (constellations != nullptr)
 	{
 		qDebug() << "[Constellations as JSON]:";

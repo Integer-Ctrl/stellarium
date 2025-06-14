@@ -10,8 +10,8 @@
 
 #include "VecMath.hpp"
 #include <optional>
-#include <QString>
 #include <QJsonArray>
+#include <QString>
 
 namespace scm
 {
@@ -41,23 +41,28 @@ struct ConstellationLine
 	//! Declination angle (J2000 frame) in decimal degrees for the end point.
 	float endDecJ2000 = 0.0f;
 
-    /**
-     * @brief Extracts the HIP number from a string.
-     * 
-     * @param hipString The string containing the HIP number.
-     */
-	inline int extractHipNumber(const QString& hipString) const
+	inline QString getStarId(const std::optional<QString> &starName) const
 	{
-		QRegularExpression re(R"(HIP\s+(\d+))");
-		QRegularExpressionMatch match = re.match(hipString);
-		if (match.hasMatch())
+		if (starName.has_value())
 		{
-			return match.captured(1).toInt();
+			QRegularExpression hipExpression(R"(HIP\s+(\d+))");
+			QRegularExpression gaiaExpression(R"(Gaia DR3\s+(\d+))");
+
+			QRegularExpressionMatch hipMatch = hipExpression.match(starName.value());
+			if (hipMatch.hasMatch())
+			{
+				return hipMatch.captured(1);
+			}
+			QRegularExpressionMatch gaiaMatch = gaiaExpression.match(starName.value());
+			if (gaiaMatch.hasMatch())
+			{
+				return gaiaMatch.captured(1);
+			}
 		}
-		return -1;
+		return "-1";
 	}
 
-    /**
+	/**
      * @brief Converts the ConstellationLine to a JSON array.
      * 
      * @return QJsonArray The JSON representation of the ConstellationLine.
@@ -65,62 +70,49 @@ struct ConstellationLine
 	QJsonArray toJson() const
 	{
 		QJsonArray json;
-		// START POINT
-		if (startName.has_value())
-		{
-			QString startNameStr = startName.value();
-			if (int hipId = extractHipNumber(startNameStr); hipId != -1)
-			{
-				json.append(hipId);
-			}
-			else if(startNameStr.contains("Gaia DR3", Qt::CaseInsensitive))
-			{
-				json.append(startName.value());
-			}
-			else
-			{
-				return QJsonArray();
-			}
-		}
-		else if (startRAJ2000 != 0.0f && startDecJ2000 != 0.0f)
-		{
-			QJsonArray coordinateArray;
-			coordinateArray.append(startRAJ2000);
-			coordinateArray.append(startDecJ2000);
-			json.append(coordinateArray);
-		}
-		else
-		{
-			return QJsonArray();
-		}
 
-		// END POINT
-		if (endName.has_value())
+        // get ids
+        QString startId = getStarId(startName);
+        QString endId = getStarId(endName);
+
+        // only save names if both are not empty
+        if (startId != "-1" && endId != "-1")
 		{
-			QString endNameStr = endName.value();
-			if (int hipId = extractHipNumber(endNameStr); hipId != -1)
+			// START POINT
+			if (startName.value().contains("HIP"))
 			{
-				json.append(hipId);
-			}
-			else if(endNameStr.contains("Gaia DR3", Qt::CaseInsensitive))
-			{
-				json.append(endNameStr);
+                // save HIP as int
+				json.append(startId.toInt());
 			}
 			else
 			{
-				return QJsonArray();
+				// save other numbers as string (Gaia DR3)
+				json.append(startId);
 			}
-		}
-		else if (endRAJ2000 != 0.0f && endDecJ2000 != 0.0f)
-		{
-			QJsonArray coordinateArray;
-			coordinateArray.append(endRAJ2000);
-			coordinateArray.append(endDecJ2000);
-			json.append(coordinateArray);
+            // END POINT
+			if (endName.value().contains("HIP"))
+			{
+                // save HIP as int
+				json.append(endId.toInt());
+			}
+			else
+			{
+				// save other numbers as string (Gaia DR3)
+				json.append(endId);
+			}
 		}
 		else
 		{
-			return QJsonArray();
+            // Only if both start and end points do not have names, we save the coordinates
+			QJsonArray startCoordinateArray;
+			startCoordinateArray.append(startRAJ2000);
+			startCoordinateArray.append(startDecJ2000);
+			json.append(startCoordinateArray);
+
+			QJsonArray endCoordinateArray;
+			endCoordinateArray.append(endRAJ2000);
+			endCoordinateArray.append(endDecJ2000);
+			json.append(endCoordinateArray);
 		}
 		return json;
 	}
