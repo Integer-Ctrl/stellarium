@@ -81,8 +81,6 @@ void ScmSkyCultureDialog::saveSkyCulture()
 		qDebug() << "[Constellations as JSON]:";
 		for (const auto &constellation : *constellations)
 		{
-			#include <QJsonObject>
-			#include <QJsonDocument>
 			QJsonObject obj = constellation.toJson(name);
 			QJsonDocument doc(obj);
 			qDebug().noquote() << doc.toJson(QJsonDocument::Compact);
