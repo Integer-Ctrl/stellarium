@@ -1,8 +1,5 @@
 #include "ScmConstellation.hpp"
 
-const Vec3f scm::ScmConstellation::colorDrawDefault(0.3f, 1.f, 0.f);
-const Vec3f scm::ScmConstellation::colorLabelDefault(0.3f, 1.f, 0.f);
-
 scm::ScmConstellation::ScmConstellation(const std::vector<scm::CoordinateLine> &coordinates,
                                         const std::vector<scm::StarLine> &stars)
 	: constellationCoordinates(coordinates)
@@ -10,6 +7,10 @@ scm::ScmConstellation::ScmConstellation(const std::vector<scm::CoordinateLine> &
 {
 	QSettings *conf = StelApp::getInstance().getSettings();
 	constellationLabelFont.setPixelSize(conf->value("viewing/constellation_font_size", 15).toInt());
+
+	QString defaultColor = conf->value("color/default_color", "0.5,0.5,0.7").toString();
+	colorDrawDefault     = Vec3f(conf->value("color/const_lines_color", defaultColor).toString());
+	colorLabelDefault    = Vec3f(conf->value("color/const_names_color", defaultColor).toString());
 }
 
 void scm::ScmConstellation::setId(const QString &id)
@@ -77,6 +78,16 @@ void scm::ScmConstellation::drawConstellation(StelCore *core, const Vec3f &color
 	drawNames(core, painter, colorLabelDefault);
 }
 
+void scm::ScmConstellation::drawConstellation(StelCore *core)
+{
+	drawConstellation(core, colorDrawDefault);
+}
+
+void scm::ScmConstellation::drawConstellation(StelCore *core)
+{
+	drawConstellation(core, colorDrawDefault);
+}
+
 void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter, const Vec3f &labelColor)
 {
 	sPainter.setBlending(true);
@@ -99,4 +110,65 @@ void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter, con
 	sPainter.setColor(labelColor, 1.0f);
 	sPainter.drawText(static_cast<float>(XYname[0]), static_cast<float>(XYname[1]), englishName, 0.,
 	                  -sPainter.getFontMetrics().boundingRect(englishName).width() / 2, 0, false);
+}
+
+void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter)
+{
+	drawNames(core, sPainter, colorLabelDefault);
+}
+
+QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureName) const
+{
+	QJsonObject json;
+
+	// Assemble lines object
+	QJsonArray linesArray;
+
+	if (constellationStars.size() != 0)
+	{
+		// Stars are NOT empty
+		for (const auto &star : constellationStars)
+		{
+			linesArray.append(star.toJson());
+		}
+	}
+	else
+	{
+		// Stars are empty, use the coorindates
+		for (const auto &coord : constellationCoordinates)
+		{
+			linesArray.append(coord.toJson());
+		}
+	}
+
+	json["id"]    = "CON " + skyCultureName + " " + id;
+	json["lines"] = linesArray;
+
+	// Assemble common name object
+	QJsonObject commonNameObj;
+	commonNameObj["english"] = englishName;
+	if (nativeName.has_value())
+	{
+		commonNameObj["native"] = nativeName.value();
+	}
+	if (pronounce.has_value())
+	{
+		commonNameObj["pronounce"] = pronounce.value();
+	}
+	if (ipa.has_value())
+	{
+		commonNameObj["ipa"] = ipa.value();
+	}
+	if (references.has_value() && !references->isEmpty())
+	{
+		QJsonArray refsArray;
+		for (const auto &ref : references.value())
+		{
+			refsArray.append(ref);
+		}
+		commonNameObj["references"] = refsArray;
+	}
+	json["common_name"] = commonNameObj;
+
+	return json;
 }

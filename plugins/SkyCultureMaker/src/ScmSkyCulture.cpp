@@ -11,9 +11,9 @@ void scm::ScmSkyCulture::setRegion(const QString &region)
 	ScmSkyCulture::region = region;
 }
 
-void scm::ScmSkyCulture::setClassification(StelSkyCulture::CLASSIFICATION classification)
+void scm::ScmSkyCulture::setClassificationType(ClassificationType classificationType)
 {
-	ScmSkyCulture::classification = classification;
+	ScmSkyCulture::classificationType = classificationType;
 }
 
 void scm::ScmSkyCulture::setFallbackToInternationalNames(bool fallback)
@@ -60,6 +60,26 @@ scm::ScmConstellation *scm::ScmSkyCulture::getConstellation(const QString &id)
 std::vector<scm::ScmConstellation> *scm::ScmSkyCulture::getConstellations()
 {
 	return &constellations;
+}
+
+void scm::ScmSkyCulture::setLicense(scm::LicenseType license)
+{
+	ScmSkyCulture::license = license;
+}
+
+scm::LicenseType scm::ScmSkyCulture::getLicense() const
+{
+	return ScmSkyCulture::license;
+}
+
+void scm::ScmSkyCulture::setAuthors(const QString authors)
+{
+	ScmSkyCulture::authors = authors;
+}
+
+QString scm::ScmSkyCulture::getAuthors() const
+{
+	return ScmSkyCulture::authors;
 }
 
 void scm::ScmSkyCulture::draw(StelCore *core)

@@ -22,6 +22,10 @@
 #include "StelSkyCultureMgr.hpp"
 #include "types/CoordinateLine.hpp"
 #include "types/StarLine.hpp"
+#include "types/License.hpp"
+#include "types/Classification.hpp"
+#include "ScmCommonName.hpp"
+#include "StelCore.hpp"
 
 namespace scm
 {
@@ -36,7 +40,7 @@ public:
 	void setRegion(const QString &region);
 
 	/// Sets the classification of the sky culture
-	void setClassification(StelSkyCulture::CLASSIFICATION classification);
+	void setClassificationType(ClassificationType classificationType);
 
 	/// Sets whether to show common names in addition to the culture-specific ones
 	void setFallbackToInternationalNames(bool fallback);
@@ -72,6 +76,18 @@ public:
 	/// Returns the common names of the stars, planets and nonstellar objects
 	std::vector<ScmCommonName> getCommonNames() const;
 
+	/// Sets the license of the sky culture
+	void setLicense(scm::LicenseType license);
+
+	/// Returns the license of the sky culture
+	scm::LicenseType getLicense() const;
+
+	/// Sets the authors of the sky culture
+	void setAuthors(const QString authors);
+
+	/// Returns the authors of the sky culture
+	QString getAuthors() const;
+
 	/**
 	* @brief Returns the sky culture as a JSON object
 	*/
@@ -92,8 +108,8 @@ private:
 	 */
 	QString region;
 
-	/// Classification of sky culture (enum)
-	StelSkyCulture::CLASSIFICATION classification;
+	/// Classification of the sky culture
+	ClassificationType classificationType = ClassificationType::NONE;
 
 	/// Whether to show common names in addition to the culture-specific ones
 	bool fallbackToInternationalNames = false;
@@ -106,6 +122,12 @@ private:
 
 	/// The common names of the stars, planets and nonstellar objects
 	std::vector<ScmCommonName> commonNames;
+
+	/// The license of the sky culture
+	scm::LicenseType license = scm::LicenseType::NONE;
+
+	/// The authors of the sky culture
+	QString authors;
 
 	// TODO: edges:
 	/// Type of the edges. Can be one of "none", "iau" or "own". TODO: enum?
