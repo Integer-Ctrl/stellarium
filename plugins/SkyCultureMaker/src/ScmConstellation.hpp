@@ -10,14 +10,14 @@
 #ifndef SCM_CONSTELLATION_HPP
 #define SCM_CONSTELLATION_HPP
 
-#include <QString>
-#include <vector>
-#include <optional>
-#include <variant>
-#include <StelCore.hpp>
+#include "VecMath.hpp"
 #include "types/CoordinateLine.hpp"
 #include "types/StarLine.hpp"
-#include "VecMath.hpp"
+#include <StelCore.hpp>
+#include <optional>
+#include <variant>
+#include <vector>
+#include <QString>
 
 namespace scm
 {
@@ -25,33 +25,33 @@ namespace scm
 class ScmConstellation
 {
 public:
-	ScmConstellation(std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars);
+	ScmConstellation(const std::vector<CoordinateLine> &coordinates, const std::vector<StarLine> &stars);
 
 	/// The frame that is used for calculation and is drawn on.
 	static const StelCore::FrameType drawFrame = StelCore::FrameJ2000;
 	static const Vec3f colorDrawDefault;
 	static const Vec3f colorLabelDefault;
 
-    /**
+	/**
     * @brief Sets the id of the constellation
     * 
     * @param id id
     */
-    void setId(QString id);
+	void setId(const QString &id);
 
-    /**
+	/**
     * @brief Gets the id of the constellation
     * 
     * @return id
     */
-    QString getId() const;
+	QString getId() const;
 
 	/**
     * @brief Sets the english name of the constellation
     * 
     * @param name The english name
     */
-	void setEnglishName(QString name);
+	void setEnglishName(const QString &name);
 
 	/**
 	* @brief Gets the english name of the constellation
@@ -65,21 +65,21 @@ public:
     * 
     * @param name The native name
     */
-	void setNativeName(std::optional<QString> name);
+	void setNativeName(const std::optional<QString> &name);
 
 	/**
     * @brief Sets the pronounciation of the constellation
     * 
     * @param pronounce The pronounciation
     */
-	void setPronounce(std::optional<QString> pronounce);
+	void setPronounce(const std::optional<QString> &pronounce);
 
 	/**
     * @brief Sets the IPA.
     * 
     * @param ipa The optional ipa
 	 */
-	void setIPA(std::optional<QString> ipa);
+	void setIPA(const std::optional<QString> &ipa);
 
 	/**
     * @brief Sets the coordinate lines and star lines of the constellation.
@@ -87,19 +87,19 @@ public:
     * @param coordinates The coordinates of the constellation. 
 	* @param stars The equivalent stars to the coordinates.
     */
-	void setConstellation(std::vector<CoordinateLine> coordinates, std::vector<StarLine> stars);
+	void setConstellation(const std::vector<CoordinateLine> &coordinates, const std::vector<StarLine> &stars);
 
 	/**
 	 * @brief Draws the constellation based on the coordinates.
 	 *
 	 * @param core The core used for drawing.
 	 */
-	void drawConstellation(StelCore *core, Vec3f color = colorDrawDefault);
+	void drawConstellation(StelCore *core, const Vec3f &color = colorDrawDefault);
 
 	/**
 	 * @brief Draws the label of the constellation.
 	 */
-	void drawNames(StelCore *core, StelPainter painter, Vec3f labelColor = colorLabelDefault);
+	void drawNames(StelCore *core, StelPainter &painter, const Vec3f &labelColor = colorLabelDefault);
 
 private:
 	/// Identifier of the constellation
@@ -134,6 +134,6 @@ private:
 	QFont constellationLabelFont;
 };
 
-}  // namespace scm
+} // namespace scm
 
-#endif	// SCM_CONSTELLATION_HPP
+#endif // SCM_CONSTELLATION_HPP

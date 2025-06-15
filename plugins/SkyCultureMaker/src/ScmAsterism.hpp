@@ -24,7 +24,7 @@ public:
     * 
     * @param id id
     */
-    void setId(QString id);
+    void setId(const QString &id);
 
     /**
     * @brief Gets the id of the asterism
@@ -38,7 +38,7 @@ public:
      *
      * @param name The common name of this asterim.
      */
-    void setCommonName(ScmCommonName name);
+    void setCommonName(const ScmCommonName &name);
 
     /**
      * @brief Returns the common name of the asterism.

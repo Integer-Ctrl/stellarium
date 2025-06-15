@@ -1,6 +1,6 @@
 #include "ScmConstellationDialog.hpp"
-#include "ui_scmConstellationDialog.h"
 #include "StelGui.hpp"
+#include "ui_scmConstellationDialog.h"
 
 ScmConstellationDialog::ScmConstellationDialog(SkyCultureMaker *maker)
 	: StelDialogSeparate("ScmConstellationDialog")
@@ -43,45 +43,37 @@ void ScmConstellationDialog::createDialogContent()
 	connect(ui->cancelBtn, &QPushButton::clicked, this, &ScmConstellationDialog::cancel);
 
 	// LABELS TAB
-	connect(ui->enNameTE,
-		&QTextEdit::textChanged,
-		this,
-		[this]()
-		{
+	connect(ui->enNameTE, &QTextEdit::textChanged, this,
+	        [this]()
+	        {
 			constellationEnglishName = ui->enNameTE->toPlainText();
 
-			QString newConstId = constellationEnglishName.toLower().replace(" ", "_");
+			QString newConstId         = constellationEnglishName.toLower().replace(" ", "_");
 			constellationPlaceholderId = newConstId;
 			ui->idTE->setPlaceholderText(newConstId);
 		});
 	connect(ui->idTE, &QTextEdit::textChanged, this, [this]() { constellationId = ui->idTE->toPlainText(); });
-	connect(ui->natNameTE,
-		&QTextEdit::textChanged,
-		this,
-		[this]()
-		{
+	connect(ui->natNameTE, &QTextEdit::textChanged, this,
+	        [this]()
+	        {
 			constellationNativeName = ui->natNameTE->toPlainText();
 			if (constellationNativeName->isEmpty())
 			{
 				constellationNativeName = std::nullopt;
 			}
 		});
-	connect(ui->pronounceTE,
-		&QTextEdit::textChanged,
-		this,
-		[this]()
-		{
+	connect(ui->pronounceTE, &QTextEdit::textChanged, this,
+	        [this]()
+	        {
 			constellationPronounce = ui->pronounceTE->toPlainText();
 			if (constellationPronounce->isEmpty())
 			{
 				constellationPronounce = std::nullopt;
 			}
 		});
-	connect(ui->ipaTE,
-		&QTextEdit::textChanged,
-		this,
-		[this]()
-		{
+	connect(ui->ipaTE, &QTextEdit::textChanged, this,
+	        [this]()
+	        {
 			constellationIPA = ui->ipaTE->toPlainText();
 			if (constellationIPA->isEmpty())
 			{
@@ -149,7 +141,8 @@ bool ScmConstellationDialog::canConstellationBeSaved()
 		return false;
 	}
 
-	if(maker->getCurrentSkyCulture() != nullptr && maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
+	if (maker->getCurrentSkyCulture() != nullptr &&
+	    maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Constellation with this ID already exists");
 		return false;
@@ -177,10 +170,26 @@ void ScmConstellationDialog::saveConstellation()
 	if (canConstellationBeSaved())
 	{
 		auto coordinates = maker->getScmDraw()->getCoordinates();
-		auto stars = maker->getScmDraw()->getStars();
-		QString id = constellationId.isEmpty() ? constellationPlaceholderId : constellationId;
-		maker->getCurrentSkyCulture()->addConstellation(id, coordinates, stars);
-		scm::ScmConstellation *constellationObj = maker->getCurrentSkyCulture()->getConstellation(id);
+		auto stars       = maker->getScmDraw()->getStars();
+		QString id       = constellationId.isEmpty() ? constellationPlaceholderId : constellationId;
+
+		scm::ScmSkyCulture *culture = maker->getCurrentSkyCulture();
+
+		if (culture == nullptr)
+		{
+			qDebug() << "Error: No current sky culture set.";
+			return;
+		}
+
+		culture->addConstellation(id, coordinates, stars);
+
+		scm::ScmConstellation *constellationObj = culture->getConstellation(id);
+
+		if (constellationObj == nullptr)
+		{
+			qDebug() << "Error: constellation object not found with id: " << id;
+			return;
+		}
 
 		constellationObj->setEnglishName(constellationEnglishName);
 		constellationObj->setNativeName(constellationNativeName);

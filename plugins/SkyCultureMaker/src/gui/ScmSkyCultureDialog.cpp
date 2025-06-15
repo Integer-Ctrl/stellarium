@@ -68,24 +68,22 @@ void ScmSkyCultureDialog::createDialogContent()
 	ui->RemoveConstellationBtn->setEnabled(false);
 	connect(ui->SaveSkyCultureBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::saveSkyCulture);
 	connect(ui->AddConstellationBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::constellationDialog);
-	connect(ui->RemoveConstellationBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::removeSelectedConstellation);
+	connect(ui->RemoveConstellationBtn, &QPushButton::clicked, this,
+	        &ScmSkyCultureDialog::removeSelectedConstellation);
 	connect(ui->constellationsList, &QListWidget::itemSelectionChanged, this,
 	        &ScmSkyCultureDialog::updateRemoveConstellationButton);
 }
 
-void ScmSkyCultureDialog::saveSkyCulture()
-{
-
-}
+void ScmSkyCultureDialog::saveSkyCulture() {}
 
 void ScmSkyCultureDialog::removeSelectedConstellation()
 {
 	auto selectedItems = ui->constellationsList->selectedItems();
 	if (!selectedItems.isEmpty() && constellations != nullptr)
 	{
-		QListWidgetItem *item = selectedItems.first();
+		QListWidgetItem *item     = selectedItems.first();
 		QString constellationName = item->text();
-		
+
 		// Get Id by comparing to the display name
 		// This will always work, even when the constellation id
 		// or name contains special characters

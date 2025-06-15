@@ -33,7 +33,7 @@ void scm::ScmDraw::setSearchMode(bool active)
 	inSearchMode = active;
 }
 
-void scm::ScmDraw::appendDrawPoint(Vec3d point, std::optional<QString> starID)
+void scm::ScmDraw::appendDrawPoint(const Vec3d &point, const std::optional<QString> &starID)
 {
 	if (hasFlag(drawState, (Drawing::hasStart | Drawing::hasFloatingEnd)))
 	{
@@ -80,7 +80,8 @@ void scm::ScmDraw::setMoveToAnotherStart()
 
 const Vec2d scm::ScmDraw::defaultLastEraserPos(std::nan("1"), std::nan("1"));
 
-bool scm::ScmDraw::segmentIntersect(Vec2d startA, Vec2d directionA, Vec2d startB, Vec2d directionB)
+bool scm::ScmDraw::segmentIntersect(const Vec2d &startA, const Vec2d &directionA, const Vec2d &startB,
+                                    const Vec2d &directionB)
 {
 	if (std::abs(directionA.dot(directionB)) < std::numeric_limits<double>::epsilon()) // check with near zero value
 	{
@@ -452,7 +453,9 @@ void scm::ScmDraw::resetDrawing()
 {
 	drawnLines.coordinates.clear();
 	drawnLines.stars.clear();
-	drawState = Drawing::None;
+	drawState     = Drawing::None;
+	lastEraserPos = defaultLastEraserPos;
+	activeTool    = DrawTools::None;
 	std::get<CoordinateLine>(currentLine).start.set(0, 0, 0);
 	std::get<CoordinateLine>(currentLine).end.set(0, 0, 0);
 	std::get<StarLine>(currentLine).start.reset();
