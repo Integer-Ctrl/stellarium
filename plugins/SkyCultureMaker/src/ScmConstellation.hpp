@@ -95,7 +95,7 @@ public:
 	 * @param core The core used for drawing.
 	 * @param color The color to use for drawing the constellation.
 	 */
-	void drawConstellation(StelCore *core, Vec3f color);
+	void drawConstellation(StelCore *core, const Vec3f &color);
 
 	/**
 	 * @brief Draws the constellation based on the coordinates using the default color.
@@ -124,7 +124,7 @@ public:
 	/**
 	 * @brief Returns the constellation data as a JSON object.
 	 */
-	QJsonObject toJson(QString &skyCultureName) const;
+	QJsonObject toJson(const QString &skyCultureName) const;
 
 private:
 	/// Identifier of the constellation

@@ -83,11 +83,6 @@ void scm::ScmConstellation::drawConstellation(StelCore *core)
 	drawConstellation(core, colorDrawDefault);
 }
 
-void scm::ScmConstellation::drawConstellation(StelCore *core)
-{
-	drawConstellation(core, colorDrawDefault);
-}
-
 void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter, const Vec3f &labelColor)
 {
 	sPainter.setBlending(true);
