@@ -74,7 +74,7 @@ void scm::ScmConstellation::drawConstellation(StelCore *core, const Vec3f &color
 		painter.drawGreatCircleArc(p.start, p.end);
 	}
 
-	drawNames(core, painter, colorLabelDefault);
+	drawNames(core, painter);
 }
 
 void scm::ScmConstellation::drawConstellation(StelCore *core) const
