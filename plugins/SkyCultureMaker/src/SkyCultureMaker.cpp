@@ -345,4 +345,6 @@ bool SkyCultureMaker::saveSkyCultureDescription()
 	{
 		return currentSkyCulture->saveDescriptionAsMarkdown(getScmDescriptionFile());
 	}
+
+	return false;
 }

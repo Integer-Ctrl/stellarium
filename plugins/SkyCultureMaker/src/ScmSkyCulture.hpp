@@ -110,19 +110,6 @@ public:
 	 */
 	bool saveDescriptionAsMarkdown(QFile file);
 
-	/**
-	 * @brief Sets the description of the sky culture.
-	 * @param description The description to set.
-	 */
-	void setDescription(const scm::Description &description);
-
-	/**
-	 * @brief Saves the current sky culture description as markdown text.
-	 * @param file The file to save the description to.
-	 * @return true if the description was saved successfully, false otherwise.
-	 */
-	bool saveDescriptionAsMarkdown(QFile file);
-
 private:
 	/// Sky culture identifier
 	QString id;

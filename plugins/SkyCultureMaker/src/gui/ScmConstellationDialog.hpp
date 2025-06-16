@@ -1,9 +1,9 @@
 #ifndef SCM_CONSTELLATION_DIALOG_HPP
 #define SCM_CONSTELLATION_DIALOG_HPP
 
-#include "../SkyCultureMaker.hpp"
-#include "../types/DrawTools.hpp"
+#include "SkyCultureMaker.hpp"
 #include "StelDialogSeparate.hpp"
+#include "types/DrawTools.hpp"
 #include <optional>
 #include <QObject>
 #include <QString>

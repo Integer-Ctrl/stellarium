@@ -1,23 +1,17 @@
 #ifndef SCM_SKY_CULTURE_DIALOG_HPP
 #define SCM_SKY_CULTURE_DIALOG_HPP
 
-#include "../ScmConstellation.hpp"
-#include "../SkyCultureMaker.hpp"
-#include "../types/Classification.hpp"
-#include "../types/License.hpp"
+#include "ScmConstellation.hpp"
+#include "SkyCultureMaker.hpp"
 #include "StelDialogSeparate.hpp"
+#include "types/Classification.hpp"
+#include "types/Description.hpp"
+#include "types/License.hpp"
 #include <optional>
+#include <QFile>
 #include <QObject>
 #include <QString>
 #include <QVariant>
-#include <optional>
-#include "StelDialogSeparate.hpp"
-#include "../SkyCultureMaker.hpp"
-#include "../ScmConstellation.hpp"
-#include "../types/License.hpp"
-#include "../types/Classification.hpp"
-#include "types/Description.hpp"
-#include <QFile>
 
 // debugging
 #include <QJsonDocument>
