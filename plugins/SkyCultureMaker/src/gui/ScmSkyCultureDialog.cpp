@@ -1,10 +1,12 @@
 #include "ScmSkyCultureDialog.hpp"
 #include "ui_scmSkyCultureDialog.h"
+#include <cassert>
 
 ScmSkyCultureDialog::ScmSkyCultureDialog(SkyCultureMaker *maker)
 	: StelDialogSeparate("ScmSkyCultureDialog")
 	, maker(maker)
 {
+	assert(maker != nullptr);
 	ui = new Ui_scmSkyCultureDialog;
 }
 
@@ -118,7 +120,7 @@ void ScmSkyCultureDialog::createDialogContent()
 
 void ScmSkyCultureDialog::saveSkyCulture()
 {
-// only for debugging purposes
+	// only for debugging purposes
 	if (constellations != nullptr)
 	{
 		qDebug() << "[Constellations as JSON]:";
@@ -217,8 +219,8 @@ void ScmSkyCultureDialog::setIsLicenseSavable()
 {
 	if (maker->getCurrentSkyCulture() != nullptr)
 	{
-		bool isLicenseNotNone = false;
-		bool isAuthorsListNotEmpty = !ui->authorsTE->toPlainText().isEmpty();
+		bool isLicenseNotNone        = false;
+		bool isAuthorsListNotEmpty   = !ui->authorsTE->toPlainText().isEmpty();
 		bool isClassificationNotNone = false;
 
 		// check if the license is not NONE

@@ -1,11 +1,13 @@
 #include "ScmConstellationDialog.hpp"
 #include "StelGui.hpp"
 #include "ui_scmConstellationDialog.h"
+#include <cassert>
 
 ScmConstellationDialog::ScmConstellationDialog(SkyCultureMaker *maker)
 	: StelDialogSeparate("ScmConstellationDialog")
 	, maker(maker)
 {
+	assert(maker != nullptr);
 	ui = new Ui_scmConstellationDialog;
 }
 
@@ -174,27 +176,14 @@ void ScmConstellationDialog::saveConstellation()
 		QString id       = constellationId.isEmpty() ? constellationPlaceholderId : constellationId;
 
 		scm::ScmSkyCulture *culture = maker->getCurrentSkyCulture();
+		assert(culture != nullptr); // already checked by canConstellationBeSaved
 
-		if (culture == nullptr)
-		{
-			qDebug() << "Error: No current sky culture set.";
-			return;
-		}
+		scm::ScmConstellation constellation = culture->addConstellation(id, coordinates, stars);
 
-		culture->addConstellation(id, coordinates, stars);
-
-		scm::ScmConstellation *constellationObj = culture->getConstellation(id);
-
-		if (constellationObj == nullptr)
-		{
-			qDebug() << "Error: constellation object not found with id: " << id;
-			return;
-		}
-
-		constellationObj->setEnglishName(constellationEnglishName);
-		constellationObj->setNativeName(constellationNativeName);
-		constellationObj->setPronounce(constellationPronounce);
-		constellationObj->setIPA(constellationIPA);
+		constellation.setEnglishName(constellationEnglishName);
+		constellation.setNativeName(constellationNativeName);
+		constellation.setPronounce(constellationPronounce);
+		constellation.setIPA(constellationIPA);
 
 		maker->updateSkyCultureDialog();
 		resetDialog();

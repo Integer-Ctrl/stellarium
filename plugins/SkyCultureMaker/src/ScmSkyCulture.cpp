@@ -33,12 +33,14 @@ void scm::ScmSkyCulture::removeAsterism(const QString &id)
 	                end(asterisms));
 }
 
-void scm::ScmSkyCulture::addConstellation(const QString &id, const std::vector<CoordinateLine> &coordinates,
-                                          const std::vector<StarLine> &stars)
+scm::ScmConstellation &scm::ScmSkyCulture::addConstellation(const QString &id,
+                                                            const std::vector<CoordinateLine> &coordinates,
+                                                            const std::vector<StarLine> &stars)
 {
 	scm::ScmConstellation constellationObj(coordinates, stars);
 	constellationObj.setId(id);
 	constellations.push_back(std::move(constellationObj));
+	return constellations.back();
 }
 
 void scm::ScmSkyCulture::removeConstellation(const QString &id)

@@ -50,14 +50,14 @@ public:
 	void removeAsterism(const QString &id);
 
 	/// Adds a constellation to the sky culture
-	void addConstellation(const QString &id, const std::vector<CoordinateLine> &coordinates,
-	                      const std::vector<StarLine> &stars);
+	ScmConstellation &addConstellation(const QString &id, const std::vector<CoordinateLine> &coordinates,
+	                                   const std::vector<StarLine> &stars);
 
 	/// Removes a constellation from the sky culture by its ID
 	void removeConstellation(const QString &id);
 
 	/// Gets a constellation from the sky culture by its ID
-	scm::ScmConstellation *getConstellation(const QString &id);
+	ScmConstellation *getConstellation(const QString &id);
 
 	/// Adds a common name to the sky culture
 	void addCommonName(ScmCommonName commonName);
