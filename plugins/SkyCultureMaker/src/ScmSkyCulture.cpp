@@ -82,7 +82,7 @@ QString scm::ScmSkyCulture::getAuthors() const
 	return ScmSkyCulture::authors;
 }
 
-void scm::ScmSkyCulture::draw(StelCore *core)
+void scm::ScmSkyCulture::draw(StelCore *core) const
 {
 	for (auto &constellation : constellations)
 	{

@@ -11,6 +11,8 @@ scm::ScmConstellation::ScmConstellation(const std::vector<scm::CoordinateLine> &
 	QString defaultColor = conf->value("color/default_color", "0.5,0.5,0.7").toString();
 	colorDrawDefault     = Vec3f(conf->value("color/const_lines_color", defaultColor).toString());
 	colorLabelDefault    = Vec3f(conf->value("color/const_names_color", defaultColor).toString());
+
+	updateTextPosition();
 }
 
 void scm::ScmConstellation::setId(const QString &id)
@@ -53,9 +55,11 @@ void scm::ScmConstellation::setConstellation(const std::vector<CoordinateLine> &
 {
 	constellationCoordinates = coordinates;
 	constellationStars       = stars;
+
+	updateTextPosition();
 }
 
-void scm::ScmConstellation::drawConstellation(StelCore *core, const Vec3f &color)
+void scm::ScmConstellation::drawConstellation(StelCore *core, const Vec3f &color) const
 {
 	StelPainter painter(core->getProjection(drawFrame));
 	painter.setBlending(true);
@@ -65,25 +69,20 @@ void scm::ScmConstellation::drawConstellation(StelCore *core, const Vec3f &color
 	bool alpha = 1.0f;
 	painter.setColor(color, alpha);
 
-	XYZname.set(0., 0., 0.);
 	for (CoordinateLine p : constellationCoordinates)
 	{
 		painter.drawGreatCircleArc(p.start, p.end);
-		XYZname += p.end;
-		XYZname += p.start;
 	}
-
-	XYZname.normalize();
 
 	drawNames(core, painter, colorLabelDefault);
 }
 
-void scm::ScmConstellation::drawConstellation(StelCore *core)
+void scm::ScmConstellation::drawConstellation(StelCore *core) const
 {
 	drawConstellation(core, colorDrawDefault);
 }
 
-void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter, const Vec3f &labelColor)
+void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter, const Vec3f &labelColor) const
 {
 	sPainter.setBlending(true);
 
@@ -93,21 +92,22 @@ void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter, con
 		velocityObserver = core->getAberrationVec(core->getJDE());
 	}
 
-	XYZname += velocityObserver;
-	XYZname.normalize();
+	Vec3d namePose = XYZname;
+	namePose += velocityObserver;
+	namePose.normalize();
 
-	if (!sPainter.getProjector()->projectCheck(XYZname, this->XYname))
+	Vec3d XYname;
+	if (!sPainter.getProjector()->projectCheck(XYZname, XYname))
 	{
 		return;
 	}
 
-	sPainter.getProjector()->project(XYZname, XYname);
 	sPainter.setColor(labelColor, 1.0f);
 	sPainter.drawText(static_cast<float>(XYname[0]), static_cast<float>(XYname[1]), englishName, 0.,
 	                  -sPainter.getFontMetrics().boundingRect(englishName).width() / 2, 0, false);
 }
 
-void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter)
+void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter) const
 {
 	drawNames(core, sPainter, colorLabelDefault);
 }
@@ -166,4 +166,15 @@ QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureName) const
 	json["common_name"] = commonNameObj;
 
 	return json;
+}
+
+void scm::ScmConstellation::updateTextPosition()
+{
+	XYZname.set(0., 0., 0.);
+	for (CoordinateLine p : constellationCoordinates)
+	{
+		XYZname += p.end;
+		XYZname += p.start;
+	}
+	XYZname.normalize();
 }

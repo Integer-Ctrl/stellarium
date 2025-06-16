@@ -3,21 +3,17 @@
 
 #include "../ScmConstellation.hpp"
 #include "../SkyCultureMaker.hpp"
+#include "../types/Classification.hpp"
+#include "../types/License.hpp"
 #include "StelDialogSeparate.hpp"
 #include <optional>
 #include <QObject>
 #include <QString>
 #include <QVariant>
-#include <optional>
-#include "StelDialogSeparate.hpp"
-#include "../SkyCultureMaker.hpp"
-#include "../ScmConstellation.hpp"
-#include "../types/License.hpp"
-#include "../types/Classification.hpp"
 
 // debugging
-#include <QJsonObject>
 #include <QJsonDocument>
+#include <QJsonObject>
 
 class Ui_scmSkyCultureDialog;
 

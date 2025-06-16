@@ -1,14 +1,14 @@
 #ifndef SKYCULTUREMAKER_HPP
 #define SKYCULTUREMAKER_HPP
 
-#include "StelModule.hpp"
-#include "VecMath.hpp"
-#include "StelTranslator.hpp"
-#include "StelCore.hpp"
-#include "ScmDraw.hpp"
-#include "StelObjectModule.hpp"
-#include "ScmSkyCulture.hpp"
 #include "ScmConstellation.hpp"
+#include "ScmDraw.hpp"
+#include "ScmSkyCulture.hpp"
+#include "StelCore.hpp"
+#include "StelModule.hpp"
+#include "StelObjectModule.hpp"
+#include "StelTranslator.hpp"
+#include "VecMath.hpp"
 
 #include <QFont>
 
@@ -114,15 +114,12 @@ signals:
 	void eventIsScmEnabled(bool b);
 
 public slots:
-	bool getIsScmEnabled() const
-	{
-		return isScmEnabled;
-	}
+	bool getIsScmEnabled() const { return isScmEnabled; }
 
 	void setIsScmEnabled(bool b);
 
 private:
-	const QString groupId = N_("Sky Culture Maker");
+	const QString groupId      = N_("Sky Culture Maker");
 	const QString actionIdLine = "actionShow_SkyCultureMaker_Line";
 
 	/// Indicates that SCM creation process is enabled (QT Signal)
@@ -139,10 +136,6 @@ private:
 
 	/// The object used for drawing constellations
 	scm::ScmDraw *drawObj = nullptr;
-
-	/// Draws the line between the start and the current end point.
-	/// @param core The core used for drawing the line.
-	void drawLine(StelCore *core);
 
 	/// Toogle SCM creation process on
 	void startScmProcess();
@@ -163,11 +156,12 @@ private:
 	scm::ScmSkyCulture *currentSkyCulture = nullptr;
 };
 
-#include <QObject>
 #include "StelPluginInterface.hpp"
+#include <QObject>
 
 /// This class is used by Qt to manage a plug-in interface
-class SkyCultureMakerStelPluginInterface : public QObject, public StelPluginInterface
+class SkyCultureMakerStelPluginInterface : public QObject,
+					   public StelPluginInterface
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID StelPluginInterface_iid)
@@ -175,10 +169,7 @@ class SkyCultureMakerStelPluginInterface : public QObject, public StelPluginInte
 public:
 	StelModule *getStelModule() const override;
 	StelPluginInfo getPluginInfo() const override;
-	QObjectList getExtensionList() const override
-	{
-		return QObjectList();
-	}
+	QObjectList getExtensionList() const override { return QObjectList(); }
 };
 
 #endif /* SKYCULTUREMAKER_HPP */

@@ -118,7 +118,7 @@ void ScmConstellationDialog::triggerUndo()
 	togglePen(true);
 }
 
-bool ScmConstellationDialog::canConstellationBeSaved()
+bool ScmConstellationDialog::canConstellationBeSaved() const
 {
 	// shouldnt happen
 	if (maker->getCurrentSkyCulture() == nullptr)

@@ -123,7 +123,7 @@ public:
 	 *
 	 * @param core The core used for drawing the line.
 	 */
-	void drawLine(StelCore *core);
+	void drawLine(StelCore *core) const;
 
 	/// Handle mouse clicks. Please note that most of the interactions will be done through the GUI module.
 	/// @return set the event as accepted if it was intercepted
@@ -146,7 +146,7 @@ public:
 	 * @param prj The projector to use for the calculation.
 	 * @return std::optional<StarPoint> The found star point if available.
 	 */
-	std::optional<StarPoint> findNearestPoint(int x, int y, StelProjectorP prj);
+	std::optional<StarPoint> findNearestPoint(int x, int y, StelProjectorP prj) const;
 
 	/// Undo the last drawn line.
 	void undoLastLine();
@@ -156,14 +156,14 @@ public:
 	 *
 	 * @return std::vector<StarLine> The optional filled vector of stars matching the coordinates.
 	 */
-	std::vector<StarLine> getStars();
+	std::vector<StarLine> getStars() const;
 
 	/**
 	 * @brief Get the drawn stick figures as coordinates.
 	 *
 	 * @return std::vector<CoordinateLine> The drawn coordinates.
 	 */
-	std::vector<CoordinateLine> getCoordinates();
+	std::vector<CoordinateLine> getCoordinates() const;
 
 	/**
 	 * @brief Set the active draw tool

@@ -118,7 +118,7 @@ scm::ScmDraw::ScmDraw()
 	connect(mvmMgr, &StelMovementMgr::flagTrackingChanged, this, &ScmDraw::setMoveToAnotherStart);
 }
 
-void scm::ScmDraw::drawLine(StelCore *core)
+void scm::ScmDraw::drawLine(StelCore *core) const
 {
 	StelPainter painter(core->getProjection(drawFrame));
 	painter.setBlending(true);
@@ -201,7 +201,7 @@ void scm::ScmDraw::handleMouseClicks(class QMouseEvent *event)
 						point               = stelPos;
 						if (stelObj->getType() == "Star")
 						{
-							starID          = stelObj->getID();
+							starID = stelObj->getID();
 						}
 					}
 				}
@@ -365,7 +365,7 @@ void scm::ScmDraw::undoLastLine()
 	}
 }
 
-std::vector<scm::StarLine> scm::ScmDraw::getStars()
+std::vector<scm::StarLine> scm::ScmDraw::getStars() const
 {
 	bool all_stars = std::all_of(drawnLines.stars.begin(), drawnLines.stars.end(), [](const StarLine &star)
 	                             { return star.start.has_value() && star.end.has_value(); });
@@ -378,7 +378,7 @@ std::vector<scm::StarLine> scm::ScmDraw::getStars()
 	return std::vector<StarLine>();
 }
 
-std::vector<scm::CoordinateLine> scm::ScmDraw::getCoordinates()
+std::vector<scm::CoordinateLine> scm::ScmDraw::getCoordinates() const
 {
 	return drawnLines.coordinates;
 }
@@ -390,7 +390,7 @@ void scm::ScmDraw::setTool(scm::DrawTools tool)
 	drawState     = Drawing::None;
 }
 
-std::optional<scm::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelProjectorP prj)
+std::optional<scm::StarPoint> scm::ScmDraw::findNearestPoint(int x, int y, StelProjectorP prj) const
 {
 	if (drawnLines.coordinates.empty())
 	{

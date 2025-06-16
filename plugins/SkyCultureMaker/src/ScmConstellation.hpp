@@ -95,14 +95,14 @@ public:
 	 * @param core The core used for drawing.
 	 * @param color The color to use for drawing the constellation.
 	 */
-	void drawConstellation(StelCore *core, const Vec3f &color);
+	void drawConstellation(StelCore *core, const Vec3f &color) const;
 
 	/**
 	 * @brief Draws the constellation based on the coordinates using the default color.
 	 *
 	 * @param core The core used for drawing.
 	 */
-	void drawConstellation(StelCore *core);
+	void drawConstellation(StelCore *core) const;
 
 	/**
 	 * @brief Draws the label of the constellation.
@@ -111,7 +111,7 @@ public:
 	 * @param painter The painter used for drawing.
 	 * @param labelColor The color of the label.
 	 */
-	void drawNames(StelCore *core, StelPainter &painter, const Vec3f &labelColor);
+	void drawNames(StelCore *core, StelPainter &painter, const Vec3f &labelColor) const;
 
 	/**
 	 * @brief Draws the label of the constellation using the default color.
@@ -119,7 +119,7 @@ public:
 	 * @param core The core used for drawing.
 	 * @param painter The painter used for drawing.
 	 */
-	void drawNames(StelCore *core, StelPainter &painter);
+	void drawNames(StelCore *core, StelPainter &painter) const;
 
 	/**
 	 * @brief Returns the constellation data as a JSON object.
@@ -153,7 +153,6 @@ private:
 
 	/// Direction vector pointing on constellation name drawing position
 	Vec3d XYZname;
-	Vec3d XYname;
 
 	/// The font used for constellation labels
 	QFont constellationLabelFont;
@@ -163,6 +162,11 @@ private:
 
 	/// The default color used for drawing the constellation label
 	Vec3f colorLabelDefault = Vec3f(0.0f, 0.0f, 0.0f);
+
+	/**
+	 * @brief Updates the XYZname that is used for the text position.
+	 */
+	void updateTextPosition();
 };
 
 } // namespace scm

@@ -20,12 +20,10 @@
 #include "ScmConstellation.hpp"
 #include "StelCore.hpp"
 #include "StelSkyCultureMgr.hpp"
-#include "types/CoordinateLine.hpp"
-#include "types/StarLine.hpp"
-#include "types/License.hpp"
 #include "types/Classification.hpp"
-#include "ScmCommonName.hpp"
-#include "StelCore.hpp"
+#include "types/CoordinateLine.hpp"
+#include "types/License.hpp"
+#include "types/StarLine.hpp"
 
 namespace scm
 {
@@ -96,7 +94,7 @@ public:
 	/**
 	* @brief Draws the sky culture.
 	*/
-	void draw(StelCore *core);
+	void draw(StelCore *core) const;
 
 private:
 	/// Sky culture identifier
