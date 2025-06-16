@@ -324,3 +324,25 @@ void SkyCultureMaker::updateSkyCultureDialog()
 	}
 	scmSkyCultureDialog->setConstellations(currentSkyCulture->getConstellations());
 }
+
+void SkyCultureMaker::setSkyCultureDescription(const scm::Description &description)
+{
+	if (currentSkyCulture != nullptr)
+	{
+		currentSkyCulture->setDescription(description);
+	}
+}
+
+QFile SkyCultureMaker::getScmDescriptionFile()
+{
+	// TODO: Issue #85
+	return QFile("description.md");
+}
+
+bool SkyCultureMaker::saveSkyCultureDescription()
+{
+	if (currentSkyCulture != nullptr)
+	{
+		return currentSkyCulture->saveDescriptionAsMarkdown(getScmDescriptionFile());
+	}
+}

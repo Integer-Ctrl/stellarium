@@ -22,6 +22,7 @@
 #include "StelSkyCultureMgr.hpp"
 #include "types/Classification.hpp"
 #include "types/CoordinateLine.hpp"
+#include "types/Description.hpp"
 #include "types/License.hpp"
 #include "types/StarLine.hpp"
 
@@ -96,6 +97,32 @@ public:
 	*/
 	void draw(StelCore *core) const;
 
+	/**
+	 * @brief Sets the description of the sky culture.
+	 * @param description The description to set.
+	 */
+	void setDescription(const scm::Description &description);
+
+	/**
+	 * @brief Saves the current sky culture description as markdown text.
+	 * @param file The file to save the description to.
+	 * @return true if the description was saved successfully, false otherwise.
+	 */
+	bool saveDescriptionAsMarkdown(QFile file);
+
+	/**
+	 * @brief Sets the description of the sky culture.
+	 * @param description The description to set.
+	 */
+	void setDescription(const scm::Description &description);
+
+	/**
+	 * @brief Saves the current sky culture description as markdown text.
+	 * @param file The file to save the description to.
+	 * @return true if the description was saved successfully, false otherwise.
+	 */
+	bool saveDescriptionAsMarkdown(QFile file);
+
 private:
 	/// Sky culture identifier
 	QString id;
@@ -126,6 +153,9 @@ private:
 
 	/// The authors of the sky culture
 	QString authors;
+
+	/// The description of the sky culture
+	scm::Description description;
 
 	// TODO: edges:
 	/// Type of the edges. Can be one of "none", "iau" or "own". TODO: enum?

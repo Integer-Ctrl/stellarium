@@ -10,6 +10,14 @@
 #include <QObject>
 #include <QString>
 #include <QVariant>
+#include <optional>
+#include "StelDialogSeparate.hpp"
+#include "../SkyCultureMaker.hpp"
+#include "../ScmConstellation.hpp"
+#include "../types/License.hpp"
+#include "../types/Classification.hpp"
+#include "types/Description.hpp"
+#include <QFile>
 
 // debugging
 #include <QJsonDocument>
@@ -42,7 +50,6 @@ private slots:
 	void constellationDialog();
 	void removeSelectedConstellation();
 	void updateRemoveConstellationButton();
-	void setIsLicenseSavable();
 	void saveLicense();
 
 private:
@@ -63,7 +70,19 @@ private:
 	 */
 	QString getDisplayNameFromConstellation(const scm::ScmConstellation &constellation) const;
 
+	/**
+	 * @brief Sets the id of the sky culture from the name.
+	 *
+	 * @param name The name to set the id from.
+	 */
 	void setIdFromName(QString &name);
+
+	/**
+	 * @brief Gets the description from the text edit.
+	 *
+	 * @return The description from the text edit.
+	 */
+	scm::Description getDescriptionFromTextEdit() const;
 };
 
 #endif // SCM_SKY_CULTURE_DIALOG_HPP

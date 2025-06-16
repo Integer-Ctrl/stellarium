@@ -1,5 +1,7 @@
 #include "ScmSkyCulture.hpp"
+#include "types/Classification.hpp"
 #include <utility>
+#include <QFile>
 
 void scm::ScmSkyCulture::setId(const QString &id)
 {
@@ -89,5 +91,52 @@ void scm::ScmSkyCulture::draw(StelCore *core) const
 	for (auto &constellation : constellations)
 	{
 		constellation.drawConstellation(core);
+	}
+}
+
+void scm::ScmSkyCulture::setDescription(const scm::Description &description)
+{
+	ScmSkyCulture::description = description;
+}
+
+bool scm::ScmSkyCulture::saveDescriptionAsMarkdown(QFile file)
+{
+	if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		const scm::Description &desc = ScmSkyCulture::description;
+
+		QTextStream out(&file);
+		out << "# " << desc.name << "\n\n";
+		out << "## Geographical Region\n" << desc.geoRegion << "\n\n";
+		out << "## Classification\n " << classificationTypeToString(desc.classification) << "\n\n";
+
+		out << "## Sky\n" << desc.sky << "\n\n";
+		out << "## Moon and Sun\n" << desc.moonAndSun << "\n\n";
+		out << "## Zodiac\n" << desc.zodiac << "\n\n";
+		out << "## Planets\n" << desc.planets << "\n\n";
+		out << "## Constellations\n" << desc.constellations << "\n\n";
+		out << "## Milky Way\n" << desc.milkyWay << "\n\n";
+		out << "## Other Celestial Objects\n" << desc.otherObjects << "\n\n";
+
+		out << "## About\n" << desc.about << "\n\n";
+		out << "## Authors\n" << desc.authors << "\n\n";
+		out << "## Acknowledgements\n" << desc.acknowledgements << "\n\n";
+		out << "## References\n" << desc.references << "\n";
+
+		try
+		{
+			file.close();
+			return true; // successfully saved
+		}
+		catch (const std::exception &e)
+		{
+			qWarning("Error closing file: %s", e.what());
+			return false; // error occurred while closing the file
+		}
+	}
+	else
+	{
+		qWarning("Could not open file for writing: %s", qPrintable(file.fileName()));
+		return false; // file could not be opened
 	}
 }
