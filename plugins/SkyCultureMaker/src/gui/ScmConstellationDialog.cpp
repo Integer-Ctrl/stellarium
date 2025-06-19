@@ -1,13 +1,21 @@
 #include "ScmConstellationDialog.hpp"
+#include "StelApp.hpp"
 #include "StelGui.hpp"
+#include "StelObjectMgr.hpp"
 #include "ui_scmConstellationDialog.h"
+#include <algorithm>
 #include <cassert>
+#include <functional>
+#include <utility>
+#include <QFileDialog>
+#include <QFileInfo>
 
 ScmConstellationDialog::ScmConstellationDialog(SkyCultureMaker *maker)
 	: StelDialogSeparate("ScmConstellationDialog")
 	, maker(maker)
 {
 	assert(maker != nullptr);
+
 	ui = new Ui_scmConstellationDialog;
 }
 
@@ -32,6 +40,9 @@ void ScmConstellationDialog::close()
 void ScmConstellationDialog::createDialogContent()
 {
 	ui->setupUi(dialog);
+	imageItem.hide();
+	ui->artwork_image->setScene(imageItem.scene());
+	ui->bind_star->setEnabled(false);
 
 	connect(&StelApp::getInstance(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
 	connect(ui->titleBar, SIGNAL(movedTo(QPoint)), this, SLOT(handleMovedTo(QPoint)));
@@ -40,6 +51,12 @@ void ScmConstellationDialog::createDialogContent()
 	connect(ui->penBtn, &QPushButton::toggled, this, &ScmConstellationDialog::togglePen);
 	connect(ui->eraserBtn, &QPushButton::toggled, this, &ScmConstellationDialog::toggleEraser);
 	connect(ui->undoBtn, &QPushButton::clicked, this, &ScmConstellationDialog::triggerUndo);
+
+	connect(ui->upload_image, &QPushButton::clicked, this, &ScmConstellationDialog::triggerUploadImage);
+	connect(ui->remove_image, &QPushButton::clicked, this, &ScmConstellationDialog::triggerRemoveImage);
+	connect(ui->bind_star, &QPushButton::clicked, this, &ScmConstellationDialog::bindSelectedStar);
+	imageItem.setAnchorSelectionChangedCallback(
+		[this]() { this->ui->bind_star->setEnabled(this->imageItem.hasAnchorSelection()); });
 
 	connect(ui->saveBtn, &QPushButton::clicked, this, &ScmConstellationDialog::saveConstellation);
 	connect(ui->cancelBtn, &QPushButton::clicked, this, &ScmConstellationDialog::cancel);
@@ -91,11 +108,13 @@ void ScmConstellationDialog::togglePen(bool checked)
 		ui->eraserBtn->setChecked(false);
 		activeTool = scm::DrawTools::Pen;
 		maker->setDrawTool(activeTool);
+		ui->drawInfoBox->setText(helpDrawInfoPen);
 	}
 	else
 	{
 		activeTool = scm::DrawTools::None;
 		maker->setDrawTool(activeTool);
+		ui->drawInfoBox->setText("");
 	}
 }
 
@@ -106,11 +125,13 @@ void ScmConstellationDialog::toggleEraser(bool checked)
 		ui->penBtn->setChecked(false);
 		activeTool = scm::DrawTools::Eraser;
 		maker->setDrawTool(activeTool);
+		ui->drawInfoBox->setText(helpDrawInfoEraser);
 	}
 	else
 	{
 		activeTool = scm::DrawTools::None;
 		maker->setDrawTool(activeTool);
+		ui->drawInfoBox->setText("");
 	}
 }
 
@@ -118,6 +139,64 @@ void ScmConstellationDialog::triggerUndo()
 {
 	maker->triggerDrawUndo();
 	togglePen(true);
+}
+
+void ScmConstellationDialog::triggerUploadImage()
+{
+	QString filePath = QFileDialog::getOpenFileName(ui->artworkTab, "Open Artwork", lastUsedImageDirectory,
+	                                                "Images (*.png *.jpg *.jpeg)");
+	QFileInfo fileInfo(filePath);
+	lastUsedImageDirectory = fileInfo.absolutePath();
+
+	if (!fileInfo.isFile())
+	{
+		ui->infoLbl->setText("Choosen path is not a valid file:\n" + filePath);
+		return;
+	}
+
+	if (!(fileInfo.suffix().toUpper().compare("PNG") || fileInfo.suffix().toUpper().compare("JPG") ||
+	      fileInfo.suffix().toUpper().compare("JPEG")))
+	{
+		ui->infoLbl->setText("Choosen file is not a PNG, JPG or JPEG image:\n" + filePath);
+		return;
+	}
+
+	// Reset text
+	ui->infoLbl->setText("");
+
+	QPixmap image = QPixmap(fileInfo.absoluteFilePath());
+	imageItem.setImage(image);
+	imageItem.show();
+	ui->artwork_image->centerOn(&imageItem);
+	ui->artwork_image->fitInView(&imageItem, Qt::KeepAspectRatio);
+	ui->artwork_image->show();
+}
+
+void ScmConstellationDialog::triggerRemoveImage()
+{
+	imageItem.hide();
+}
+
+void ScmConstellationDialog::bindSelectedStar()
+{
+	if (!imageItem.hasAnchorSelection())
+	{
+		ui->infoLbl->setText("WARNING: Select a anchor to bind to.");
+		return;
+	}
+
+	StelApp &app             = StelApp::getInstance();
+	StelObjectMgr &objectMgr = app.getStelObjectMgr();
+
+	if (!objectMgr.getWasSelected())
+	{
+		ui->infoLbl->setText("WARNING: Select a star to bind to the current selected anchor.");
+		return;
+	}
+
+	StelObjectP stelObj    = objectMgr.getLastSelectedObject();
+	ScmImageAnchor *anchor = imageItem.getSelectedAnchor();
+	anchor->setStarNameI18n(stelObj->getNameI18n());
 }
 
 bool ScmConstellationDialog::canConstellationBeSaved() const
@@ -218,4 +297,11 @@ void ScmConstellationDialog::resetDialog()
 
 	// reset ScmDraw
 	maker->resetScmDraw();
+}
+
+void ScmConstellationDialog::handleDialogSizeChanged(QSizeF size)
+{
+	StelDialog::handleDialogSizeChanged(size);
+
+	ui->artwork_image->fitInView(&imageItem, Qt::KeepAspectRatio);
 }
