@@ -48,7 +48,7 @@ private:
 	QString constellationEnglishName;
 	/// Native name of the constellation
 	std::optional<QString> constellationNativeName;
-	/// Pronounciation of the constellation
+	/// Pronunciation of the constellation
 	std::optional<QString> constellationPronounce;
 	/// IPA representation of the constellation
 	std::optional<QString> constellationIPA;
