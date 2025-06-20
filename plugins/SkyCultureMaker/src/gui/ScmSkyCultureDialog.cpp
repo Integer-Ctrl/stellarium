@@ -68,9 +68,7 @@ void ScmSkyCultureDialog::createDialogContent()
 
 	ui->SaveSkyCultureBtn->setEnabled(false);
 	ui->RemoveConstellationBtn->setEnabled(false);
-	connect(ui->SaveSkyCultureBtn, &QPushButton::clicked, this, [this]() {
-		maker->setSkyCultureExportDialogVisibility(true);
-	});
+	connect(ui->SaveSkyCultureBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::saveSkyCulture);
 	connect(ui->AddConstellationBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::constellationDialog);
 	connect(ui->RemoveConstellationBtn, &QPushButton::clicked, this,
 	        &ScmSkyCultureDialog::removeSelectedConstellation);
@@ -139,7 +137,7 @@ void ScmSkyCultureDialog::saveSkyCulture()
 	// If valid, set the sky culture description
 	maker->setSkyCultureDescription(desc);
 
-	// show export dialog
+	// open export dialog
 	maker->setSkyCultureExportDialogVisibility(true);
 }
 
