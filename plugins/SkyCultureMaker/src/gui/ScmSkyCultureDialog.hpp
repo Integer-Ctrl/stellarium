@@ -13,10 +13,6 @@
 #include <QString>
 #include <QVariant>
 
-// debugging
-#include <QJsonDocument>
-#include <QJsonObject>
-
 class Ui_scmSkyCultureDialog;
 
 class ScmSkyCultureDialog : public StelDialogSeparate

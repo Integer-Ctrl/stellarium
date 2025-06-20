@@ -18,6 +18,7 @@ class StelButton;
 class ScmSkyCultureDialog;
 class ScmConstellationDialog;
 class ScmStartDialog;
+class ScmSkyCultureExportDialog;
 
 /// This is an example of a plug-in which can be dynamically loaded into stellarium
 class SkyCultureMaker : public StelModule
@@ -66,6 +67,13 @@ public:
 	 * @param b The boolean value to be set.
 	 */
 	void setConstellationDialogVisibility(bool b);
+
+	/**
+	 * @brief Shows the sky culture export dialog.
+	 *
+	 * @param b The boolean value to be set.
+	 */
+	void setSkyCultureExportDialogVisibility(bool b);
 
 	/**
 	 * @brief Toggles the usage of the line draw.
@@ -170,6 +178,9 @@ private:
 
 	/// Dialog for creating/editing a constellation
 	ScmConstellationDialog *scmConstellationDialog = nullptr;
+
+	/// Dialog for exporting a sky culture
+	ScmSkyCultureExportDialog *scmSkyCultureExportDialog = nullptr;
 
 	/// The current sky culture
 	scm::ScmSkyCulture *currentSkyCulture = nullptr;

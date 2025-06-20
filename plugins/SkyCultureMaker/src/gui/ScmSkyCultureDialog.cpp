@@ -68,7 +68,9 @@ void ScmSkyCultureDialog::createDialogContent()
 
 	ui->SaveSkyCultureBtn->setEnabled(false);
 	ui->RemoveConstellationBtn->setEnabled(false);
-	connect(ui->SaveSkyCultureBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::saveSkyCulture);
+	connect(ui->SaveSkyCultureBtn, &QPushButton::clicked, this, [this]() {
+		maker->setSkyCultureExportDialogVisibility(true);
+	});
 	connect(ui->AddConstellationBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::constellationDialog);
 	connect(ui->RemoveConstellationBtn, &QPushButton::clicked, this,
 	        &ScmSkyCultureDialog::removeSelectedConstellation);
@@ -134,31 +136,11 @@ void ScmSkyCultureDialog::saveSkyCulture()
 		return;
 	}
 
-	// If valid, save the sky culture as markdown file
+	// If valid, set the sky culture description
 	maker->setSkyCultureDescription(desc);
-	maker->saveSkyCultureDescription();
 
-	// only for debugging purposes
-	if (constellations != nullptr)
-	{
-		qDebug() << "[Constellations as JSON]:";
-		for (const auto &constellation : *constellations)
-		{
-			QJsonObject obj = constellation.toJson(name);
-			QJsonDocument doc(obj);
-			qDebug().noquote() << doc.toJson(QJsonDocument::Compact);
-		}
-	}
-	bool success = maker->saveSkyCultureDescription();
-
-	if (success)
-	{
-		ui->infoLbl->setText("Sky culture saved successfully.");
-	}
-	else
-	{
-		ui->infoLbl->setText("ERROR: Could not save the sky culture.");
-	}
+	// show export dialog
+	maker->setSkyCultureExportDialogVisibility(true);
 }
 
 void ScmSkyCultureDialog::saveLicense()
