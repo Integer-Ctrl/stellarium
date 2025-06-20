@@ -16,12 +16,14 @@ ScmConstellationDialog::ScmConstellationDialog(SkyCultureMaker *maker)
 {
 	assert(maker != nullptr);
 
-	ui = new Ui_scmConstellationDialog;
+	ui        = new Ui_scmConstellationDialog;
+	imageItem = new ScmImageAnchored;
 }
 
 ScmConstellationDialog::~ScmConstellationDialog()
 {
 	delete ui;
+	qDebug() << "Unloaded the ScmConstellationDialog";
 }
 
 void ScmConstellationDialog::retranslate()
@@ -40,8 +42,8 @@ void ScmConstellationDialog::close()
 void ScmConstellationDialog::createDialogContent()
 {
 	ui->setupUi(dialog);
-	imageItem.hide();
-	ui->artwork_image->setScene(imageItem.scene());
+	imageItem->hide();
+	ui->artwork_image->setScene(imageItem->scene());
 	ui->bind_star->setEnabled(false);
 
 	connect(&StelApp::getInstance(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
@@ -55,8 +57,8 @@ void ScmConstellationDialog::createDialogContent()
 	connect(ui->upload_image, &QPushButton::clicked, this, &ScmConstellationDialog::triggerUploadImage);
 	connect(ui->remove_image, &QPushButton::clicked, this, &ScmConstellationDialog::triggerRemoveImage);
 	connect(ui->bind_star, &QPushButton::clicked, this, &ScmConstellationDialog::bindSelectedStar);
-	imageItem.setAnchorSelectionChangedCallback(
-		[this]() { this->ui->bind_star->setEnabled(this->imageItem.hasAnchorSelection()); });
+	imageItem->setAnchorSelectionChangedCallback(
+		[this]() { this->ui->bind_star->setEnabled(this->imageItem->hasAnchorSelection()); });
 
 	connect(ui->saveBtn, &QPushButton::clicked, this, &ScmConstellationDialog::saveConstellation);
 	connect(ui->cancelBtn, &QPushButton::clicked, this, &ScmConstellationDialog::cancel);
@@ -165,21 +167,21 @@ void ScmConstellationDialog::triggerUploadImage()
 	ui->infoLbl->setText("");
 
 	QPixmap image = QPixmap(fileInfo.absoluteFilePath());
-	imageItem.setImage(image);
-	imageItem.show();
-	ui->artwork_image->centerOn(&imageItem);
-	ui->artwork_image->fitInView(&imageItem, Qt::KeepAspectRatio);
+	imageItem->setImage(image);
+	imageItem->show();
+	ui->artwork_image->centerOn(imageItem);
+	ui->artwork_image->fitInView(imageItem, Qt::KeepAspectRatio);
 	ui->artwork_image->show();
 }
 
 void ScmConstellationDialog::triggerRemoveImage()
 {
-	imageItem.hide();
+	imageItem->hide();
 }
 
 void ScmConstellationDialog::bindSelectedStar()
 {
-	if (!imageItem.hasAnchorSelection())
+	if (!imageItem->hasAnchorSelection())
 	{
 		ui->infoLbl->setText("WARNING: Select a anchor to bind to.");
 		return;
@@ -195,7 +197,7 @@ void ScmConstellationDialog::bindSelectedStar()
 	}
 
 	StelObjectP stelObj    = objectMgr.getLastSelectedObject();
-	ScmImageAnchor *anchor = imageItem.getSelectedAnchor();
+	ScmImageAnchor *anchor = imageItem->getSelectedAnchor();
 	anchor->setStarNameI18n(stelObj->getNameI18n());
 }
 
@@ -303,5 +305,5 @@ void ScmConstellationDialog::handleDialogSizeChanged(QSizeF size)
 {
 	StelDialog::handleDialogSizeChanged(size);
 
-	ui->artwork_image->fitInView(&imageItem, Qt::KeepAspectRatio);
+	ui->artwork_image->fitInView(imageItem, Qt::KeepAspectRatio);
 }

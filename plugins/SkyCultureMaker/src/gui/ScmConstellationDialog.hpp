@@ -53,7 +53,7 @@ private:
 	/// IPA representation of the constellation
 	std::optional<QString> constellationIPA;
 	/// The currently displayed artwork
-	ScmImageAnchored imageItem;
+	ScmImageAnchored *imageItem;
 	/// Holds the last used directory
 	QString lastUsedImageDirectory;
 	/// Holds the help text on how to use the pen.

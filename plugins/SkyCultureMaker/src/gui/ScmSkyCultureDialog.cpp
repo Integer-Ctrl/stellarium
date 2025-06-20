@@ -13,6 +13,8 @@ ScmSkyCultureDialog::ScmSkyCultureDialog(SkyCultureMaker *maker)
 ScmSkyCultureDialog::~ScmSkyCultureDialog()
 {
 	delete ui;
+
+	qDebug() << "Unloaded the ScmSkyCultureDialog";
 }
 
 void ScmSkyCultureDialog::setConstellations(std::vector<scm::ScmConstellation> *constellations)

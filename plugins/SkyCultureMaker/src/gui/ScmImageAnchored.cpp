@@ -13,6 +13,11 @@ ScmImageAnchored::ScmImageAnchored()
 	}
 }
 
+ScmImageAnchored::~ScmImageAnchored()
+{
+	qDebug() << "Unloaded the ScmImageAnchored";
+}
+
 void ScmImageAnchored::setImage(const QPixmap &image)
 {
 	setPixmap(image);

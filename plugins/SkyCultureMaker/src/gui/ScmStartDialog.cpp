@@ -16,6 +16,8 @@ ScmStartDialog::~ScmStartDialog()
 	{
 		delete ui;
 	}
+
+	qDebug() << "Unloaded the ScmStartDialog";
 }
 
 void ScmStartDialog::retranslate()

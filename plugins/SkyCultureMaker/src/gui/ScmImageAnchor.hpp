@@ -10,6 +10,7 @@ class ScmImageAnchor : public QGraphicsEllipseItem
 public:
 	ScmImageAnchor();
 	ScmImageAnchor(QPointF position, qreal diameter);
+	~ScmImageAnchor();
 
 	/**
 	 * @brief Set the diameter of this anchor.

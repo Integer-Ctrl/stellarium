@@ -12,6 +12,7 @@ class ScmImageAnchored : public QGraphicsPixmapItem
 {
 public:
 	ScmImageAnchored();
+	~ScmImageAnchored();
 
 	/**
 	 * @brief Set the image that is shown by this item.

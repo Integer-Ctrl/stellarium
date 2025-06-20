@@ -53,7 +53,7 @@ void ScmImageAnchor::setMovementBounds(const QRectF &bounds)
 void ScmImageAnchor::setStarNameI18n(const QString &starNameI18n)
 {
 	ScmImageAnchor::starNameI18n = starNameI18n;
-	setBrush(starNameI18n.isEmpty() ? selectedColorNoStar : selectedColor);
+	updateColor();
 }
 
 void ScmImageAnchor::updateColor()
@@ -130,6 +130,11 @@ ScmImageAnchor::ScmImageAnchor(QPointF position, qreal diameter)
 	setFlag(ItemIsMovable, true);
 	setBrush(QBrush(colorNoStar));
 	setZValue(10);
+}
+
+ScmImageAnchor::~ScmImageAnchor()
+{
+	qDebug() << "Unloaded the ScmImageAnchor";
 }
 
 void ScmImageAnchor::setDiameter(qreal diameter)

@@ -95,6 +95,8 @@ SkyCultureMaker::~SkyCultureMaker()
 	{
 		delete currentSkyCulture;
 	}
+
+	qDebug() << "Unloaded plugin \"SkyCultureMaker\"";
 }
 
 void SkyCultureMaker::setActionToggle(const QString &id, bool toggle)
