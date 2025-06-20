@@ -336,6 +336,14 @@ void SkyCultureMaker::updateSkyCultureDialog()
 	scmSkyCultureDialog->setConstellations(currentSkyCulture->getConstellations());
 }
 
+void SkyCultureMaker::setSkyCultureDialogInfoLabel(const QString &text)
+{
+	if (scmSkyCultureDialog != nullptr)
+	{
+		scmSkyCultureDialog->setInfoLabel(text);
+	}
+}
+
 void SkyCultureMaker::setSkyCultureDescription(const scm::Description &description)
 {
 	if (currentSkyCulture != nullptr)

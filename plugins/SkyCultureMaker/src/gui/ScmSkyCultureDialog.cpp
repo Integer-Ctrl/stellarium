@@ -125,14 +125,14 @@ void ScmSkyCultureDialog::saveSkyCulture()
 	}
 	else
 	{
-		ui->infoLbl->setText("ERROR: Please select a license for the sky culture.");
+		ui->infoLbl->setText("WARNING: Please select a license for the sky culture.");
 		return;
 	}
 
 	// check if description is complete
 	if (!desc.isComplete())
 	{
-		ui->infoLbl->setText("ERROR: The sky culture description is not complete.");
+		ui->infoLbl->setText("WARNING: The sky culture description is not complete.");
 		return;
 	}
 
@@ -245,4 +245,16 @@ scm::Description ScmSkyCultureDialog::getDescriptionFromTextEdit() const
 	desc.classification   = ui->classificationCB->currentData().value<scm::ClassificationType>();
 
 	return desc;
+}
+
+void ScmSkyCultureDialog::setInfoLabel(const QString &text)
+{
+	if (ui && dialog)
+	{
+		ui->infoLbl->setText(text);
+	}
+	else
+	{
+		qDebug() << "ScmSkyCultureDialog: UI or dialog is not initialized.";
+	}
 }

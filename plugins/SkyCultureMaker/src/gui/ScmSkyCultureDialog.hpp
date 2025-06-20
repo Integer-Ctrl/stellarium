@@ -31,6 +31,13 @@ public:
 	 */
 	void setConstellations(std::vector<scm::ScmConstellation> *constellations);
 
+	/**
+	 * @brief Sets the info label text.
+	 *
+	 * @param text The text to set in the info label.
+	 */
+	void setInfoLabel(const QString &text);
+
 public slots:
 	void retranslate() override;
 	void close() override;

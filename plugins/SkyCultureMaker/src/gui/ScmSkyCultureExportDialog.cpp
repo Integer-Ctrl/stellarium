@@ -38,23 +38,24 @@ void ScmSkyCultureExportDialog::createDialogContent()
 
 void ScmSkyCultureExportDialog::closeDialog()
 {
-	StelDialog::close();
+	StelDialogSeparate::close();
 }
 
 void ScmSkyCultureExportDialog::exportSkyCulture()
 {
-	maker->saveSkyCultureDescription();
+	// TODO: Export sky culture as json
 
-	// // only for debugging purposes
-	// if (constellations != nullptr)
-	// {
-	// 	qDebug() << "[Constellations as JSON]:";
-	// 	for (const auto &constellation : *constellations)
-	// 	{
-	// 		QJsonObject obj = constellation.toJson(name);
-	// 		QJsonDocument doc(obj);
-	// 		qDebug().noquote() << doc.toJson(QJsonDocument::Compact);
-	// 	}
-	// }
 	bool success = maker->saveSkyCultureDescription();
+
+	if (success)
+	{
+		maker->setSkyCultureDialogInfoLabel("Sky culture exported successfully!");
+	}
+	else
+	{
+		maker->setSkyCultureDialogInfoLabel("WARNING: Failed to export sky culture.");
+		qDebug() << "SkyCultureMaker: Failed to export sky culture.";
+	}
+
+	closeDialog();
 }

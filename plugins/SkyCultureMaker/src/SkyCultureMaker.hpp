@@ -120,6 +120,12 @@ public:
 	void updateSkyCultureDialog();
 
 	/**
+	 * @brief Sets the info label text in the sky culture dialog.
+	 * @param text The text to set in the info label.
+	 */
+	void setSkyCultureDialogInfoLabel(const QString &text);
+
+	/**
 	 * @brief Sets the current sky culture description.
 	 * @param description The description to set.
 	 */
