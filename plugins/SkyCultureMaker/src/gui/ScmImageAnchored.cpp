@@ -1,4 +1,5 @@
 #include <ScmImageAnchored.hpp>
+#include <QDebug>
 
 ScmImageAnchored::ScmImageAnchored()
 	: QGraphicsPixmapItem()

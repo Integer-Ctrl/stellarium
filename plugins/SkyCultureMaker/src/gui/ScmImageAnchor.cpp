@@ -2,6 +2,7 @@
 #include "StelApp.hpp"
 #include "StelObjectMgr.hpp"
 #include <QBrush>
+#include <QDebug>
 #include <QGraphicsSceneMouseEvent>
 
 void ScmImageAnchor::setSelectionReference(ScmImageAnchor *&anchor)

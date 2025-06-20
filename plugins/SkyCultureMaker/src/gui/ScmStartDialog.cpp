@@ -1,6 +1,7 @@
 #include "ScmStartDialog.hpp"
 #include "ui_scmStartDialog.h"
 #include <cassert>
+#include <QDebug>
 
 ScmStartDialog::ScmStartDialog(SkyCultureMaker *maker)
 	: StelDialog("ScmStartDialog")

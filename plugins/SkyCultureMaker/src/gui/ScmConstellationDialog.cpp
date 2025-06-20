@@ -7,6 +7,7 @@
 #include <cassert>
 #include <functional>
 #include <utility>
+#include <QDebug>
 #include <QFileDialog>
 #include <QFileInfo>
 

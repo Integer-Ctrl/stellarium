@@ -1,6 +1,7 @@
 #include "ScmSkyCultureDialog.hpp"
 #include "ui_scmSkyCultureDialog.h"
 #include <cassert>
+#include <QDebug>
 
 ScmSkyCultureDialog::ScmSkyCultureDialog(SkyCultureMaker *maker)
 	: StelDialogSeparate("ScmSkyCultureDialog")
