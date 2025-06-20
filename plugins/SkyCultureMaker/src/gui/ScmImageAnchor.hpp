@@ -56,6 +56,11 @@ public:
 	 */
 	void setStarNameI18n(const QString &starNameI18n);
 
+	/**
+	 * @brief Updates the color of the anchor based on its current state.
+	 */
+	void updateColor();
+
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;

@@ -19,15 +19,12 @@ void ScmImageAnchor::select()
 	if (*selection != nullptr)
 	{
 		(*selection)->isSelected = false;
-		(*selection)
-			->setBrush((*selection)->starNameI18n.isEmpty() ? (*selection)->colorNoStar
-		                                                        : (*selection)->color);
+		(*selection)->updateColor();
 	}
 
 	isSelected = true;
-	setBrush(starNameI18n.isEmpty() ? selectedColorNoStar : selectedColor);
 	*selection = this;
-	update();
+	updateColor();
 
 	if (selectionChangedCallback != nullptr)
 	{
@@ -57,6 +54,18 @@ void ScmImageAnchor::setStarNameI18n(const QString &starNameI18n)
 {
 	ScmImageAnchor::starNameI18n = starNameI18n;
 	setBrush(starNameI18n.isEmpty() ? selectedColorNoStar : selectedColor);
+}
+
+void ScmImageAnchor::updateColor()
+{
+	if (isSelected == true)
+	{
+		setBrush(starNameI18n.isEmpty() ? selectedColorNoStar : selectedColor);
+	}
+	else
+	{
+		setBrush(starNameI18n.isEmpty() ? colorNoStar : color);
+	}
 }
 
 void ScmImageAnchor::mousePressEvent(QGraphicsSceneMouseEvent *event)
