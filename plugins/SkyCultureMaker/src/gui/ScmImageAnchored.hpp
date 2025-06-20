@@ -27,19 +27,26 @@ public:
 	 * @return true Anchor is selected.
 	 * @return false no Anchor is selected.
 	 */
-	bool hasAnchorSelection();
+	bool hasAnchorSelection() const;
 
 	/**
 	 * @brief Get the selected anchor.
 	 * 
 	 * @return ScmImageAnchor* The selected anchor pointer or nullptr.
 	 */
-	ScmImageAnchor *getSelectedAnchor();
+	ScmImageAnchor *getSelectedAnchor() const;
 
 	/**
 	 * @brief Set the anchor selection changed callback function.
 	 */
 	void setAnchorSelectionChangedCallback(std::function<void()> func);
+
+	/**
+	 * @brief Resets the anchors to default.
+	 */
+	void resetAnchors();
+
+	const std::vector<ScmImageAnchor> &getAnchors() const;
 
 protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

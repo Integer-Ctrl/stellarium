@@ -41,6 +41,11 @@ public:
 	void select();
 
 	/**
+	 * @brief Deselects this anchor.
+	 */
+	void deselect();
+
+	/**
 	 * @brief Set the selection changed callback function.
 	 */
 	void setSelectionChangedCallback(std::function<void()> func);
@@ -56,6 +61,13 @@ public:
 	 * @brief set the bound star ID of this anchor.
 	 */
 	void setStarNameI18n(const QString &starNameI18n);
+
+	/**
+	 * @brief Get the star nameI18n that is bound to this anchor.
+	 * 
+	 * @return const QString& The star nameI18n.
+	 */
+	const QString &getStarNameI18n() const;
 
 	/**
 	 * @brief Updates the color of the anchor based on its current state.

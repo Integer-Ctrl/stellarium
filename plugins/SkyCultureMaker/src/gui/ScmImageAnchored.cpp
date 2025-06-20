@@ -43,12 +43,12 @@ void ScmImageAnchored::setImage(const QPixmap &image)
 	}
 }
 
-bool ScmImageAnchored::hasAnchorSelection()
+bool ScmImageAnchored::hasAnchorSelection() const
 {
 	return selectedAnchor != nullptr;
 }
 
-ScmImageAnchor *ScmImageAnchored::getSelectedAnchor()
+ScmImageAnchor *ScmImageAnchored::getSelectedAnchor() const
 {
 	return selectedAnchor;
 }
@@ -59,6 +59,21 @@ void ScmImageAnchored::setAnchorSelectionChangedCallback(std::function<void()> f
 	{
 		anchor.setSelectionChangedCallback(func);
 	}
+}
+
+void ScmImageAnchored::resetAnchors()
+{
+	selectedAnchor = nullptr;
+	for (auto &anchor : anchorItems)
+	{
+		anchor.setStarNameI18n(QString());
+		anchor.deselect();
+	}
+}
+
+const std::vector<ScmImageAnchor> &ScmImageAnchored::getAnchors() const
+{
+	return anchorItems;
 }
 
 void ScmImageAnchored::mousePressEvent(QGraphicsSceneMouseEvent *event)

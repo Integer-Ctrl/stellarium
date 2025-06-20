@@ -178,13 +178,14 @@ void ScmConstellationDialog::triggerUploadImage()
 void ScmConstellationDialog::triggerRemoveImage()
 {
 	imageItem->hide();
+	imageItem->resetAnchors();
 }
 
 void ScmConstellationDialog::bindSelectedStar()
 {
 	if (!imageItem->hasAnchorSelection())
 	{
-		ui->infoLbl->setText("WARNING: Select a anchor to bind to.");
+		ui->infoLbl->setText("WARNING: Select an anchor to bind to.");
 		return;
 	}
 
@@ -238,6 +239,20 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 	{
 		ui->infoLbl->setText("WARNING: Could not save: The constellation does not contain any drawings");
 		return false;
+	}
+
+	// Check if an artwork was added and all anchors have a binding
+	if (imageItem->isVisible())
+	{
+		for (const auto &anchor : imageItem->getAnchors())
+		{
+			if (anchor.getStarNameI18n().isEmpty())
+			{
+				ui->infoLbl->setText("WARNING: Could not save: An artwork is attached, but not all "
+				                     "anchors have a star bound.");
+				return false;
+			}
+		}
 	}
 
 	return true;
@@ -297,6 +312,10 @@ void ScmConstellationDialog::resetDialog()
 
 	constellationIPA = std::nullopt;
 	ui->ipaTE->clear();
+
+	ui->bind_star->setEnabled(false);
+	imageItem->hide();
+	imageItem->resetAnchors();
 
 	// reset ScmDraw
 	maker->resetScmDraw();

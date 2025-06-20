@@ -19,8 +19,7 @@ void ScmImageAnchor::select()
 
 	if (*selection != nullptr)
 	{
-		(*selection)->isSelected = false;
-		(*selection)->updateColor();
+		(*selection)->deselect();
 	}
 
 	isSelected = true;
@@ -41,6 +40,12 @@ void ScmImageAnchor::select()
 	}
 }
 
+void ScmImageAnchor::deselect()
+{
+	isSelected = false;
+	updateColor();
+}
+
 void ScmImageAnchor::setSelectionChangedCallback(std::function<void()> func)
 {
 	selectionChangedCallback = func;
@@ -55,6 +60,11 @@ void ScmImageAnchor::setStarNameI18n(const QString &starNameI18n)
 {
 	ScmImageAnchor::starNameI18n = starNameI18n;
 	updateColor();
+}
+
+const QString &ScmImageAnchor::getStarNameI18n() const
+{
+	return starNameI18n;
 }
 
 void ScmImageAnchor::updateColor()
