@@ -32,6 +32,8 @@ SET( SkyCultureMaker_SRCS
      gui/ScmImageAnchor.cpp
      gui/ScmImageAnchored.hpp
      gui/ScmImageAnchored.cpp
+     gui/ScmSkyCultureExportDialog.hpp
+     gui/ScmSkyCultureExportDialog.cpp
 
      types/CoordinateLine.hpp
      types/Drawing.hpp
@@ -44,6 +46,7 @@ SET( SkyCultureMaker_SRCS
 SET( SCM_UIS
      gui/scmConstellationDialog.ui
      gui/scmSkyCultureDialog.ui
+     gui/scmSkyCultureExportDialog.ui
      gui/scmStartDialog.ui
 )     
 
