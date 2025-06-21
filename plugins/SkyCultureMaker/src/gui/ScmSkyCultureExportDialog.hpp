@@ -19,9 +19,6 @@ public:
 public slots:
 	void retranslate() override;
 
-private slots:
-	void closeDialog();
-
 private:
 	Ui_scmSkyCultureExportDialog *ui  = nullptr;
 	SkyCultureMaker *maker = nullptr;

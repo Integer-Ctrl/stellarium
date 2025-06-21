@@ -33,12 +33,7 @@ void ScmSkyCultureExportDialog::createDialogContent()
 	connect(ui->titleBar, SIGNAL(movedTo(QPoint)), this, SLOT(handleMovedTo(QPoint)));
 	connect(ui->titleBar, &TitleBar::closeClicked, this, &ScmSkyCultureExportDialog::close);
 	connect(ui->exportBtn, &QPushButton::clicked, this, &ScmSkyCultureExportDialog::exportSkyCulture);
-	connect(ui->cancelBtn, &QPushButton::clicked, this, &ScmSkyCultureExportDialog::closeDialog);
-}
-
-void ScmSkyCultureExportDialog::closeDialog()
-{
-	StelDialogSeparate::close();
+	connect(ui->cancelBtn, &QPushButton::clicked, this, &ScmSkyCultureExportDialog::close);
 }
 
 void ScmSkyCultureExportDialog::exportSkyCulture()
@@ -57,5 +52,5 @@ void ScmSkyCultureExportDialog::exportSkyCulture()
 		qDebug() << "SkyCultureMaker: Failed to export sky culture.";
 	}
 
-	closeDialog();
+	ScmSkyCultureExportDialog::close();
 }
