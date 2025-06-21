@@ -281,7 +281,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+        <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
          <property name="sizeConstraint">
           <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
          </property>
@@ -333,6 +333,43 @@
           <widget class="QPushButton" name="remove_image">
            <property name="text">
             <string>Remove Image</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>WhatsThisCursor</cursorShape>
+           </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+           </property>
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span&gt;Usage:&lt;br/&gt;1. Upload an image&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;2. Three anchor point appear in the center of the image&lt;br/&gt;- An anchor is green when selected&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;3. Select a star of your choice&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;4. Click the 'Bind Star' button &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span&gt;5. The anchor is represented in a brighter color to indicate that it is bound to a star&lt;br/&gt;-  The corresponding bound star gets automatically selected when an anchor is selected &lt;br/&gt;- 'Bind Star' does overwrite the current binding with the selected star if a binding already exists&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="icon">
+            <iconset theme="QIcon::ThemeIcon::HelpAbout"/>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
+           </property>
+           <property name="default">
+            <bool>false</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
