@@ -117,6 +117,12 @@ void ScmSkyCultureDialog::saveSkyCulture()
 {
 	scm::Description desc = getDescriptionFromTextEdit();
 
+	// check if license is set
+	if (desc.license == scm::LicenseType::NONE)
+	{
+		ui->infoLbl->setText("WARNING: Please select a license for the sky culture.");
+		return;
+	}
 	// check if description is complete
 	if (!desc.isComplete())
 	{
