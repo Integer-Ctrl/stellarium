@@ -38,18 +38,37 @@ void ScmSkyCultureExportDialog::createDialogContent()
 
 void ScmSkyCultureExportDialog::exportSkyCulture()
 {
+	if (maker == nullptr) {
+		qWarning() << "SkyCultureMaker: maker is nullptr. Cannot export sky culture.";
+		if (maker) maker->setSkyCultureDialogInfoLabel("ERROR: Internal error (maker is nullptr).");
+		ScmSkyCultureExportDialog::close();
+		return;
+	}
+
+	scm::ScmSkyCulture* currentSkyCulture = maker->getCurrentSkyCulture();
+	if (currentSkyCulture == nullptr) {
+		qWarning() << "SkyCultureMaker: current sky culture is nullptr. Cannot export.";
+		maker->setSkyCultureDialogInfoLabel("ERROR: No sky culture loaded.");
+		ScmSkyCultureExportDialog::close();
+		return;
+	}
+
 	// TODO: Export sky culture as json
+	std::cout << "Exporting sky culture..." << std::endl;
+	QJsonObject scJsonObject = currentSkyCulture->toJson();
+	QJsonDocument scJsonDoc(scJsonObject);
+ 	qDebug().noquote() << scJsonDoc.toJson(QJsonDocument::Compact);
 
-	bool success = maker->saveSkyCultureDescription();
+	bool savedDescriptionSuccessfully = maker->saveSkyCultureDescription();
 
-	if (success)
+	if (savedDescriptionSuccessfully)
 	{
 		maker->setSkyCultureDialogInfoLabel("Sky culture exported successfully!");
 	}
 	else
 	{
 		maker->setSkyCultureDialogInfoLabel("WARNING: Failed to export sky culture.");
-		qDebug() << "SkyCultureMaker: Failed to export sky culture.";
+		qWarning() << "SkyCultureMaker: Failed to export sky culture (saveSkyCultureDescription failed).";
 	}
 
 	ScmSkyCultureExportDialog::close();

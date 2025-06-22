@@ -3,7 +3,13 @@
 
 #include "SkyCultureMaker.hpp"
 #include "StelDialogSeparate.hpp"
-#include <QObject>
+#include "ScmSkyCulture.hpp"
+
+// will be removed when JSON file export is implemented
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <iostream>
+///////////////////////////////////////////////////////
 
 class Ui_scmSkyCultureExportDialog;
 
