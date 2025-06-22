@@ -3,9 +3,6 @@
 
 #include "SkyCultureMaker.hpp"
 #include "StelDialogSeparate.hpp"
-#include "ScmSkyCulture.hpp"
-#include <QJsonObject>
-#include <QJsonDocument>
 
 class Ui_scmSkyCultureExportDialog;
 

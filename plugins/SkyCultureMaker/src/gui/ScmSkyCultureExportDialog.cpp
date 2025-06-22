@@ -1,5 +1,8 @@
 #include "ScmSkyCultureExportDialog.hpp"
 #include "ui_scmSkyCultureExportDialog.h"
+#include "ScmSkyCulture.hpp"
+#include <QJsonObject>
+#include <QJsonDocument>
 
 ScmSkyCultureExportDialog::ScmSkyCultureExportDialog(SkyCultureMaker *maker)
 	: StelDialogSeparate("ScmSkyCultureExportDialog")
@@ -40,7 +43,6 @@ void ScmSkyCultureExportDialog::exportSkyCulture()
 {
 	if (maker == nullptr) {
 		qWarning() << "SkyCultureMaker: maker is nullptr. Cannot export sky culture.";
-		if (maker) maker->setSkyCultureDialogInfoLabel("ERROR: Internal error (maker is nullptr).");
 		ScmSkyCultureExportDialog::close();
 		return;
 	}
@@ -58,7 +60,7 @@ void ScmSkyCultureExportDialog::exportSkyCulture()
 	QJsonObject scJsonObject = currentSkyCulture->toJson();
 	QJsonDocument scJsonDoc(scJsonObject);
  	qDebug().noquote() << scJsonDoc.toJson(QJsonDocument::Compact);
-	// the error handling here should be improved once we also have to
+	// TODO: the error handling here should be improved once we also have to
 	// check whether the json file was successfully saved (#88)
 
 	bool savedDescriptionSuccessfully = maker->saveSkyCultureDescription();
