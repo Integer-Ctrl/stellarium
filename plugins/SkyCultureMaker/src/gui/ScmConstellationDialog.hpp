@@ -34,6 +34,7 @@ private slots:
 	void triggerUploadImage();
 	void triggerRemoveImage();
 	void bindSelectedStar();
+	void tabChanged(int index);
 
 private:
 	Ui_scmConstellationDialog *ui = nullptr;

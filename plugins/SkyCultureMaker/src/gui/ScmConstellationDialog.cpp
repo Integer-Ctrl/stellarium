@@ -50,6 +50,7 @@ void ScmConstellationDialog::createDialogContent()
 	connect(&StelApp::getInstance(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
 	connect(ui->titleBar, SIGNAL(movedTo(QPoint)), this, SLOT(handleMovedTo(QPoint)));
 	connect(ui->titleBar, &TitleBar::closeClicked, this, &ScmConstellationDialog::close);
+	connect(ui->tabs, &QTabWidget::currentChanged, this, &ScmConstellationDialog::tabChanged);
 
 	connect(ui->penBtn, &QPushButton::toggled, this, &ScmConstellationDialog::togglePen);
 	connect(ui->eraserBtn, &QPushButton::toggled, this, &ScmConstellationDialog::toggleEraser);
@@ -229,6 +230,13 @@ void ScmConstellationDialog::bindSelectedStar()
 	updateArtwork();
 }
 
+void ScmConstellationDialog::tabChanged(int index)
+{
+	ui->penBtn->setChecked(false);
+	ui->eraserBtn->setChecked(false);
+	maker->setDrawTool(scm::DrawTools::None);
+}
+
 bool ScmConstellationDialog::canConstellationBeSaved() const
 {
 	// shouldnt happen
@@ -314,10 +322,9 @@ void ScmConstellationDialog::saveConstellation()
 
 void ScmConstellationDialog::resetDialog()
 {
-	activeTool = scm::DrawTools::None;
 	ui->penBtn->setChecked(false);
 	ui->eraserBtn->setChecked(false);
-	maker->setDrawTool(activeTool);
+	maker->setDrawTool(scm::DrawTools::None);
 
 	constellationId.clear();
 	ui->idTE->clear();
