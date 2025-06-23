@@ -159,6 +159,13 @@ bool scm::ScmConstellationArtwork::getHasArt() const
 
 void scm::ScmConstellationArtwork::draw(StelCore *core) const
 {
+	const StelProjectorP prj = core->getProjection(StelCore::FrameJ2000);
+	StelPainter painter(prj);
+	draw(core, painter);
+}
+
+void scm::ScmConstellationArtwork::draw(StelCore *core, StelPainter &painter) const
+{
 	if (hasArt == false)
 	{
 		qWarning() << "ERROR: Failed to draw the artwork has not art";
@@ -171,11 +178,8 @@ void scm::ScmConstellationArtwork::draw(StelCore *core) const
 		return;
 	}
 
-	const StelProjectorP prj = core->getProjection(StelCore::FrameJ2000);
-	StelPainter sPainter(prj);
-
-	sPainter.setBlending(true, GL_ONE, GL_ONE);
-	sPainter.setCullFace(true);
+	painter.setBlending(true, GL_ONE, GL_ONE);
+	painter.setCullFace(true);
 
 	Vec3d vel(0.);
 	if (core->getUseAberration())
@@ -183,8 +187,8 @@ void scm::ScmConstellationArtwork::draw(StelCore *core) const
 		vel = core->getAberrationVec(core->getJDE());
 	}
 
-	SphericalRegionP region = sPainter.getProjector()->getViewportConvexPolygon();
-	drawOptimized(sPainter, *region, vel);
+	SphericalRegionP region = painter.getProjector()->getViewportConvexPolygon();
+	drawOptimized(painter, *region, vel);
 }
 
 QJsonObject scm::ScmConstellationArtwork::to_json(const QString &relativePath) const

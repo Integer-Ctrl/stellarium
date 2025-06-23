@@ -56,19 +56,20 @@ std::vector<scm::ScmConstellation> *scm::ScmSkyCulture::getConstellations()
 	return &constellations;
 }
 
-QJsonObject scm::ScmSkyCulture::toJson() const
+QJsonObject scm::ScmSkyCulture::toJson(const QString &directory) const
 {
 	QJsonObject scJsonObj;
-	scJsonObj["id"] = id;
+	scJsonObj["id"]     = id;
 	scJsonObj["region"] = description.geoRegion;
 	// for some reason, the classification is inside an array, eg. ["historical"]
-	QJsonArray classificationArray = QJsonArray::fromStringList(QStringList() << classificationTypeToString(description.classification));
-	scJsonObj["classification"] = classificationArray;
+	QJsonArray classificationArray = QJsonArray::fromStringList(
+		QStringList() << classificationTypeToString(description.classification));
+	scJsonObj["classification"]                  = classificationArray;
 	scJsonObj["fallback_to_international_names"] = fallbackToInternationalNames;
 	QJsonArray constellationsArray;
 	for (const auto &constellation : constellations)
 	{
-		constellationsArray.append(constellation.toJson(id));
+		constellationsArray.append(constellation.toJson(id, directory));
 	}
 	scJsonObj["constellations"] = constellationsArray;
 
@@ -96,12 +97,12 @@ bool scm::ScmSkyCulture::saveDescriptionAsMarkdown(QFile file)
 	if (file.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
 		const scm::Description &desc = ScmSkyCulture::description;
-		const scm::License license = scm::LICENSES.at(desc.license);
+		const scm::License license   = scm::LICENSES.at(desc.license);
 
 		QTextStream out(&file);
 		out << "# " << desc.name << "\n\n";
 		out << "## Authors\n" << desc.authors << "\n\n";
-		out << "## License\n### " << license.name << "\n"<< license.description << "\n\n";
+		out << "## License\n### " << license.name << "\n" << license.description << "\n\n";
 		out << "## Culture Description\n" << desc.cultureDescription << "\n\n";
 		out << "## About\n" << desc.about << "\n\n";
 
@@ -142,4 +143,9 @@ void scm::ScmSkyCulture::saveIllustrations(const QString &directory)
 	{
 		constellation.saveArtwork(directory);
 	}
+}
+
+const QString &scm::ScmSkyCulture::getId() const
+{
+	return id;
 }

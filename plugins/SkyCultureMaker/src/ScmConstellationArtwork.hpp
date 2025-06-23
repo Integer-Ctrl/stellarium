@@ -68,6 +68,13 @@ public:
 	void draw(StelCore *core) const;
 
 	/**
+     * @brief Draws the artwork.
+     * 
+     * @param core The core to use to draw the artwork.
+     */
+	void draw(StelCore *core, StelPainter &painter) const;
+
+	/**
      * @brief Converts the artwork into stalleriums json format.
      * 
      * @param relativePath The relative path to the artwork on disk.
@@ -113,7 +120,7 @@ private:
 	float artIntensityFovScale = 1.0f;
 
 	/// Holds the opacity of the art.
-	float artOpacity = 1.0f;
+	float artOpacity = 0.42;
 
 	/// Indicates if the artwork has an image that can be drawn.
 	bool hasArt = false;

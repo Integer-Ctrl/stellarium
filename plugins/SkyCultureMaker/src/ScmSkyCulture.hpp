@@ -35,6 +35,11 @@ public:
 	/// Sets the id of the sky culture
 	void setId(const QString &id);
 
+	/**
+	 * @brief Gets the id of the sky culture.
+	 */
+	const QString &getId() const;
+
 	/// Sets whether to show common names in addition to the culture-specific ones
 	void setFallbackToInternationalNames(bool fallback);
 
@@ -71,8 +76,10 @@ public:
 
 	/**
 	* @brief Returns the sky culture as a JSON object
+	*
+	* @param directory The directory the json will be exported to.
 	*/
-	QJsonObject toJson() const;
+	QJsonObject toJson(const QString &directory) const;
 
 	/**
 	* @brief Draws the sky culture.

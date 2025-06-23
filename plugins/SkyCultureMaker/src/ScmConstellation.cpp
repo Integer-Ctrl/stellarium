@@ -82,7 +82,7 @@ void scm::ScmConstellation::drawConstellation(StelCore *core, const Vec3f &lineC
 
 	drawNames(core, painter, nameColor);
 
-	artwork.draw(core);
+	artwork.draw(core, painter);
 }
 
 void scm::ScmConstellation::drawConstellation(StelCore *core) const
@@ -152,8 +152,8 @@ QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureId, const QSt
 	}
 	else
 	{
-		qWarning() << "WARNING: The artwork of this constellation '" << id
-			   << "' has no art or was not saved to a file.";
+		qWarning() << "WARNING: The artwork of this constellation " << id
+			   << " has no art or was not saved to a file.";
 	}
 
 	// Assemble common name object
@@ -189,7 +189,7 @@ bool scm::ScmConstellation::saveArtwork(const QString &directory)
 {
 	if (!artwork.getHasArt())
 	{
-		qWarning() << "WARNING: The artwork of this constellation '" << id << "' has no art.";
+		qWarning() << "WARNING: The artwork of this constellation " << id << " has no art.";
 		return false;
 	}
 
