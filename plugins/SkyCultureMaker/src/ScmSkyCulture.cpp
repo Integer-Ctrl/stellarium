@@ -140,3 +140,11 @@ bool scm::ScmSkyCulture::saveDescriptionAsMarkdown(QFile file)
 		return false; // file could not be opened
 	}
 }
+
+bool scm::ScmSkyCulture::saveIllustrations(const QString &directory)
+{
+	for (auto &constellation : constellations)
+	{
+		constellation.saveArtwork(directory);
+	}
+}

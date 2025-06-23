@@ -110,6 +110,15 @@ public:
 	 */
 	bool saveDescriptionAsMarkdown(QFile file);
 
+	/**
+	 * @brief Saves all illustrations to the directory. No subdirectory is saved.
+	 * 
+	 * @param directory The directory the illustrations are saved in.
+	 * @return true Successful saved.
+	 * @return false Failed to save.
+	 */
+	bool saveIllustrations(const QString &directory);
+
 private:
 	/// Sky culture identifier
 	QString id;

@@ -1,4 +1,5 @@
 #include "ScmConstellation.hpp"
+#include <QDir>
 
 scm::ScmConstellation::ScmConstellation(const std::vector<scm::CoordinateLine> &coordinates,
                                         const std::vector<scm::StarLine> &stars)
@@ -50,6 +51,11 @@ void scm::ScmConstellation::setIPA(const std::optional<QString> &ipa)
 	ScmConstellation::ipa = ipa;
 }
 
+void scm::ScmConstellation::setArtwork(const ScmConstellationArtwork &artwork)
+{
+	ScmConstellation::artwork = artwork;
+}
+
 void scm::ScmConstellation::setConstellation(const std::vector<CoordinateLine> &coordinates,
                                              const std::vector<StarLine> &stars)
 {
@@ -75,6 +81,8 @@ void scm::ScmConstellation::drawConstellation(StelCore *core, const Vec3f &lineC
 	}
 
 	drawNames(core, painter, nameColor);
+
+	artwork.draw(core);
 }
 
 void scm::ScmConstellation::drawConstellation(StelCore *core) const
@@ -112,7 +120,7 @@ void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter) con
 	drawNames(core, sPainter, defaultConstellationNameColor);
 }
 
-QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureName) const
+QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureName, const QString &directory) const
 {
 	QJsonObject json;
 
@@ -129,7 +137,7 @@ QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureName) const
 	}
 	else
 	{
-		// Stars are empty, use the coorindates
+		// Stars are empty, use the coordinates
 		for (const auto &coord : constellationCoordinates)
 		{
 			linesArray.append(coord.toJson());
@@ -138,6 +146,15 @@ QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureName) const
 
 	json["id"]    = "CON " + skyCultureName + " " + id;
 	json["lines"] = linesArray;
+	if (artwork.getHasArt() == true && !artworkPath.isEmpty())
+	{
+		json["image"] = artwork.to_json(QDir(directory).relativeFilePath(artworkPath));
+	}
+	else
+	{
+		qWarning() << "WARNING: The artwork of this constellation '" << id
+			   << "' has no art or was not saved to a file.";
+	}
 
 	// Assemble common name object
 	QJsonObject commonNameObj;
@@ -166,6 +183,20 @@ QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureName) const
 	json["common_name"] = commonNameObj;
 
 	return json;
+}
+
+bool scm::ScmConstellation::saveArtwork(const QString &directory)
+{
+	if (!artwork.getHasArt())
+	{
+		qWarning() << "WARNING: The artwork of this constellation '" << id << "' has no art.";
+		return false;
+	}
+
+	QString filename = id.split(" ").back(); // Last part of id as usually used as the illustrations name
+	QString filepath = directory + QDir::separator() + filename + ".png"; // Write every illustrations as png
+	artworkPath      = filepath;
+	return artwork.save(filepath);
 }
 
 void scm::ScmConstellation::updateTextPosition()

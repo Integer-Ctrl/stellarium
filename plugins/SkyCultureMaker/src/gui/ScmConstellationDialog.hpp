@@ -83,6 +83,11 @@ private:
 	 * @brief Resets the constellation dialog data.
 	 */
 	void resetDialog();
+
+	/**
+	 * @brief Updates the state of the artwork.
+	 */
+	void updateArtwork();
 };
 
 #endif // SCM_CONSTELLATION_DIALOG_HPP

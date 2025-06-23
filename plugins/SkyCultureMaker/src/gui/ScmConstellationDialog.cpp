@@ -59,7 +59,12 @@ void ScmConstellationDialog::createDialogContent()
 	connect(ui->remove_image, &QPushButton::clicked, this, &ScmConstellationDialog::triggerRemoveImage);
 	connect(ui->bind_star, &QPushButton::clicked, this, &ScmConstellationDialog::bindSelectedStar);
 	imageItem->setAnchorSelectionChangedCallback(
-		[this]() { this->ui->bind_star->setEnabled(this->imageItem->hasAnchorSelection()); });
+		[this]()
+		{
+			this->ui->bind_star->setEnabled(this->imageItem->hasAnchorSelection());
+			this->updateArtwork();
+		});
+	imageItem->setAnchorPositionChangedCallback([this]() { this->updateArtwork(); });
 
 	connect(ui->saveBtn, &QPushButton::clicked, this, &ScmConstellationDialog::saveConstellation);
 	connect(ui->cancelBtn, &QPushButton::clicked, this, &ScmConstellationDialog::cancel);
@@ -157,8 +162,9 @@ void ScmConstellationDialog::triggerUploadImage()
 		return;
 	}
 
-	if (!(fileInfo.suffix().toUpper().compare("PNG") || fileInfo.suffix().toUpper().compare("JPG") ||
-	      fileInfo.suffix().toUpper().compare("JPEG")))
+	if (!(fileInfo.suffix().compare("PNG", Qt::CaseInsensitive) == 0 ||
+	      fileInfo.suffix().compare("JPG", Qt::CaseInsensitive) == 0 ||
+	      fileInfo.suffix().compare("JPEG", Qt::CaseInsensitive) == 0))
 	{
 		ui->infoLbl->setText("Choosen file is not a PNG, JPG or JPEG image:\n" + filePath);
 		return;
@@ -173,12 +179,16 @@ void ScmConstellationDialog::triggerUploadImage()
 	ui->artwork_image->centerOn(imageItem);
 	ui->artwork_image->fitInView(imageItem, Qt::KeepAspectRatio);
 	ui->artwork_image->show();
+
+	updateArtwork();
 }
 
 void ScmConstellationDialog::triggerRemoveImage()
 {
 	imageItem->hide();
 	imageItem->resetAnchors();
+
+	updateArtwork();
 }
 
 void ScmConstellationDialog::bindSelectedStar()
@@ -198,9 +208,25 @@ void ScmConstellationDialog::bindSelectedStar()
 		return;
 	}
 
-	StelObjectP stelObj    = objectMgr.getLastSelectedObject();
+	StelObjectP stelObj = objectMgr.getLastSelectedObject();
+	if (stelObj->getType().compare("star", Qt::CaseInsensitive) != 0)
+	{
+		ui->infoLbl->setText("WARNING: The selected object must be of type star.");
+		return;
+	}
+
 	ScmImageAnchor *anchor = imageItem->getSelectedAnchor();
+	bool success           = anchor->trySetStarHip(stelObj->getID());
+	if (success == false)
+	{
+		ui->infoLbl->setText("WARNING: The selected object must contain a HIP number.");
+		return;
+	}
+
 	anchor->setStarNameI18n(stelObj->getNameI18n());
+	ui->infoLbl->setText(""); // Reset
+
+	updateArtwork();
 }
 
 bool ScmConstellationDialog::canConstellationBeSaved() const
@@ -244,14 +270,11 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 	// Check if an artwork was added and all anchors have a binding
 	if (imageItem->isVisible())
 	{
-		for (const auto &anchor : imageItem->getAnchors())
+		if (!imageItem->isImageAnchored())
 		{
-			if (anchor.getStarNameI18n().isEmpty())
-			{
-				ui->infoLbl->setText("WARNING: Could not save: An artwork is attached, but not all "
-				                     "anchors have a star bound.");
-				return false;
-			}
+			ui->infoLbl->setText("WARNING: Could not save: An artwork is attached, but not all "
+			                     "anchors have a star bound.");
+			return false;
 		}
 	}
 
@@ -281,6 +304,7 @@ void ScmConstellationDialog::saveConstellation()
 		constellation.setNativeName(constellationNativeName);
 		constellation.setPronounce(constellationPronounce);
 		constellation.setIPA(constellationIPA);
+		constellation.setArtwork(imageItem->getArtwork());
 
 		maker->updateSkyCultureDialog();
 		resetDialog();
@@ -316,9 +340,28 @@ void ScmConstellationDialog::resetDialog()
 	ui->bind_star->setEnabled(false);
 	imageItem->hide();
 	imageItem->resetAnchors();
+	maker->setTempArtwork(nullptr);
 
 	// reset ScmDraw
 	maker->resetScmDraw();
+}
+
+void ScmConstellationDialog::updateArtwork()
+{
+	if (!imageItem->isVisible())
+	{
+		maker->setTempArtwork(nullptr);
+		return;
+	}
+
+	if (!imageItem->isImageAnchored())
+	{
+		maker->setTempArtwork(nullptr);
+		return;
+	}
+
+	imageItem->updateAnchors();
+	maker->setTempArtwork(&(imageItem->getArtwork()));
 }
 
 void ScmConstellationDialog::handleDialogSizeChanged(QSizeF size)

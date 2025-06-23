@@ -10,6 +10,7 @@
 #ifndef SCM_CONSTELLATION_HPP
 #define SCM_CONSTELLATION_HPP
 
+#include "ScmConstellationArtwork.hpp"
 #include "VecMath.hpp"
 #include "types/CoordinateLine.hpp"
 #include "types/StarLine.hpp"
@@ -82,6 +83,13 @@ public:
 	void setIPA(const std::optional<QString> &ipa);
 
 	/**
+	 * @brief Sets the artwork.
+	 * 
+	 * @param artwork The artwork.
+	 */
+	void setArtwork(const ScmConstellationArtwork &artwork);
+
+	/**
     * @brief Sets the coordinate lines and star lines of the constellation.
     * 
     * @param coordinates The coordinates of the constellation. 
@@ -122,9 +130,22 @@ public:
 	void drawNames(StelCore *core, StelPainter &painter) const;
 
 	/**
-	 * @brief Returns the constellation data as a JSON object.
+	  * @brief Returns the constellation data as a JSON object.
+	  * 
+	  * @param skyCultureName The name of the parent sky culture.
+	  * @param directory The directory the json will be saved. Only required by the artwork.
+	  * @return QJsonObject 
+	  */
+	QJsonObject toJson(const QString &skyCultureName, const QString &directory) const;
+
+	/**
+	 * @brief Saves the artwork of this constellation, if art is attached, to the give filepath.
+	 * 
+	 * @param directory The directory to the illustrations.
+	 * @return true Successful saved.
+	 * @return false Failed to save.
 	 */
-	QJsonObject toJson(const QString &skyCultureName) const;
+	bool saveArtwork(const QString &directory);
 
 private:
 	/// Identifier of the constellation
@@ -162,6 +183,12 @@ private:
 
 	/// The default color used for drawing the constellation names
 	Vec3f defaultConstellationNameColor = Vec3f(0.0f, 0.0f, 0.0f);
+
+	/// Holds the artwork of this constellation.
+	ScmConstellationArtwork artwork;
+
+	/// Holds the path the artwork was saved to.
+	QString artworkPath;
 
 	/**
 	 * @brief Updates the XYZname that is used for the text position.
