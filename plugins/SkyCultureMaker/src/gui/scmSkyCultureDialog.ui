@@ -135,6 +135,9 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
+            <property name="acceptRichText">
+              <bool>false</bool>
+            </property>
            </widget>
           </item>
           <item>
@@ -303,6 +306,22 @@ p, li { white-space: pre-wrap; }
                 <number>10</number>
                 </property>
 
+                <!-- Authors -->
+                <item>
+                <widget class="QLabel" name="authorsLbl">
+                  <property name="text">
+                  <string>Authors:</string>
+                  </property>
+                </widget>
+                </item>
+                <item>
+                <widget class="QTextEdit" name="authorsTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+                </item>
+
                 <!-- Culture Description -->
                 <item>
                 <widget class="QLabel" name="cultureDescriptionLbl">
@@ -312,104 +331,11 @@ p, li { white-space: pre-wrap; }
                 </widget>
                 </item>
                 <item>
-                <widget class="QTextEdit" name="cultureDescriptionTE"/>
-
-                </item>
-
-                <!-- Geo-Region -->
-                <item>
-                <widget class="QLabel" name="geoRegionLbl">
-                  <property name="text">
-                  <string>Geo-Region:</string>
+                <widget class="QTextEdit" name="cultureDescriptionTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
                   </property>
                 </widget>
-                </item>
-                <item>
-                <widget class="QTextEdit" name="geoRegionTE"/>
-                </item>
-
-                <!-- Sky -->
-                <item>
-                <widget class="QLabel" name="skyLbl">
-                  <property name="text">
-                  <string>Sky (what can the User see here):</string>
-                  </property>
-                </widget>
-                </item>
-                <item>
-                <widget class="QTextEdit" name="skyTE"/>
-                </item>
-
-                <!-- Moon & Sun -->
-                <item>
-                <widget class="QLabel" name="moonSunLbl">
-                  <property name="text">
-                  <string>Moon &amp; Sun:</string>
-                  </property>
-                </widget>
-                </item>
-                <item>
-                <widget class="QTextEdit" name="moonSunTE"/>
-                </item>
-
-                <!-- Zodiac / Lunar System -->
-                <item>
-                <widget class="QLabel" name="zodiacLbl">
-                  <property name="text">
-                  <string>Zodiac/ Lunar System:</string>
-                  </property>
-                </widget>
-                </item>
-                <item>
-                <widget class="QTextEdit" name="zodiacTE"/>
-                </item>
-
-                <!-- Planets -->
-                <item>
-                <widget class="QLabel" name="planetsLbl">
-                  <property name="text">
-                  <string>Planets:</string>
-                  </property>
-                </widget>
-                </item>
-                <item>
-                <widget class="QTextEdit" name="planetsTE"/>
-                </item>
-
-                <!-- Constellations -->
-                <item>
-                <widget class="QLabel" name="constellationsDescLbl">
-                  <property name="text">
-                  <string>Constellations:</string>
-                  </property>
-                </widget>
-                </item>
-                <item>
-                <widget class="QTextEdit" name="constellationsDescTE"/>
-                </item>
-
-                <!-- Milky Way -->
-                <item>
-                <widget class="QLabel" name="milkyWayLbl">
-                  <property name="text">
-                  <string>Milky Way:</string>
-                  </property>
-                </widget>
-                </item>
-                <item>
-                <widget class="QTextEdit" name="milkyWayTE"/>
-                </item>
-
-                <!-- Other Celestial Objects -->
-                <item>
-                <widget class="QLabel" name="otherObjectsLbl">
-                  <property name="text">
-                  <string>Other Celestial Objects:</string>
-                  </property>
-                </widget>
-                </item>
-                <item>
-                <widget class="QTextEdit" name="otherObjectsTE"/>
                 </item>
 
                 <!-- About -->
@@ -421,31 +347,139 @@ p, li { white-space: pre-wrap; }
                 </widget>
                 </item>
                 <item>
-                <widget class="QTextEdit" name="aboutTE"/>
+                <widget class="QTextEdit" name="aboutTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
                 </item>
 
-                <!-- Authors -->
+                <!-- Geo-Region -->
                 <item>
-                <widget class="QLabel" name="authorsLbl">
+                <widget class="QLabel" name="geoRegionLbl">
                   <property name="text">
-                  <string>Authors:</string>
+                  <string>Geo-Region:</string>
                   </property>
                 </widget>
                 </item>
                 <item>
-                <widget class="QTextEdit" name="authorsTE"/>
+                <widget class="QTextEdit" name="geoRegionTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
                 </item>
 
-                <!-- Acknowledgements -->
+                <!-- Sky -->
                 <item>
-                <widget class="QLabel" name="acknowledgementsLbl">
+                <widget class="QLabel" name="skyLbl">
                   <property name="text">
-                  <string>Acknowledgements:</string>
+                  <string>Sky (what can the User see here):</string>
                   </property>
                 </widget>
                 </item>
                 <item>
-                <widget class="QTextEdit" name="acknowledgementsTE"/>
+                <widget class="QTextEdit" name="skyTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+                </item>
+
+                <!-- Moon & Sun -->
+                <item>
+                <widget class="QLabel" name="moonSunLbl">
+                  <property name="text">
+                  <string>Moon &amp; Sun:</string>
+                  </property>
+                </widget>
+                </item>
+                <item>
+                <widget class="QTextEdit" name="moonSunTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+                </item>
+
+                <!-- Planets -->
+                <item>
+                <widget class="QLabel" name="planetsLbl">
+                  <property name="text">
+                  <string>Planets:</string>
+                  </property>
+                </widget>
+                </item>
+                <item>
+                <widget class="QTextEdit" name="planetsTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+                </item>
+
+                <!-- Zodiac / Lunar System -->
+                <item>
+                <widget class="QLabel" name="zodiacLbl">
+                  <property name="text">
+                  <string>Zodiac/ Lunar System:</string>
+                  </property>
+                </widget>
+                </item>
+                <item>
+                <widget class="QTextEdit" name="zodiacTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+                </item>
+
+                <!-- Milky Way -->
+                <item>
+                <widget class="QLabel" name="milkyWayLbl">
+                  <property name="text">
+                  <string>Milky Way:</string>
+                  </property>
+                </widget>
+                </item>
+                <item>
+                <widget class="QTextEdit" name="milkyWayTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+                </item>
+
+                <!-- Other Celestial Objects -->
+                <item>
+                <widget class="QLabel" name="otherObjectsLbl">
+                  <property name="text">
+                  <string>Other Celestial Objects:</string>
+                  </property>
+                </widget>
+                </item>
+                <item>
+                <widget class="QTextEdit" name="otherObjectsTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+                </item>
+
+                 <!-- Constellations -->
+                <item>
+                <widget class="QLabel" name="constellationsDescLbl">
+                  <property name="text">
+                  <string>Constellations:</string>
+                  </property>
+                </widget>
+                </item>
+                <item>
+                <widget class="QTextEdit" name="constellationsDescTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
                 </item>
 
                 <!-- References -->
@@ -457,7 +491,27 @@ p, li { white-space: pre-wrap; }
                 </widget>
                 </item>
                 <item>
-                <widget class="QTextEdit" name="referencesTE"/>
+                <widget class="QTextEdit" name="referencesTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
+                </item>
+
+                <!-- Acknowledgements -->
+                <item>
+                <widget class="QLabel" name="acknowledgementsLbl">
+                  <property name="text">
+                  <string>Acknowledgements:</string>
+                  </property>
+                </widget>
+                </item>
+                <item>
+                <widget class="QTextEdit" name="acknowledgementsTE">
+                  <property name="acceptRichText">
+                    <bool>false</bool>
+                  </property>
+                </widget>
                 </item>
 
                 <!-- Classification -->

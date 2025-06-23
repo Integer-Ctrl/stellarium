@@ -8,16 +8,6 @@ void scm::ScmSkyCulture::setId(const QString &id)
 	ScmSkyCulture::id = id;
 }
 
-void scm::ScmSkyCulture::setRegion(const QString &region)
-{
-	ScmSkyCulture::region = region;
-}
-
-void scm::ScmSkyCulture::setClassificationType(ClassificationType classificationType)
-{
-	ScmSkyCulture::classificationType = classificationType;
-}
-
 void scm::ScmSkyCulture::setFallbackToInternationalNames(bool fallback)
 {
 	ScmSkyCulture::fallbackToInternationalNames = fallback;
@@ -66,24 +56,26 @@ std::vector<scm::ScmConstellation> *scm::ScmSkyCulture::getConstellations()
 	return &constellations;
 }
 
-void scm::ScmSkyCulture::setLicense(scm::LicenseType license)
+QJsonObject scm::ScmSkyCulture::toJson() const
 {
-	ScmSkyCulture::license = license;
-}
+	QJsonObject scJsonObj;
+	scJsonObj["id"] = id;
+	scJsonObj["region"] = description.geoRegion;
+	// for some reason, the classification is inside an array, eg. ["historical"]
+	QJsonArray classificationArray = QJsonArray::fromStringList(QStringList() << classificationTypeToString(description.classification));
+	scJsonObj["classification"] = classificationArray;
+	scJsonObj["fallback_to_international_names"] = fallbackToInternationalNames;
+	QJsonArray constellationsArray;
+	for (const auto &constellation : constellations)
+	{
+		constellationsArray.append(constellation.toJson(id));
+	}
+	scJsonObj["constellations"] = constellationsArray;
 
-scm::LicenseType scm::ScmSkyCulture::getLicense() const
-{
-	return ScmSkyCulture::license;
-}
+	// TODO: Add asterisms to the JSON object (currently out of scope)
+	// TODO: Add common names to the JSON object (currently out of scope)
 
-void scm::ScmSkyCulture::setAuthors(const QString authors)
-{
-	ScmSkyCulture::authors = authors;
-}
-
-QString scm::ScmSkyCulture::getAuthors() const
-{
-	return ScmSkyCulture::authors;
+	return scJsonObj;
 }
 
 void scm::ScmSkyCulture::draw(StelCore *core) const
@@ -104,24 +96,27 @@ bool scm::ScmSkyCulture::saveDescriptionAsMarkdown(QFile file)
 	if (file.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
 		const scm::Description &desc = ScmSkyCulture::description;
+		const scm::License license = scm::LICENSES.at(desc.license);
 
 		QTextStream out(&file);
 		out << "# " << desc.name << "\n\n";
-		out << "## Geographical Region\n" << desc.geoRegion << "\n\n";
-		out << "## Classification\n " << classificationTypeToString(desc.classification) << "\n\n";
+		out << "## Authors\n" << desc.authors << "\n\n";
+		out << "## License\n### " << license.name << "\n"<< license.description << "\n\n";
+		out << "## Culture Description\n" << desc.cultureDescription << "\n\n";
+		out << "## About\n" << desc.about << "\n\n";
 
+		out << "## Geographical Region\n" << desc.geoRegion << "\n\n";
 		out << "## Sky\n" << desc.sky << "\n\n";
 		out << "## Moon and Sun\n" << desc.moonAndSun << "\n\n";
-		out << "## Zodiac\n" << desc.zodiac << "\n\n";
 		out << "## Planets\n" << desc.planets << "\n\n";
-		out << "## Constellations\n" << desc.constellations << "\n\n";
+		out << "## Zodiac\n" << desc.zodiac << "\n\n";
 		out << "## Milky Way\n" << desc.milkyWay << "\n\n";
 		out << "## Other Celestial Objects\n" << desc.otherObjects << "\n\n";
 
-		out << "## About\n" << desc.about << "\n\n";
-		out << "## Authors\n" << desc.authors << "\n\n";
+		out << "## Constellations\n" << desc.constellations << "\n\n";
+		out << "## References\n" << desc.references << "\n\n";
 		out << "## Acknowledgements\n" << desc.acknowledgements << "\n\n";
-		out << "## References\n" << desc.references << "\n";
+		out << "## Classification\n " << classificationTypeToString(desc.classification) << "\n\n";
 
 		try
 		{

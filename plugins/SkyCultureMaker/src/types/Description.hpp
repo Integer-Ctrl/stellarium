@@ -2,6 +2,7 @@
 #define SCM_DESCRIPTION_HPP
 
 #include "Classification.hpp"
+#include "License.hpp"
 #include <map>
 #include <vector>
 #include <QMetaType>
@@ -16,18 +17,22 @@ namespace scm
 struct Description
 {
 	QString name;
+	QString authors;
+	scm::LicenseType license;
+	QString cultureDescription;
+	QString about;
+
 	QString geoRegion;
 	QString sky;
 	QString moonAndSun;
-	QString zodiac;
 	QString planets;
-	QString constellations;
+	QString zodiac;
 	QString milkyWay;
 	QString otherObjects;
-	QString about;
-	QString authors;
-	QString acknowledgements;
+
+	QString constellations;
 	QString references;
+	QString acknowledgements;
 	scm::ClassificationType classification;
 
 	/**
@@ -41,7 +46,8 @@ struct Description
 		       !constellations.trimmed().isEmpty() && !milkyWay.trimmed().isEmpty() &&
 		       !otherObjects.trimmed().isEmpty() && !about.trimmed().isEmpty() &&
 		       !authors.trimmed().isEmpty() && !acknowledgements.trimmed().isEmpty() &&
-		       !references.trimmed().isEmpty() && classification != scm::ClassificationType::NONE;
+		       !references.trimmed().isEmpty() && classification != scm::ClassificationType::NONE &&
+				license != scm::LicenseType::NONE;
 	}
 };
 } // namespace scm
