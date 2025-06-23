@@ -141,7 +141,7 @@ bool scm::ScmSkyCulture::saveDescriptionAsMarkdown(QFile file)
 	}
 }
 
-bool scm::ScmSkyCulture::saveIllustrations(const QString &directory)
+void scm::ScmSkyCulture::saveIllustrations(const QString &directory)
 {
 	for (auto &constellation : constellations)
 	{

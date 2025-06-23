@@ -117,7 +117,7 @@ public:
 	 * @return true Successful saved.
 	 * @return false Failed to save.
 	 */
-	bool saveIllustrations(const QString &directory);
+	void saveIllustrations(const QString &directory);
 
 private:
 	/// Sky culture identifier
