@@ -1,5 +1,6 @@
 #include "ScmConstellation.hpp"
 #include <QDir>
+#include <QFileInfo>
 
 scm::ScmConstellation::ScmConstellation(const std::vector<scm::CoordinateLine> &coordinates,
                                         const std::vector<scm::StarLine> &stars)
@@ -120,7 +121,7 @@ void scm::ScmConstellation::drawNames(StelCore *core, StelPainter &sPainter) con
 	drawNames(core, sPainter, defaultConstellationNameColor);
 }
 
-QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureId, const QString &directory) const
+QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureId) const
 {
 	QJsonObject json;
 
@@ -148,7 +149,9 @@ QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureId, const QSt
 	json["lines"] = linesArray;
 	if (artwork.getHasArt() == true && !artworkPath.isEmpty())
 	{
-		json["image"] = artwork.to_json(QDir(directory).relativeFilePath(artworkPath));
+		QFileInfo fileInfo(artworkPath);
+		// the '/' separator is default in all skycultures
+		json["image"] = artwork.toJson("illustrations/" + fileInfo.fileName());
 	}
 	else
 	{
@@ -190,7 +193,7 @@ bool scm::ScmConstellation::saveArtwork(const QString &directory)
 	if (!artwork.getHasArt())
 	{
 		qWarning() << "WARNING: The artwork of this constellation " << id << " has no art.";
-		return false;
+		return true; // Not an error just a warning
 	}
 
 	QString filename = id.split(" ").back(); // Last part of id as usually used as the illustrations name

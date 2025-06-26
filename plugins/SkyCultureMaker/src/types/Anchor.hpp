@@ -8,7 +8,7 @@ namespace scm
 {
 struct Anchor
 {
-	Vec2i postion;
+	Vec2i position;
 	int hip;
 };
 

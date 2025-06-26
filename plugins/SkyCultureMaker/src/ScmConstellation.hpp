@@ -133,10 +133,9 @@ public:
 	  * @brief Returns the constellation data as a JSON object.
 	  * 
 	  * @param skyCultureId The ID of the sky culture to which this constellation belongs.
-	  * @param directory The directory the json will be saved. Only required by the artwork.
 	  * @return QJsonObject 
 	  */
-	QJsonObject toJson(const QString &skyCultureId, const QString &directory) const;
+	QJsonObject toJson(const QString &skyCultureId) const;
 
 	/**
 	 * @brief Saves the artwork of this constellation, if art is attached, to the give filepath.

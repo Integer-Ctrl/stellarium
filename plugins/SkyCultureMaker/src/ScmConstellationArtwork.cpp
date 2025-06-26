@@ -58,9 +58,9 @@ void scm::ScmConstellationArtwork::setupArt()
 	const Vec3d s2 = s2obj->getJ2000EquatorialPos(core);
 	const Vec3d s3 = s3obj->getJ2000EquatorialPos(core);
 
-	const Vec2i &xy1 = anchors[0].postion;
-	const Vec2i &xy2 = anchors[1].postion;
-	const Vec2i &xy3 = anchors[2].postion;
+	const Vec2i &xy1 = anchors[0].position;
+	const Vec2i &xy2 = anchors[1].position;
+	const Vec2i &xy3 = anchors[2].position;
 	const int x1     = xy1[0];
 	const int y1     = xy1[1];
 	const int x2     = xy2[0];
@@ -191,7 +191,7 @@ void scm::ScmConstellationArtwork::draw(StelCore *core, StelPainter &painter) co
 	drawOptimized(painter, *region, vel);
 }
 
-QJsonObject scm::ScmConstellationArtwork::to_json(const QString &relativePath) const
+QJsonObject scm::ScmConstellationArtwork::toJson(const QString &relativePath) const
 {
 	QJsonObject json;
 
@@ -208,7 +208,7 @@ QJsonObject scm::ScmConstellationArtwork::to_json(const QString &relativePath) c
 	{
 		QJsonObject anchorJson;
 
-		auto &pos = anchor.postion;
+		auto &pos = anchor.position;
 		QJsonArray posAnchorJson;
 		posAnchorJson.append(pos[0]);
 		posAnchorJson.append(pos[1]);

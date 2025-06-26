@@ -167,7 +167,7 @@ void ScmConstellationDialog::triggerUploadImage()
 	      fileInfo.suffix().compare("JPG", Qt::CaseInsensitive) == 0 ||
 	      fileInfo.suffix().compare("JPEG", Qt::CaseInsensitive) == 0))
 	{
-		ui->infoLbl->setText("Choosen file is not a PNG, JPG or JPEG image:\n" + filePath);
+		ui->infoLbl->setText("Chosen file is not a PNG, JPG or JPEG image:\n" + filePath);
 		return;
 	}
 
@@ -210,6 +210,7 @@ void ScmConstellationDialog::bindSelectedStar()
 	}
 
 	StelObjectP stelObj = objectMgr.getLastSelectedObject();
+	assert(stelObj != nullptr); // Checked through getWasSelected
 	if (stelObj->getType().compare("star", Qt::CaseInsensitive) != 0)
 	{
 		ui->infoLbl->setText("WARNING: The selected object must be of type star.");

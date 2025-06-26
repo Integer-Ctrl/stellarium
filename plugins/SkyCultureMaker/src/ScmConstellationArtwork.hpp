@@ -80,7 +80,7 @@ public:
      * @param relativePath The relative path to the artwork on disk.
      * @return QJsonObject The json format.
      */
-	QJsonObject to_json(const QString &relativePath) const;
+	QJsonObject toJson(const QString &relativePath) const;
 
 	/**
      * @brief Writes the image of the artwork to the disk.

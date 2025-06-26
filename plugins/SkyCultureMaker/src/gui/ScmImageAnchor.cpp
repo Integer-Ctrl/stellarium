@@ -114,7 +114,7 @@ Vec2i ScmImageAnchor::getPosition() const
 	auto position     = pos();
 	auto origin       = movementBound.topLeft();
 	auto anchorRadius = rect().size() * 0.5f;
-	// offset by the origin of the texture so we have exakt pixel mapping starting in the top left corner.
+	// offset by the origin of the texture so we have exact pixel mapping starting in the top left corner.
 	return Vec2i(static_cast<int>(position.x() - origin.x() + anchorRadius.width()),
 	             static_cast<int>(position.y() - origin.y() + anchorRadius.height()));
 }

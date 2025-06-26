@@ -111,8 +111,8 @@ void ScmImageAnchored::updateAnchors()
 	for (size_t i = 0; i < anchorItems.size(); ++i)
 	{
 		scm::Anchor anchor;
-		anchor.postion = anchorItems[i].getPosition();
-		anchor.hip     = anchorItems[i].getStarHip();
+		anchor.position = anchorItems[i].getPosition();
+		anchor.hip      = anchorItems[i].getStarHip();
 		artwork.setAnchor(i, anchor);
 	}
 

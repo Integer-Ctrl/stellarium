@@ -76,10 +76,8 @@ public:
 
 	/**
 	* @brief Returns the sky culture as a JSON object
-	*
-	* @param directory The directory the json will be exported to.
 	*/
-	QJsonObject toJson(const QString &directory) const;
+	QJsonObject toJson() const;
 
 	/**
 	* @brief Draws the sky culture.
@@ -106,7 +104,7 @@ public:
 	 * @return true Successful saved.
 	 * @return false Failed to save.
 	 */
-	void saveIllustrations(const QString &directory);
+	bool saveIllustrations(const QString &directory);
 
 private:
 	/// Sky culture identifier

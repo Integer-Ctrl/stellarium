@@ -56,7 +56,7 @@ std::vector<scm::ScmConstellation> *scm::ScmSkyCulture::getConstellations()
 	return &constellations;
 }
 
-QJsonObject scm::ScmSkyCulture::toJson(const QString &directory) const
+QJsonObject scm::ScmSkyCulture::toJson() const
 {
 	QJsonObject scJsonObj;
 	scJsonObj["id"]     = id;
@@ -69,7 +69,7 @@ QJsonObject scm::ScmSkyCulture::toJson(const QString &directory) const
 	QJsonArray constellationsArray;
 	for (const auto &constellation : constellations)
 	{
-		constellationsArray.append(constellation.toJson(id, directory));
+		constellationsArray.append(constellation.toJson(id));
 	}
 	scJsonObj["constellations"] = constellationsArray;
 
@@ -137,12 +137,15 @@ bool scm::ScmSkyCulture::saveDescriptionAsMarkdown(QFile file)
 	}
 }
 
-void scm::ScmSkyCulture::saveIllustrations(const QString &directory)
+bool scm::ScmSkyCulture::saveIllustrations(const QString &directory)
 {
+	bool success = true;
 	for (auto &constellation : constellations)
 	{
-		constellation.saveArtwork(directory);
+		success &= constellation.saveArtwork(directory);
 	}
+
+	return success;
 }
 
 const QString &scm::ScmSkyCulture::getId() const
