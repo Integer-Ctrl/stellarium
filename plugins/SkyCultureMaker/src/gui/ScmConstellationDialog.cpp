@@ -197,6 +197,7 @@ void ScmConstellationDialog::bindSelectedStar()
 	if (!imageItem->hasAnchorSelection())
 	{
 		ui->infoLbl->setText("WARNING: Select an anchor to bind to.");
+		qDebug() << "WARNING: No anchor was selected.";
 		return;
 	}
 
@@ -206,6 +207,7 @@ void ScmConstellationDialog::bindSelectedStar()
 	if (!objectMgr.getWasSelected())
 	{
 		ui->infoLbl->setText("WARNING: Select a star to bind to the current selected anchor.");
+		qDebug() << "WARNING: No start was selected to bind to.";
 		return;
 	}
 
@@ -214,6 +216,7 @@ void ScmConstellationDialog::bindSelectedStar()
 	if (stelObj->getType().compare("star", Qt::CaseInsensitive) != 0)
 	{
 		ui->infoLbl->setText("WARNING: The selected object must be of type star.");
+		qDebug() << "WARNING: The selected object is not of type start, got " << stelObj->getType();
 		return;
 	}
 
@@ -222,6 +225,7 @@ void ScmConstellationDialog::bindSelectedStar()
 	if (success == false)
 	{
 		ui->infoLbl->setText("WARNING: The selected object must contain a HIP number.");
+		qDebug() << "WARNING: The object does not contain a hip, id = " << stelObj->getID();
 		return;
 	}
 
@@ -244,12 +248,14 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 	if (maker->getCurrentSkyCulture() == nullptr)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Sky Culture is not set");
+		qDebug() << "WARNING: The current sky culture is not set";
 		return false;
 	}
 
 	if (constellationEnglishName.isEmpty())
 	{
 		ui->infoLbl->setText("WARNING: Could not save: English name is empty");
+		qDebug() << "WARNING: No englische name exists";
 		return false;
 	}
 
@@ -258,6 +264,7 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 	if (finalId.isEmpty())
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Constellation ID is empty");
+		qDebug() << "WARNING: no constellation is is set.";
 		return false;
 	}
 
@@ -265,6 +272,7 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 	    maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Constellation with this ID already exists");
+		qDebug() << "WARNING: constellation id already exists, id = " << finalId;
 		return false;
 	}
 
@@ -273,6 +281,7 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 	if (drawnConstellation.empty())
 	{
 		ui->infoLbl->setText("WARNING: Could not save: The constellation does not contain any drawings");
+		qDebug() << "WARNING: Constellation does not contain any drawings.";
 		return false;
 	}
 
@@ -283,6 +292,7 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 		{
 			ui->infoLbl->setText("WARNING: Could not save: An artwork is attached, but not all "
 			                     "anchors have a star bound.");
+			qDebug() << "WARNING: Artwork is attached, but not all anchors have a star bound.";
 			return false;
 		}
 	}
@@ -356,13 +366,7 @@ void ScmConstellationDialog::resetDialog()
 
 void ScmConstellationDialog::updateArtwork()
 {
-	if (!imageItem->isVisible())
-	{
-		maker->setTempArtwork(nullptr);
-		return;
-	}
-
-	if (!imageItem->isImageAnchored())
+	if (!imageItem->isVisible() || !imageItem->isImageAnchored())
 	{
 		maker->setTempArtwork(nullptr);
 		return;
