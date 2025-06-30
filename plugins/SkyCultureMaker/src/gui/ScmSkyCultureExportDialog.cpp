@@ -143,7 +143,7 @@ void ScmSkyCultureExportDialog::saveAndExitSkyCulture()
 	maker->setIsScmEnabled(false);
 }
 
-bool saveSkyCultureCMakeListsFile(const QDir &directory)
+bool ScmSkyCultureExportDialog::saveSkyCultureCMakeListsFile(const QDir &directory)
 {
 	QFile cmakeListsFile(directory.absoluteFilePath("CMakeLists.txt"));
 	if (!cmakeListsFile.open(QIODevice::WriteOnly | QIODevice::Text))
