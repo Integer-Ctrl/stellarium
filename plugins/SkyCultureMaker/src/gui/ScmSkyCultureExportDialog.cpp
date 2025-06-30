@@ -156,8 +156,8 @@ bool ScmSkyCultureExportDialog::saveSkyCultureCMakeListsFile(const QDir &directo
 	out << "get_filename_component(skyculturePath \"${CMAKE_CURRENT_SOURCE_DIR}\" REALPATH)\n";
 	out << "get_filename_component(skyculture ${skyculturePath} NAME)\n";
 	out << "install(DIRECTORY ./ DESTINATION ${SDATALOC}/skycultures/${skyculture}\n";
-	out << "    	FILES_MATCHING PATTERN \"*\"\n";
-	out << "    	PATTERN \"CMakeLists.txt\" EXCLUDE)\n";
+	out << "        FILES_MATCHING PATTERN \"*\"\n";
+	out << "        PATTERN \"CMakeLists.txt\" EXCLUDE)\n";
 
 	cmakeListsFile.close();
 	return true;
