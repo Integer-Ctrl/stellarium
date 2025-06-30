@@ -121,6 +121,9 @@ void ScmSkyCultureExportDialog::saveSkyCulture()
 	{
 		maker->setSkyCultureDialogInfoLabel("WARNING: Failed to export sky culture description.");
 		qWarning() << "SkyCultureMaker: Failed to export sky culture description.";
+		skyCultureDirectory.removeRecursively();
+		ScmSkyCultureExportDialog::close();
+		return;
 	}
 
 	// Save the CMakeLists.txt file
@@ -129,6 +132,9 @@ void ScmSkyCultureExportDialog::saveSkyCulture()
 	{
 		maker->setSkyCultureDialogInfoLabel("WARNING: Failed to export CMakeLists.txt.");
 		qWarning() << "SkyCultureMaker: Failed to export CMakeLists.txt.";
+		skyCultureDirectory.removeRecursively();
+		ScmSkyCultureExportDialog::close();
+		return;
 	}
 
 	maker->setSkyCultureDialogInfoLabel("Sky culture exported successfully!");
