@@ -1,5 +1,3 @@
-#define SCM_CONVERTER_ENABLED_CPP
-
 #ifdef SCM_CONVERTER_ENABLED_CPP
 
 # include "ScmConvertDialog.hpp"
