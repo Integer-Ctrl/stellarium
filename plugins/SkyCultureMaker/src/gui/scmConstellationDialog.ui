@@ -70,23 +70,6 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QPushButton" name="undoBtn">
-           <property name="text">
-            <string>Undo</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="eraserBtn">
-           <property name="text">
-            <string>Eraser</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="penBtn">
            <property name="text">
             <string>Pen</string>
@@ -96,6 +79,26 @@
            </property>
            <property name="checked">
             <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="undoBtn">
+           <property name="text">
+            <string>Undo</string>
+           </property>
+           <property name="toolTip">
+            <string>Revert the last drawn line.</string>
+            </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="eraserBtn">
+           <property name="text">
+            <string>Eraser</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
