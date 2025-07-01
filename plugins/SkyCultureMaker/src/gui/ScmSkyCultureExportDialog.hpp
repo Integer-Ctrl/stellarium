@@ -27,6 +27,7 @@ private:
 	void saveSkyCulture();
 	bool chooseFallbackDirectory(const QString &skyCultureId, QDir &skyCultureDirectory);
 	void saveAndExitSkyCulture();
+	bool saveSkyCultureCMakeListsFile(const QDir &directory);
 };
 
 #endif // SCM_SKY_CULTURE_EXPORT_DIALOG_HPP
