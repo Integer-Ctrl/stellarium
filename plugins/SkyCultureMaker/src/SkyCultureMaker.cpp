@@ -401,11 +401,6 @@ void SkyCultureMaker::setSkyCultureDescription(const scm::Description &descripti
 	}
 }
 
-QFile SkyCultureMaker::getScmDescriptionFile(const QDir &directory)
-{
-	return QFile(directory.absoluteFilePath("description.md"));
-}
-
 void SkyCultureMaker::setTempArtwork(const scm::ScmConstellationArtwork *artwork)
 {
 	tempArtwork = artwork;
@@ -415,7 +410,8 @@ bool SkyCultureMaker::saveSkyCultureDescription(const QDir &directory)
 {
 	if (currentSkyCulture != nullptr)
 	{
-		return currentSkyCulture->saveDescriptionAsMarkdown(getScmDescriptionFile(directory));
+		QFile descriptionFile = QFile(directory.absoluteFilePath("description.md"));
+		return currentSkyCulture->saveDescriptionAsMarkdown(descriptionFile);
 	}
 
 	return false;
