@@ -93,7 +93,7 @@ bool ScmConvertDialog::chooseFallbackDirectory(QString &skyCulturesPath, QString
 		QString selectedDirectory = QFileDialog::getExistingDirectory(nullptr, tr("Open Directory"));
 		if (!QDir(selectedDirectory).exists())
 		{
-			qDebug() << "Selected not existing fallback directory";
+			qDebug() << "Selected fallback directory does not exist!";
 			continue;
 		}
 
