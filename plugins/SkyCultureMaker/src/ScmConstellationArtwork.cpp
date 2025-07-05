@@ -47,7 +47,7 @@ void scm::ScmConstellationArtwork::setupArt()
 {
 	if (hasArt == false)
 	{
-		qWarning() << "ERROR: Failed to setup the artwork has not art";
+		qWarning() << "ERROR: Failed to setup the artwork, because it has no art";
 		return;
 	}
 
@@ -57,7 +57,7 @@ void scm::ScmConstellationArtwork::setupArt()
 
 	if (starMgr == nullptr)
 	{
-		qWarning() << "ERROR: Failed to setup the artwork the starMgr is not available";
+		qWarning() << "ERROR: Failed to setup the artwork, because the starMgr is not available";
 		return;
 	}
 
@@ -191,13 +191,12 @@ void scm::ScmConstellationArtwork::draw(StelCore *core, StelPainter &painter) co
 {
 	if (hasArt == false)
 	{
-		qWarning() << "ERROR: Failed to draw the artwork has not art";
 		return;
 	}
 
 	if (isSetup == false)
 	{
-		qWarning() << "ERROR: Failed to draw the artwork call setup first";
+		qWarning() << "ERROR: Failed to draw the artwork: call setup first";
 		return;
 	}
 

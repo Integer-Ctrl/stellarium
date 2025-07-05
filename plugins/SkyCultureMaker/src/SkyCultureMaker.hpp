@@ -34,8 +34,8 @@
 #include "StelTranslator.hpp"
 #include "VecMath.hpp"
 #include "types/DialogID.hpp"
+#include <QDir>
 #include <QFile>
-
 #include <QFont>
 
 class QPixmap;
@@ -184,15 +184,10 @@ public:
 
 	/**
 	 * @brief Saves the current sky culture description as markdown text.
+	 * @param directory The directory to save the description in.
 	 * @return true if the description was saved successfully, false otherwise.
 	 */
-	bool saveSkyCultureDescription();
-
-	/**
-	 * @brief Gets the saving file for the sky culture description.
-	 * @return The file to save the description to.
-	 */
-	QFile getScmDescriptionFile();
+	bool saveSkyCultureDescription(const QDir &directory);
 
 	/**
 	 * @brief Saves the visibility state of the SCM dialogs.

@@ -170,16 +170,11 @@ QJsonObject scm::ScmConstellation::toJson(const QString &skyCultureId) const
 
 	json["id"]    = "CON " + skyCultureId + " " + id;
 	json["lines"] = linesArray;
-	if (artwork.getHasArt() == true && !artworkPath.isEmpty())
+	if (artwork.getHasArt() && !artworkPath.isEmpty())
 	{
 		QFileInfo fileInfo(artworkPath);
 		// the '/' separator is default in all skycultures
 		json["image"] = artwork.toJson("illustrations/" + fileInfo.fileName());
-	}
-	else
-	{
-		qWarning() << "WARNING: The artwork of this constellation " << id
-			   << " has no art or was not saved to a file.";
 	}
 
 	// Assemble common name object
@@ -215,7 +210,7 @@ bool scm::ScmConstellation::saveArtwork(const QString &directory)
 {
 	if (!artwork.getHasArt())
 	{
-		qWarning() << "WARNING: The artwork of this constellation " << id << " has no art.";
+		qWarning() << "WARNING: The artwork of the constellation " << id << " has no art.";
 		return true; // Not an error just a warning
 	}
 

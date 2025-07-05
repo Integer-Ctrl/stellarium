@@ -26,6 +26,7 @@
 
 #include "SkyCultureMaker.hpp"
 #include "StelDialogSeparate.hpp"
+#include <QString>
 
 class Ui_scmSkyCultureExportDialog;
 
@@ -44,9 +45,12 @@ public slots:
 private:
 	Ui_scmSkyCultureExportDialog *ui = nullptr;
 	SkyCultureMaker *maker           = nullptr;
+	QString skyCulturesPath;
 
 	void saveSkyCulture();
+	bool chooseFallbackDirectory(const QString &skyCultureId, QDir &skyCultureDirectory);
 	void saveAndExitSkyCulture();
+	bool saveSkyCultureCMakeListsFile(const QDir &directory);
 };
 
 #endif // SCM_SKY_CULTURE_EXPORT_DIALOG_HPP

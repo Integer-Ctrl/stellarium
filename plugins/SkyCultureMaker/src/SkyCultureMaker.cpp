@@ -212,6 +212,18 @@ void SkyCultureMaker::stopScmProcess()
 		return;
 	}
 
+	// If the converter dialog is visible, hide it
+	if (scmStartDialog->isConverterDialogVisible())
+	{
+		scmStartDialog->setConverterDialogVisibility(false);
+		if (isScmEnabled)
+		{
+			isScmEnabled = false;
+			emit eventIsScmEnabled(false);
+			setToolbarButtonState(false); // Toggle the toolbar button to disabled
+		}
+	}
+
 	// If any other dialog is visible, don't stop the process — just keep UI state ON
 	if (isAnyDialogVisible())
 	{
@@ -409,22 +421,17 @@ void SkyCultureMaker::setSkyCultureDescription(const scm::Description &descripti
 	}
 }
 
-QFile SkyCultureMaker::getScmDescriptionFile()
-{
-	// TODO: Issue #85
-	return QFile("description.md");
-}
-
 void SkyCultureMaker::setTempArtwork(const scm::ScmConstellationArtwork *artwork)
 {
 	tempArtwork = artwork;
 }
 
-bool SkyCultureMaker::saveSkyCultureDescription()
+bool SkyCultureMaker::saveSkyCultureDescription(const QDir &directory)
 {
 	if (currentSkyCulture != nullptr)
 	{
-		return currentSkyCulture->saveDescriptionAsMarkdown(getScmDescriptionFile());
+		QFile descriptionFile = QFile(directory.absoluteFilePath("description.md"));
+		return currentSkyCulture->saveDescriptionAsMarkdown(descriptionFile);
 	}
 
 	return false;
