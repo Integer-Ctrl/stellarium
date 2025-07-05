@@ -52,7 +52,7 @@ ScmStartDialog::~ScmStartDialog()
 		delete ui;
 	}
 
-	qDebug() << "Unloaded the ScmStartDialog";
+	qDebug() << "SkyCultureMaker: Unloaded the ScmStartDialog";
 }
 
 void ScmStartDialog::retranslate()
@@ -150,10 +150,10 @@ void ScmStartDialog::setConverterDialogVisibility(bool b)
 	}
 	else
 	{
-		qWarning() << "Converter dialog is not initialized!";
+		qWarning() << "SkyCultureMaker: Converter dialog is not initialized!";
 	}
 #else
 	Q_UNUSED(b);
-	qWarning() << "Converter dialog is not available in this build!";
+	qWarning() << "SkyCultureMaker: Converter dialog is not available in this build!";
 #endif // SCM_CONVERTER_ENABLED_CPP
 }

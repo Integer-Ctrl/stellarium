@@ -149,13 +149,13 @@ bool scm::ScmSkyCulture::saveDescriptionAsMarkdown(QFile &file)
 		}
 		catch (const std::exception &e)
 		{
-			qWarning("Error closing file: %s", e.what());
+			qWarning("SkyCultureMaker: Error closing file: %s", e.what());
 			return false; // error occurred while closing the file
 		}
 	}
 	else
 	{
-		qWarning("Could not open file for writing: %s", qPrintable(file.fileName()));
+		qWarning("SkyCultureMaker: Could not open file for writing: %s", qPrintable(file.fileName()));
 		return false; // file could not be opened
 	}
 }

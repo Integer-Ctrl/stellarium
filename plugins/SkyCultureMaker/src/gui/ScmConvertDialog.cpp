@@ -219,7 +219,7 @@ QString validateArchivePath(const QString &path)
 
 	if (!archiveTypes.contains(mime.name()))
 	{
-		qWarning() << "Unsupported MIME type:" << mime.name() << "for file" << path;
+		qWarning() << "SkyCultureMaker: Unsupported MIME type:" << mime.name() << "for file" << path;
 		return QStringLiteral("Please select a valid archive file "
 		                      "(zip, tar, rar or 7z)");
 	}
@@ -230,7 +230,7 @@ QString extractAndDetermineSource(const QString &archivePath, const QString &tem
 {
 	try
 	{
-		qDebug() << "Extracting archive:" << archivePath << "to" << tempDirPath;
+		qDebug() << "SkyCultureMaker: Extracting archive:" << archivePath << "to" << tempDirPath;
 
 		QString error = extractArchive(archivePath, tempDirPath);
 		if (!error.isEmpty())
@@ -238,7 +238,7 @@ QString extractAndDetermineSource(const QString &archivePath, const QString &tem
 			return error;
 		}
 
-		qDebug() << "Archive extracted to:" << tempDirPath;
+		qDebug() << "SkyCultureMaker: Archive extracted to:" << tempDirPath;
 	}
 	catch (const std::exception &e)
 	{
@@ -247,7 +247,7 @@ QString extractAndDetermineSource(const QString &archivePath, const QString &tem
 
 	QStringList extracted_files = QDir(tempDirPath).entryList(QDir::AllEntries | QDir::NoDotAndDotDot);
 
-	qDebug() << "Extracted files:" << extracted_files.length();
+	qDebug() << "SkyCultureMaker: Extracted files:" << extracted_files.length();
 
 	if (extracted_files.isEmpty())
 	{
@@ -286,8 +286,8 @@ QString extractAndDetermineSource(const QString &archivePath, const QString &tem
 
 QString performConversion(const QString &sourcePath, const QString &destPath)
 {
-	qDebug() << "Source for conversion:" << sourcePath;
-	qDebug() << "Destination for conversion:" << destPath;
+	qDebug() << "SkyCultureMaker: Source for conversion:" << sourcePath;
+	qDebug() << "SkyCultureMaker: Destination for conversion:" << destPath;
 
 	SkyCultureConverter::ReturnValue result;
 
@@ -322,19 +322,19 @@ QString moveConvertedFiles(const QString &tempDestDirPath, const QString &stem, 
 	const QString absoluteTargetPath      = targetDir.absolutePath();
 	const QString absoluteTempDestDirPath = QDir(tempDestDirPath).absolutePath();
 
-	qDebug() << "Target path for moved files:" << absoluteTargetPath;
+	qDebug() << "SkyCultureMaker: Target path for moved files:" << absoluteTargetPath;
 
 	if (targetDir.exists())
 	{
 		// Target folder already exists. Do not copy/move.
-		qDebug() << "Target folder" << absoluteTargetPath
+		qDebug() << "SkyCultureMaker: Target folder" << absoluteTargetPath
 			 << "already exists. No move operation "
 			    "performed.";
 		return QString("Target folder already exists: %1").arg(absoluteTargetPath);
 	}
 	else if (QDir().rename(absoluteTempDestDirPath, absoluteTargetPath))
 	{
-		qDebug() << "Successfully moved contents of" << absoluteTempDestDirPath << "to" << absoluteTargetPath;
+		qDebug() << "SkyCultureMaker: Successfully moved contents of" << absoluteTempDestDirPath << "to" << absoluteTargetPath;
 		return QString();
 	}
 	else
@@ -364,7 +364,7 @@ void ScmConvertDialog::convert()
 		return;
 	}
 
-	qDebug() << "Selected file:" << path;
+	qDebug() << "SkyCultureMaker: Selected file:" << path;
 
 	// Create a temporary directory for extraction
 	QString stem = QFileInfo(path).baseName(); // e.g. "foo.tar.gz" -> "foo"
@@ -449,7 +449,7 @@ void ScmConvertDialog::convert()
 
 	watcher->setFuture(future);
 
-	qDebug() << "Conversion started.";
+	qDebug() << "SkyCultureMaker: Conversion started.";
 }
 
 #endif // SCM_CONVERTER_ENABLED_CPP

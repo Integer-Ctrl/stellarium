@@ -124,7 +124,7 @@ void ScmSkyCultureExportDialog::saveSkyCulture()
 	}
 
 	// Export the sky culture to the index.json file
-	qDebug() << "Exporting sky culture...";
+	qDebug() << "SkyCultureMaker: Exporting sky culture...";
 	QJsonObject scJsonObject = currentSkyCulture->toJson();
 	QJsonDocument scJsonDoc(scJsonObject);
 	if (scJsonDoc.isNull() || scJsonDoc.isEmpty())
@@ -182,7 +182,7 @@ bool ScmSkyCultureExportDialog::chooseFallbackDirectory(const QString& skyCultur
 		if (!QDir(selectedDirectory).exists())
 		{
 			maker->setSkyCultureDialogInfoLabel("ERROR: The selected directory is not valid");
-			qDebug() << "Selected not existing fallback directory";
+			qDebug() << "SkyCultureMaker: Selected not existing fallback directory";
 			continue;
 		}
 
@@ -195,7 +195,7 @@ bool ScmSkyCultureExportDialog::chooseFallbackDirectory(const QString& skyCultur
 	}
 
 	maker->setSkyCultureDialogInfoLabel("ERROR: Exceeded maximum attempts to set a fallback directory.");
-	qDebug() << "User exceeded maximum number (10) of attempts to set a fallback directory.";
+	qDebug() << "SkyCultureMaker: User exceeded maximum number (10) of attempts to set a fallback directory.";
 	return false;
 }
 

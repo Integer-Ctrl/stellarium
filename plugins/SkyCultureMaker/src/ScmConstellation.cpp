@@ -210,7 +210,7 @@ bool scm::ScmConstellation::saveArtwork(const QString &directory)
 {
 	if (!artwork.getHasArt())
 	{
-		qWarning() << "WARNING: The artwork of the constellation " << id << " has no art.";
+		qWarning() << "SkyCultureMaker: The artwork of the constellation " << id << " has no art.";
 		return true; // Not an error just a warning
 	}
 

@@ -218,7 +218,7 @@ ScmImageAnchor::ScmImageAnchor(QPointF position, qreal diameter)
 
 ScmImageAnchor::~ScmImageAnchor()
 {
-	qDebug() << "Unloaded the ScmImageAnchor";
+	qDebug() << "SkyCultureMaker: Unloaded the ScmImageAnchor";
 }
 
 void ScmImageAnchor::setDiameter(qreal diameter)

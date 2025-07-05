@@ -47,7 +47,7 @@ void scm::ScmConstellationArtwork::setupArt()
 {
 	if (hasArt == false)
 	{
-		qWarning() << "ERROR: Failed to setup the artwork, because it has no art";
+		qWarning() << "SkyCultureMaker: Failed to setup the artwork, because it has no art";
 		return;
 	}
 
@@ -57,7 +57,7 @@ void scm::ScmConstellationArtwork::setupArt()
 
 	if (starMgr == nullptr)
 	{
-		qWarning() << "ERROR: Failed to setup the artwork, because the starMgr is not available";
+		qWarning() << "SkyCultureMaker: Failed to setup the artwork, because the starMgr is not available";
 		return;
 	}
 
@@ -72,7 +72,7 @@ void scm::ScmConstellationArtwork::setupArt()
 	// check for null pointers
 	if (s1obj.isNull() || s2obj.isNull() || s3obj.isNull())
 	{
-		qWarning() << "ERROR: could not find stars:" << anchors[0].hip << ", " << anchors[1].hip << "or "
+		qWarning() << "SkyCultureMaker: could not find stars:" << anchors[0].hip << ", " << anchors[1].hip << "or "
 			   << anchors[2].hip;
 		return;
 	}
@@ -152,7 +152,7 @@ void scm::ScmConstellationArtwork::setAnchor(int index, const Anchor &anchor)
 {
 	if (index < 0 || index >= static_cast<int>(anchors.size()))
 	{
-		qDebug() << "Index ouf of bounds for setting an anchor.";
+		qDebug() << "SkyCultureMaker: Index ouf of bounds for setting an anchor.";
 		return;
 	}
 
@@ -196,7 +196,7 @@ void scm::ScmConstellationArtwork::draw(StelCore *core, StelPainter &painter) co
 
 	if (isSetup == false)
 	{
-		qWarning() << "ERROR: Failed to draw the artwork: call setup first";
+		qWarning() << "SkyCultureMaker: Failed to draw the artwork: call setup first";
 		return;
 	}
 
@@ -254,7 +254,7 @@ bool scm::ScmConstellationArtwork::save(const QString &filepath) const
 	bool success = fileInfo.absoluteDir().mkpath(fileInfo.absolutePath());
 	if (success == false)
 	{
-		qWarning() << "ERROR: Failed to create the directory structure for: '" << fileInfo.absolutePath()
+		qWarning() << "SkyCultureMaker: Failed to create the directory structure for: '" << fileInfo.absolutePath()
 			   << "'";
 		return false;
 	}
@@ -262,7 +262,7 @@ bool scm::ScmConstellationArtwork::save(const QString &filepath) const
 	success = artwork.save(fileInfo.absoluteFilePath());
 	if (success == false)
 	{
-		qWarning() << "ERROR: Failed to save the image to the given path: '" << fileInfo.absoluteFilePath()
+		qWarning() << "SkyCultureMaker: Failed to save the image to the given path: '" << fileInfo.absoluteFilePath()
 			   << "'";
 		return false;
 	}

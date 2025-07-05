@@ -41,7 +41,7 @@ ScmHideOrAbortMakerDialog::~ScmHideOrAbortMakerDialog()
 		delete ui;
 	}
 
-	qDebug() << "Unloaded the ScmHideOrAbortMakerDialog";
+	qDebug() << "SkyCultureMaker: Unloaded the ScmHideOrAbortMakerDialog";
 }
 
 void ScmHideOrAbortMakerDialog::retranslate()

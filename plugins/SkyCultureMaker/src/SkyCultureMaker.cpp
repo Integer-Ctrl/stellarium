@@ -143,7 +143,7 @@ double SkyCultureMaker::getCallOrder(StelModuleActionName actionName) const
 *************************************************************************/
 void SkyCultureMaker::init()
 {
-	qDebug() << "init called for SkyCultureMaker";
+	qDebug() << "SkyCultureMaker: Init called for SkyCultureMaker";
 
 	StelApp &app = StelApp::getInstance();
 
@@ -154,9 +154,9 @@ void SkyCultureMaker::init()
 	{
 		QPixmap iconScmDisabled(":/SkyCultureMaker/bt_SCM_Off.png");
 		QPixmap iconScmEnabled(":/SkyCultureMaker/bt_SCM_On.png");
-		qDebug() << (iconScmDisabled.isNull() ? "Failed to load image: bt_SCM_Off.png"
+		qDebug() << "SkyCultureMaker: " << (iconScmDisabled.isNull() ? "Failed to load image: bt_SCM_Off.png"
 		                                      : "Loaded image: bt_SCM_Off.png");
-		qDebug() << (iconScmEnabled.isNull() ? "Failed to load image: bt_SCM_On.png"
+		qDebug() << "SkyCultureMaker: " << (iconScmEnabled.isNull() ? "Failed to load image: bt_SCM_On.png"
 		                                     : "Loaded image: bt_SCM_On.png");
 
 		StelGui *gui = dynamic_cast<StelGui *>(app.getGui());
@@ -169,7 +169,7 @@ void SkyCultureMaker::init()
 	}
 	catch (std::runtime_error &e)
 	{
-		qWarning() << "Unable create toolbar button for SkyCultureMaker plugin: " << e.what();
+		qWarning() << "SkyCultureMaker: Unable create toolbar button for SkyCultureMaker plugin: " << e.what();
 	}
 }
 

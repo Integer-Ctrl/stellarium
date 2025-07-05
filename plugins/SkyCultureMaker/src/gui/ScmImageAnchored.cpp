@@ -42,7 +42,7 @@ ScmImageAnchored::ScmImageAnchored()
 
 ScmImageAnchored::~ScmImageAnchored()
 {
-	qDebug() << "Unloaded the ScmImageAnchored";
+	qDebug() << "SkyCultureMaker: Unloaded the ScmImageAnchored";
 }
 
 void ScmImageAnchored::setImage(const QPixmap &image)
