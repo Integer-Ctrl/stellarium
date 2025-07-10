@@ -45,6 +45,7 @@ protected:
 public:
 	ScmConstellationDialog(SkyCultureMaker *maker);
 	~ScmConstellationDialog() override;
+	void loadFromConstellation(scm::ScmConstellation *constellation);
 
 public slots:
 	void retranslate() override;
@@ -93,6 +94,8 @@ private:
 					"Use CTRL + F to search and connect stars.";
 	/// Holds the help text on how to use the eraser.
 	const QString helpDrawInfoEraser = "Hold RightClick to delete the line under the cursor.\n";
+	/// The constellation that is currently being edited
+	scm::ScmConstellation *constellationBeingEdited = nullptr;
 
 	/**
 	 * @brief Checks whether the current data is enough for the constellation to be saved.

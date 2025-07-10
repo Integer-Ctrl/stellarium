@@ -528,3 +528,27 @@ void SkyCultureMaker::resetScmDialogs()
 	scmSkyCultureDialog->resetDialog();
 	scmConstellationDialog->resetDialog();
 }
+
+void SkyCultureMaker::openConstellationDialog(const QString &constellationId)
+{
+	if (scmConstellationDialog != nullptr)
+	{
+		// Load the necessary data
+		scm::ScmSkyCulture *skyCulture = getCurrentSkyCulture();
+		scm::ScmConstellation *constellation = skyCulture->getConstellation(constellationId);
+		if (constellation != nullptr)
+		{
+			scmConstellationDialog->loadFromConstellation(constellation);
+			setConstellationDialogVisibility(true);
+			qDebug() << "SkyCultureMaker: Opened constellation dialog for ID:" << constellationId;
+		}
+		else
+		{
+			qWarning() << "SkyCultureMaker: Constellation with ID" << constellationId << "not found.";
+		}
+	}
+	else
+	{
+		qWarning() << "SkyCultureMaker: Constellation dialog is not initialized.";
+	}
+}

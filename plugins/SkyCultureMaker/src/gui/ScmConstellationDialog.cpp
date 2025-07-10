@@ -50,6 +50,45 @@ ScmConstellationDialog::~ScmConstellationDialog()
 	qDebug() << "SkyCultureMaker: Unloaded the ScmConstellationDialog";
 }
 
+void ScmConstellationDialog::loadFromConstellation(scm::ScmConstellation *constellation)
+{
+	if (constellation == nullptr)
+	{
+		qWarning() << "ScmConstellationDialog::loadFromConstellation: constellation is null";
+		return;
+	}
+
+	if (!isDialogInitialized)
+	{
+		createDialogContent();
+	}
+	else
+	{
+		resetDialog();
+	}
+
+	// Hide the original constellation
+	constellation->hide();
+
+	constellationId            = constellation->getId();
+	constellationEnglishName   = constellation->getEnglishName();
+	constellationPlaceholderId = constellation->getId();
+	constellationNativeName    = constellation->getNativeName();
+	constellationPronounce     = constellation->getPronounce();
+	constellationIPA           = constellation->getIPA();
+
+	ui->enNameTE->setPlainText(constellationEnglishName);
+	ui->idTE->setPlainText(constellationId);
+	ui->natNameTE->setPlainText(constellationNativeName.value_or(""));
+	ui->pronounceTE->setPlainText(constellationPronounce.value_or(""));
+	ui->ipaTE->setPlainText(constellationIPA.value_or(""));
+
+	maker->getScmDraw()->loadLines(constellation->getCoordinates(), constellation->getStars());
+
+	//imageItem->loadImage(constellation->getArtworkPath());
+	//updateArtwork()
+}
+
 void ScmConstellationDialog::retranslate()
 {
 	if (dialog)
@@ -292,11 +331,14 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 		return false;
 	}
 
+	// the id is allowed to exist already, if we are editing a constellation
 	if (maker->getCurrentSkyCulture() != nullptr &&
-	    maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
+	    maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr &&
+	    constellationBeingEdited->getId() != finalId)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Constellation with this ID already exists");
-		qDebug() << "SkyCultureMaker: Could not save: Constellation with this ID already exists, id = " << finalId;
+		qDebug() << "SkyCultureMaker: Could not save: Constellation with this ID already exists, id = "
+			 << finalId;
 		return false;
 	}
 
@@ -317,7 +359,7 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 			ui->infoLbl->setText("WARNING: Could not save: An artwork is attached, but not all "
 			                     "anchors have a star bound.");
 			qDebug() << "SkyCultureMaker: Could not save: An artwork is attached, but not all "
-			                     "anchors have a star bound.";
+				    "anchors have a star bound.";
 			return false;
 		}
 	}
@@ -327,6 +369,11 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 
 void ScmConstellationDialog::cancel()
 {
+	if (constellationBeingEdited != nullptr)
+	{
+		// If we are editing a constellation, we need to show the original one again
+		constellationBeingEdited->show();
+	}
 	resetDialog();
 	ScmConstellationDialog::close();
 }
@@ -342,6 +389,12 @@ void ScmConstellationDialog::saveConstellation()
 		scm::ScmSkyCulture *culture = maker->getCurrentSkyCulture();
 		assert(culture != nullptr); // already checked by canConstellationBeSaved
 
+		// delete the original constellation if we are editing one
+		if (constellationBeingEdited != nullptr)
+		{
+			culture->removeConstellation(constellationBeingEdited->getId());
+		}
+
 		scm::ScmConstellation &constellation = culture->addConstellation(id, coordinates, stars);
 
 		constellation.setEnglishName(constellationEnglishName);
@@ -352,7 +405,7 @@ void ScmConstellationDialog::saveConstellation()
 		{
 			constellation.setArtwork(imageItem->getArtwork());
 		}
-		
+
 		maker->updateSkyCultureDialog();
 		resetDialog();
 		ScmConstellationDialog::close();
@@ -366,6 +419,8 @@ void ScmConstellationDialog::resetDialog()
 	{
 		return;
 	}
+
+	ui->tabs->setCurrentIndex(0);
 
 	activeTool = scm::DrawTools::None;
 
@@ -395,6 +450,8 @@ void ScmConstellationDialog::resetDialog()
 	imageItem->hide();
 	imageItem->resetAnchors();
 	maker->setTempArtwork(nullptr);
+
+	constellationBeingEdited = nullptr;
 
 	// reset ScmDraw
 	maker->resetScmDraw();
