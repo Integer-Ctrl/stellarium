@@ -26,6 +26,8 @@
 
 #include "ScmConstellationArtwork.hpp"
 #include "ScmImageAnchor.hpp"
+#include "types/Anchor.hpp"
+#include <array>
 #include <functional>
 #include <vector>
 #include <QGraphicsPathItem>
@@ -75,7 +77,19 @@ public:
 	 */
 	void resetAnchors();
 
+	/**
+	 * @brief Gets the anchors of this object.
+	 * 
+	 * @return const std::vector<ScmImageAnchor>& The anchors of this object.
+	 */
 	const std::vector<ScmImageAnchor> &getAnchors() const;
+
+	/**
+	 * @brief Sets the anchors of this object.
+	 * 
+	 * @param anchors The anchors to set.
+	 */
+	void setAnchors(const std::array<scm::Anchor, 3> &anchors);
 
 	/**
 	 * @brief Indicates if all anchors have a star they are bound too.

@@ -67,8 +67,8 @@ void ScmConstellationDialog::loadFromConstellation(scm::ScmConstellation *conste
 		resetDialog();
 	}
 
-	// Hide the original constellation
-	constellation->hide();
+	// Save the constellation that is currently being edited
+	constellationBeingEdited = constellation;
 
 	constellationId            = constellation->getId();
 	constellationEnglishName   = constellation->getEnglishName();
@@ -83,10 +83,21 @@ void ScmConstellationDialog::loadFromConstellation(scm::ScmConstellation *conste
 	ui->pronounceTE->setPlainText(constellationPronounce.value_or(""));
 	ui->ipaTE->setPlainText(constellationIPA.value_or(""));
 
+	// Hide the original constellation while editing
+	constellation->hide();
+	// Load the coordinates and stars to ScmDraw
 	maker->getScmDraw()->loadLines(constellation->getCoordinates(), constellation->getStars());
 
-	//imageItem->loadImage(constellation->getArtworkPath());
-	//updateArtwork()
+	// WTF???
+	// Set up artwork tab
+	// imageItem->setAnchors(constellation->getArtwork().getAnchors());
+	// QPixmap image = QPixmap("");
+	// imageItem->setImage(image);
+	// imageItem->show();
+	// ui->artwork_image->centerOn(imageItem);
+	// ui->artwork_image->fitInView(imageItem, Qt::KeepAspectRatio);
+	// ui->artwork_image->show();
+	// updateArtwork();
 }
 
 void ScmConstellationDialog::retranslate()
@@ -331,10 +342,19 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 		return false;
 	}
 
-	// the id is allowed to exist already, if we are editing a constellation
-	if (maker->getCurrentSkyCulture() != nullptr &&
-	    maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr &&
-	    constellationBeingEdited->getId() != finalId)
+	// Not editing a constellation, but the ID already exists
+	if (constellationBeingEdited == nullptr && 
+		maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
+	{
+		ui->infoLbl->setText("WARNING: Could not save: Constellation with this ID already exists");
+		qDebug() << "SkyCultureMaker: Could not save: Constellation with this ID already exists, id = "
+			 << finalId;
+		return false;
+	}
+	// Editing a constellation, but the ID already exists and is not the same as the one being edited
+	else if (constellationBeingEdited != nullptr &&
+	         constellationBeingEdited->getId() != finalId &&
+	         maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Constellation with this ID already exists");
 		qDebug() << "SkyCultureMaker: Could not save: Constellation with this ID already exists, id = "
