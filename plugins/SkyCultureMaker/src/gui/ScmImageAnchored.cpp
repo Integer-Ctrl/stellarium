@@ -24,7 +24,6 @@
 #include "ScmImageAnchored.hpp"
 #include "StarWrapper.hpp"
 #include "StelApp.hpp"
-#include "types/Anchor.hpp"
 #include <QDebug>
 
 ScmImageAnchored::ScmImageAnchored()
