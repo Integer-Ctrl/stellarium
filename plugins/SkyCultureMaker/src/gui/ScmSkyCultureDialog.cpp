@@ -104,6 +104,7 @@ void ScmSkyCultureDialog::createDialogContent()
 	ui->SaveSkyCultureBtn->setEnabled(false);
 	ui->RemoveConstellationBtn->setEnabled(false);
 	ui->EditConstellationBtn->setEnabled(false);
+	ui->EditConstellationBtn->setToolTip("Warning: Editing a constellation resets the artwork.");
 	connect(ui->SaveSkyCultureBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::saveSkyCulture);
 	connect(ui->AddConstellationBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::constellationDialog);
 
