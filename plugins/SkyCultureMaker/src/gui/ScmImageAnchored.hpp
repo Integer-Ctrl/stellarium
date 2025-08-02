@@ -26,7 +26,6 @@
 
 #include "ScmConstellationArtwork.hpp"
 #include "ScmImageAnchor.hpp"
-#include "types/Anchor.hpp"
 #include <functional>
 #include <vector>
 #include <QGraphicsPathItem>
