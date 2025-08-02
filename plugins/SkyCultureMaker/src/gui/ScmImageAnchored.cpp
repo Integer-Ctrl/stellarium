@@ -116,20 +116,6 @@ const std::vector<ScmImageAnchor> &ScmImageAnchored::getAnchors() const
 	return anchorItems;
 }
 
-void ScmImageAnchored::setAnchors(const std::array<scm::Anchor, 3> &anchors)
-{
-	for (size_t i = 0; i < anchorItems.size(); ++i)
-	{
-		const auto &anchor = anchors[i];
-		anchorItems[i].setPosDiameter(anchor.position[0], anchor.position[1],
-		                              anchorItems[i].boundingRect().width());
-		anchorItems[i].setStarHip(anchor.hip);
-		anchorItems[i].setStarNameI18n("");
-	}
-
-	updateAnchors();
-}
-
 bool ScmImageAnchored::isImageAnchored()
 {
 	for (const auto &anchor : anchorItems)

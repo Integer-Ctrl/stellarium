@@ -87,17 +87,6 @@ void ScmConstellationDialog::loadFromConstellation(scm::ScmConstellation *conste
 	constellation->hide();
 	// Load the coordinates and stars to ScmDraw
 	maker->getScmDraw()->loadLines(constellation->getCoordinates(), constellation->getStars());
-
-	// WTF???
-	// Set up artwork tab
-	// imageItem->setAnchors(constellation->getArtwork().getAnchors());
-	// QPixmap image = QPixmap("");
-	// imageItem->setImage(image);
-	// imageItem->show();
-	// ui->artwork_image->centerOn(imageItem);
-	// ui->artwork_image->fitInView(imageItem, Qt::KeepAspectRatio);
-	// ui->artwork_image->show();
-	// updateArtwork();
 }
 
 void ScmConstellationDialog::retranslate()
