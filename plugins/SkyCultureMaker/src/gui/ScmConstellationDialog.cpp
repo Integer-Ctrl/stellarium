@@ -41,7 +41,7 @@ ScmConstellationDialog::ScmConstellationDialog(SkyCultureMaker *maker)
 	assert(maker != nullptr);
 
 	ui        = new Ui_scmConstellationDialog;
-	imageItem = new ScmImageAnchored;
+	imageItem = new ScmConstellationImage;
 }
 
 ScmConstellationDialog::~ScmConstellationDialog()
@@ -87,6 +87,15 @@ void ScmConstellationDialog::loadFromConstellation(scm::ScmConstellation *conste
 	constellation->hide();
 	// Load the coordinates and stars to ScmDraw
 	maker->getScmDraw()->loadLines(constellation->getCoordinates(), constellation->getStars());
+
+	// Loads the artwork
+	imageItem->setArtwork(constellation->getArtwork());
+	imageItem->show();
+	ui->artwork_image->centerOn(imageItem);
+	ui->artwork_image->fitInView(imageItem, Qt::KeepAspectRatio);
+	ui->artwork_image->show();
+
+	updateArtwork();
 }
 
 void ScmConstellationDialog::retranslate()
@@ -283,8 +292,8 @@ void ScmConstellationDialog::bindSelectedStar()
 		return;
 	}
 
-	ScmImageAnchor *anchor = imageItem->getSelectedAnchor();
-	bool success           = anchor->trySetStarHip(stelObj->getID());
+	ScmConstellationImageAnchor *anchor = imageItem->getSelectedAnchor();
+	bool success                        = anchor->trySetStarHip(stelObj->getID());
 	if (success == false)
 	{
 		ui->infoLbl->setText("WARNING: The selected object must contain a HIP number.");
@@ -292,7 +301,6 @@ void ScmConstellationDialog::bindSelectedStar()
 		return;
 	}
 
-	anchor->setStarNameI18n(stelObj->getNameI18n());
 	ui->infoLbl->setText(""); // Reset
 
 	updateArtwork();
@@ -332,8 +340,7 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 	}
 
 	// Not editing a constellation, but the ID already exists
-	if (constellationBeingEdited == nullptr && 
-		maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
+	if (constellationBeingEdited == nullptr && maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Constellation with this ID already exists");
 		qDebug() << "SkyCultureMaker: Could not save: Constellation with this ID already exists, id = "
@@ -341,8 +348,7 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 		return false;
 	}
 	// Editing a constellation, but the ID already exists and is not the same as the one being edited
-	else if (constellationBeingEdited != nullptr &&
-	         constellationBeingEdited->getId() != finalId &&
+	else if (constellationBeingEdited != nullptr && constellationBeingEdited->getId() != finalId &&
 	         maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Constellation with this ID already exists");

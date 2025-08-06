@@ -24,7 +24,7 @@
 #ifndef SCM_CONSTELLATION_DIALOG_HPP
 #define SCM_CONSTELLATION_DIALOG_HPP
 
-#include "ScmImageAnchored.hpp"
+#include "ScmConstellationImage.hpp"
 #include "SkyCultureMaker.hpp"
 #include "StelDialogSeparate.hpp"
 #include "types/DrawTools.hpp"
@@ -84,7 +84,7 @@ private:
 	/// IPA representation of the constellation
 	std::optional<QString> constellationIPA;
 	/// The currently displayed artwork
-	ScmImageAnchored *imageItem;
+	ScmConstellationImage *imageItem;
 	/// Holds the last used directory
 	QString lastUsedImageDirectory;
 	/// Holds the help text on how to use the pen.
