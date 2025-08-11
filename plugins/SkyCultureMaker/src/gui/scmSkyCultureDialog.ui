@@ -184,7 +184,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QPushButton" name="AddConstellationBtn">
               <property name="minimumSize">
                <size>
-                <width>125</width>
+                <width>100</width>
                 <height>0</height>
                </size>
               </property>
@@ -202,7 +202,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QPushButton" name="EditConstellationBtn">
               <property name="minimumSize">
                <size>
-                <width>125</width>
+                <width>100</width>
                 <height>0</height>
                </size>
               </property>
@@ -215,7 +215,7 @@ p, li { white-space: pre-wrap; }
              <widget class="QPushButton" name="RemoveConstellationBtn">
               <property name="minimumSize">
                <size>
-                <width>125</width>
+                <width>100</width>
                 <height>0</height>
                </size>
               </property>
@@ -306,7 +306,7 @@ p, li { white-space: pre-wrap; }
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>211</width>
+               <width>368</width>
                <height>1520</height>
               </rect>
              </property>
