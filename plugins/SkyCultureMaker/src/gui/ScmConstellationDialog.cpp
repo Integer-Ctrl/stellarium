@@ -90,7 +90,6 @@ void ScmConstellationDialog::loadFromConstellation(scm::ScmConstellation *conste
 
 	// Loads the artwork
 	imageItem->setArtwork(constellation->getArtwork());
-	imageItem->show();
 	ui->artwork_image->centerOn(imageItem);
 	ui->artwork_image->fitInView(imageItem, Qt::KeepAspectRatio);
 	ui->artwork_image->show();
@@ -258,7 +257,7 @@ void ScmConstellationDialog::triggerUploadImage()
 
 void ScmConstellationDialog::triggerRemoveImage()
 {
-	imageItem->hide();
+	imageItem->resetArtwork();
 	imageItem->resetAnchors();
 
 	updateArtwork();

@@ -76,6 +76,11 @@ public:
 	void resetAnchors();
 
 	/**
+	 * @brief Resets the artwork.
+	 */
+	void resetArtwork();
+
+	/**
 	 * @brief Gets the anchors of this object.
 	 * 
 	 * @return const std::vector<ScmConstellationImageAnchor>& The anchors of this object.

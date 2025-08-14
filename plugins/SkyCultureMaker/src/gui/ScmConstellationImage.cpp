@@ -112,6 +112,12 @@ void ScmConstellationImage::resetAnchors()
 	}
 }
 
+void ScmConstellationImage::resetArtwork()
+{
+	artwork.reset();
+	hide();
+}
+
 const std::vector<ScmConstellationImageAnchor> &ScmConstellationImage::getAnchors() const
 {
 	return anchorItems;
@@ -165,6 +171,12 @@ const scm::ScmConstellationArtwork &ScmConstellationImage::getArtwork() const
 void ScmConstellationImage::setArtwork(const scm::ScmConstellationArtwork &artwork)
 {
 	resetAnchors();
+	resetArtwork();
+
+	if (!artwork.getHasArt())
+	{
+		return;
+	}
 
 	QPixmap pixmap = QPixmap::fromImage(artwork.getArtwork());
 	setImage(pixmap);
@@ -177,4 +189,5 @@ void ScmConstellationImage::setArtwork(const scm::ScmConstellationArtwork &artwo
 	}
 
 	updateAnchors();
+	show();
 }
