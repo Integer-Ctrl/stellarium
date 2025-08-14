@@ -104,12 +104,10 @@ void ScmSkyCultureDialog::createDialogContent()
 	ui->SaveSkyCultureBtn->setEnabled(false);
 	ui->RemoveConstellationBtn->setEnabled(false);
 	ui->EditConstellationBtn->setEnabled(false);
-	ui->EditConstellationBtn->setToolTip("Warning: Editing a constellation resets the artwork.");
 	connect(ui->SaveSkyCultureBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::saveSkyCulture);
 	connect(ui->AddConstellationBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::constellationDialog);
 
-	connect(ui->EditConstellationBtn, &QPushButton::clicked, this,
-	        &ScmSkyCultureDialog::editSelectedConstellation);
+	connect(ui->EditConstellationBtn, &QPushButton::clicked, this, &ScmSkyCultureDialog::editSelectedConstellation);
 	connect(ui->constellationsList, &QListWidget::itemSelectionChanged, this,
 	        &ScmSkyCultureDialog::updateEditConstellationButton);
 
@@ -180,7 +178,7 @@ void ScmSkyCultureDialog::editSelectedConstellation()
 	auto selectedItems = ui->constellationsList->selectedItems();
 	if (!selectedItems.isEmpty() && constellations != nullptr)
 	{
-		QListWidgetItem *item = selectedItems.first();
+		QListWidgetItem *item     = selectedItems.first();
 		QString constellationName = item->text();
 
 		// Get Id by comparing to the display name
@@ -195,7 +193,7 @@ void ScmSkyCultureDialog::editSelectedConstellation()
 				break;
 			}
 		}
-		
+
 		maker->openConstellationDialog(selectedConstellationId);
 	}
 }

@@ -293,7 +293,14 @@ void ScmConstellationDialog::bindSelectedStar()
 	}
 
 	ScmConstellationImageAnchor *anchor = imageItem->getSelectedAnchor();
-	bool success                        = anchor->trySetStarHip(stelObj->getID());
+	if (anchor == nullptr)
+	{
+		ui->infoLbl->setText("WARNING: No anchor is selected.");
+		qDebug() << "SkyCultureMaker: No anchor is selected";
+		return;
+	}
+
+	bool success = anchor->trySetStarHip(stelObj->getID());
 	if (success == false)
 	{
 		ui->infoLbl->setText("WARNING: The selected object must contain a HIP number.");
@@ -316,7 +323,8 @@ void ScmConstellationDialog::tabChanged(int index)
 bool ScmConstellationDialog::canConstellationBeSaved() const
 {
 	// shouldnt happen
-	if (maker->getCurrentSkyCulture() == nullptr)
+	scm::ScmSkyCulture *currentSkyCulture = maker->getCurrentSkyCulture();
+	if (currentSkyCulture == nullptr)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Sky Culture is not set");
 		qDebug() << "SkyCultureMaker: Could not save: Sky Culture is not set";
@@ -340,7 +348,7 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 	}
 
 	// Not editing a constellation, but the ID already exists
-	if (constellationBeingEdited == nullptr && maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
+	if (constellationBeingEdited == nullptr && currentSkyCulture->getConstellation(finalId) != nullptr)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Constellation with this ID already exists");
 		qDebug() << "SkyCultureMaker: Could not save: Constellation with this ID already exists, id = "
@@ -349,7 +357,7 @@ bool ScmConstellationDialog::canConstellationBeSaved() const
 	}
 	// Editing a constellation, but the ID already exists and is not the same as the one being edited
 	else if (constellationBeingEdited != nullptr && constellationBeingEdited->getId() != finalId &&
-	         maker->getCurrentSkyCulture()->getConstellation(finalId) != nullptr)
+	         currentSkyCulture->getConstellation(finalId) != nullptr)
 	{
 		ui->infoLbl->setText("WARNING: Could not save: Constellation with this ID already exists");
 		qDebug() << "SkyCultureMaker: Could not save: Constellation with this ID already exists, id = "

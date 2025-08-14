@@ -21,8 +21,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ScmConstellationImageAnchor_H
-#define ScmConstellationImageAnchor_H
+#ifndef SCM_CONSTELLATION_IMAGE_ANCHOR_H
+#define SCM_CONSTELLATION_IMAGE_ANCHOR_H
 
 #include "StarMgr.hpp"
 #include "VecMath.hpp"
@@ -156,4 +156,4 @@ private:
 	QRectF movementBound;
 };
 
-#endif // ScmConstellationImageAnchor_H
+#endif // SCM_CONSTELLATION_IMAGE_ANCHOR_H

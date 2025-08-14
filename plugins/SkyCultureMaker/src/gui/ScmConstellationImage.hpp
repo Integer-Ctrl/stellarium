@@ -21,8 +21,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ScmConstellationImage_H
-#define ScmConstellationImage_H
+#ifndef SCM_CONSTELLATION_IMAGE_H
+#define SCM_CONSTELLATION_IMAGE_H
 
 #include "ScmConstellationArtwork.hpp"
 #include "ScmConstellationImageAnchor.hpp"
@@ -129,4 +129,4 @@ private:
 	scm::ScmConstellationArtwork artwork;
 };
 
-#endif // ScmConstellationImage_H
+#endif // SCM_CONSTELLATION_IMAGE_H

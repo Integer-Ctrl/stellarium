@@ -154,9 +154,11 @@ void SkyCultureMaker::init()
 	{
 		QPixmap iconScmDisabled(":/SkyCultureMaker/bt_SCM_Off.png");
 		QPixmap iconScmEnabled(":/SkyCultureMaker/bt_SCM_On.png");
-		qDebug() << "SkyCultureMaker: " << (iconScmDisabled.isNull() ? "Failed to load image: bt_SCM_Off.png"
+		qDebug() << "SkyCultureMaker: "
+			 << (iconScmDisabled.isNull() ? "Failed to load image: bt_SCM_Off.png"
 		                                      : "Loaded image: bt_SCM_Off.png");
-		qDebug() << "SkyCultureMaker: " << (iconScmEnabled.isNull() ? "Failed to load image: bt_SCM_On.png"
+		qDebug() << "SkyCultureMaker: "
+			 << (iconScmEnabled.isNull() ? "Failed to load image: bt_SCM_On.png"
 		                                     : "Loaded image: bt_SCM_On.png");
 
 		StelGui *gui = dynamic_cast<StelGui *>(app.getGui());
@@ -535,6 +537,12 @@ void SkyCultureMaker::openConstellationDialog(const QString &constellationId)
 	{
 		// Load the necessary data
 		scm::ScmSkyCulture *skyCulture = getCurrentSkyCulture();
+		if (skyCulture == nullptr)
+		{
+			qDebug() << "SkyCultureMaker: Current Sky Culture is not initialized.";
+			return;
+		}
+
 		scm::ScmConstellation *constellation = skyCulture->getConstellation(constellationId);
 		if (constellation != nullptr)
 		{
