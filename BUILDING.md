@@ -45,7 +45,10 @@ your distribution. Here's a list.
 - [CMake](https://www.cmake.org/) 3.16.0 or later - buildsystem used by many open source projects
 - [Qt Framework](https://www.qt.io/) 5.12.0/6.2.0 or later. We recommend 5.15.2 or 6.5.1
 - [OpenGL](https://www.opengl.org/) - graphics library
-- [Zlib](https://www.zlib.net) - compression library
+- Compression libraries:
+  - [Zlib](https://www.zlib.net)
+  - [Bzip2](https://sourceforge.net/projects/bzip2/)
+  - [LZMA](https://tukaani.org/lzma/)
 
 ### Dependencies
 
