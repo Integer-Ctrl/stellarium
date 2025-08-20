@@ -331,8 +331,8 @@ IF(WIN32)
           # C4351: "new" behaviour, member array default initialization. Required since at least C++98, but funny MSVC throws a warning.
           # C4996: deprecated POSIX names (used in zlib)
 	     # C5105: defines in macros
-          # Zc:_cplusplus: Qt >5.9.0 requieres a C++17 compiler. This is only requiered because cmake has a bug: https://gitlab.kitware.com/cmake/cmake/-/issues/1883
-          # permissiv: requiered by Qt >=6.9.0 (see qt6\QtCore\qcompilerdetection.h for more information: https://github.com/qt/qtbase/blob/v6.9.0/src/corelib/global/qcompilerdetection.h#L1304-L1316)
+          # Zc:_cplusplus: Qt >5.9.0 requires a C++17 compiler, because cmake has a bug: https://gitlab.kitware.com/cmake/cmake/-/issues/1883
+          # permissive: required by Qt >=6.9.0 (see qt6\QtCore\qcompilerdetection.h for more information: https://github.com/qt/qtbase/blob/v6.9.0/src/corelib/global/qcompilerdetection.h#L1304-L1316)
           SET(STEL_MSVC_FLAGS "/wd4244 /wd4305 /wd4351 /wd4996 /wd5105 /utf-8 /Zc:__cplusplus /permissive-")
           # Avoid type conflict with C++17 standard
           # SET(STEL_MSVC_FLAGS "${STEL_MSVC_FLAGS} /D_HAS_STD_BYTE=0") # Don't do this in Qt6. Just avoid "using namespace std" anywhere! https://developercommunity.visualstudio.com/t/error-c2872-byte-ambiguous-symbol/93889
