@@ -47,8 +47,6 @@ your distribution. Here's a list.
 - [OpenGL](https://www.opengl.org/) - graphics library
 - Compression libraries:
   - [Zlib](https://www.zlib.net)
-  - [Bzip2](https://sourceforge.net/projects/bzip2/)
-  - [LZMA](https://tukaani.org/lzma/)
 
 ### Dependencies
 

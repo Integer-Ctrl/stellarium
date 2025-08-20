@@ -54,8 +54,6 @@ The Sky Culture Maker currently consists of two main features. The first is the 
 - [Tidy HTML](https://www.html-tidy.org/) (used for formatting HTML descriptions)
 - [gettext](https://www.gnu.org/software/gettext/)
 - [Zlib](https://www.zlib.net)
-- [Bzip2](https://sourceforge.net/projects/bzip2/)
-- [LZMA](https://tukaani.org/lzma/)
 
 ### 1.2 Activating the Plugin in Stellarium
 
