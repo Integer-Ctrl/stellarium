@@ -312,7 +312,7 @@ jobs:
         prepare: |
           pkg install -y cmake git eigen glm exiv2 nlopt fast_float md4c qxlsx-qt6 perl5 xorg-vfbserver gettext qt6 tidy-html5
           echo "=== tidy-html5 package info ==="
-          pkg_info -L tidy-html5
+          pkg info tidy-html5
           echo "=== tidy-html5 installed files ==="
           pkg info -l tidy-html5
           echo "=== Searching for tidy headers ==="
