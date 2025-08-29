@@ -12,8 +12,11 @@ IF(SCM_SHOULD_ENABLE_CONVERTER AND NOT (QT_VERSION_MAJOR EQUAL "5"))
   # On macOS, Homebrew is a common way to install dependencies.
   # We should look for it in the default locations for Apple Silicon and Intel macs
   # to find the correct version of libtidy. Otherwise a system library might be used.
+  # On FreeBSD, packages are typically installed in /usr/local.
   IF(APPLE)
     LIST(APPEND CMAKE_PREFIX_PATH "/opt/homebrew" "/usr/local")
+  ELSEIF(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+    LIST(APPEND CMAKE_PREFIX_PATH "/usr/local")
   ENDIF()
 
   # download https://github.com/Stellarium/stellarium-skyculture-converter
