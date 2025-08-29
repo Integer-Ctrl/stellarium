@@ -204,10 +204,10 @@ jobs:
     - name: Configure CMake
       shell: bash
       run: |
-        export PATH="/opt/homebrew/opt/qt@6/bin:/usr/local/opt/qt@6:$PATH"
+        export PATH="/usr/local/opt/qt@6:$PATH"
         mkdir -p build
         cd build
-        cmake -DCMAKE_PREFIX_PATH="/opt/homebrew;/usr/local" \
+        cmake -DCMAKE_PREFIX_PATH="/usr/local" \
               -DCMAKE_BUILD_TYPE=RelWithDebInfo \
               -DSTELLARIUM_RELEASE_BUILD=Off \
               -DENABLE_TESTING=On ${{ github.workspace }}
@@ -249,10 +249,11 @@ jobs:
     - name: Configure CMake
       shell: bash
       run: |
-        export PATH="/usr/local/opt/qt@6/bin:$PATH"
+        export PATH="/opt/homebrew/opt/qt@6/bin:$PATH"
         mkdir -p build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+        cmake -DCMAKE_PREFIX_PATH="/opt/homebrew" \
+              -DCMAKE_BUILD_TYPE=RelWithDebInfo \
               -DSTELLARIUM_RELEASE_BUILD=Off \
               -DENABLE_TESTING=On \
               ${{ github.workspace }}
@@ -333,10 +334,10 @@ jobs:
           export CMAKE_PREFIX_PATH="/usr/local:$CMAKE_PREFIX_PATH"
           mkdir builds
           cd builds
-          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          cmake -DCMAKE_PREFIX_PATH="/usr/local" \
+                -DCMAKE_BUILD_TYPE=RelWithDebInfo \
                 -DSTELLARIUM_RELEASE_BUILD=Off \
                 -DENABLE_TESTING=On \
-                -DCMAKE_PREFIX_PATH="/usr/local" \
                 -DLIBTIDY_INCLUDE_DIR="/usr/local/include" \
                 -DLIBTIDY_LIBRARY="/usr/local/lib/libtidy5.so" \
                 "${{ github.workspace }}"
