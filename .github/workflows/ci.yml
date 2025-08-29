@@ -38,7 +38,10 @@ jobs:
       run: |
         mkdir -p build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On "${{ github.workspace }}"
+        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+              -DSTELLARIUM_RELEASE_BUILD=Off \
+              -DENABLE_TESTING=On \
+              "${{ github.workspace }}"
 
     - name: Compile
       working-directory: build
@@ -162,7 +165,7 @@ jobs:
         export PATH="/opt/homebrew/opt/qt@5/bin:/usr/local/opt/qt@5/bin:$PATH"
         mkdir -p build
         cd build
-        cmake -DCMAKE_PREFIX_PATH="/opt/homebrew;/usr/local"
+        cmake -DCMAKE_PREFIX_PATH="/opt/homebrew;/usr/local" \
               -DCMAKE_BUILD_TYPE=RelWithDebInfo \
               -DSTELLARIUM_RELEASE_BUILD=Off \
               -DENABLE_TESTING=On ${{ github.workspace }}
