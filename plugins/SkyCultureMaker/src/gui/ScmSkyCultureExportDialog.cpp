@@ -103,15 +103,15 @@ void ScmSkyCultureExportDialog::saveSkyCulture()
 	if (skyCultureDirectory.exists())
 	{
 		qWarning() << "SkyCultureMaker: Sky culture with ID" << skyCultureId
-			   << "already exists. Cannot export.";
+			<< "already exists. Cannot export.";
 		maker->setSkyCultureDialogInfoLabel("ERROR: Sky culture with this ID already exists.");
 		// dont close the dialog here, so the user can delete the folder first
 		return;
 	}
 
 	// Create the sky culture directory
-	bool directorySuccessfully = skyCultureDirectory.mkpath(".");
-	if (!directorySuccessfully)
+	bool createdDirectorySuccessfully = skyCultureDirectory.mkpath(".");
+	if (!createdDirectorySuccessfully)
 	{
 		maker->setSkyCultureDialogInfoLabel("ERROR: Failed to create sky culture directory.");
 		qWarning() << "SkyCultureMaker: Failed to create sky culture directory at" << skyCultureDirectory.absolutePath();
