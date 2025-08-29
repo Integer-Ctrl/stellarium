@@ -317,16 +317,12 @@ jobs:
           export DISPLAY=:0
           export CMAKE_PREFIX_PATH="/usr/local:$CMAKE_PREFIX_PATH"
           export PKG_CONFIG_PATH="/usr/local/libdata/pkgconfig:$PKG_CONFIG_PATH"
-          # Create missing libtidy.so symlink
-          if [ ! -e /usr/local/lib/libtidy.so ]; then
-            ln -sf /usr/local/lib/libtidy.so.58 /usr/local/lib/libtidy.so
-          fi
           mkdir builds
           cd builds
           cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On \
                 -DCMAKE_PREFIX_PATH="/usr/local" \
                 -DLIBTIDY_INCLUDE_DIR="/usr/local/include" \
-                -DLIBTIDY_LIBRARY="/usr/local/lib/libtidy.so" \
+                -DLIBTIDY_LIBRARY="/usr/local/lib/libtidy5.so"
                 "${{ github.workspace }}"
           make -j3
           Xvfb :0 -ac -screen 0 1024x768x24+32 >/dev/null 2>&1 &
