@@ -311,15 +311,38 @@ jobs:
         copyback: false
         prepare: |
           pkg install -y cmake git eigen glm exiv2 nlopt fast_float md4c qxlsx-qt6 perl5 xorg-vfbserver gettext qt6 tidy-html5
+          echo "=== tidy-html5 package info ==="
+          pkg_info -L tidy-html5
+          echo "=== tidy-html5 installed files ==="
+          pkg info -l tidy-html5
+          echo "=== Searching for tidy headers ==="
+          find /usr/local -name "*tidy*" -type f 2>/dev/null || true
+          echo "=== Searching for tidy libraries ==="
+          find /usr/local -name "*tidy*" -type f -name "*.so*" -o -name "*.a" 2>/dev/null || true
+          echo "=== PKG_CONFIG_PATH and pkg-config info ==="
+          echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+          pkg-config --list-all | grep -i tidy || echo "No tidy found in pkg-config"
+          echo "=== /usr/local/lib contents (tidy related) ==="
+          ls -la /usr/local/lib/ | grep -i tidy || echo "No tidy libs found in /usr/local/lib"
+          echo "=== /usr/local/include contents (tidy related) ==="
+          find /usr/local/include -name "*tidy*" -type f 2>/dev/null || echo "No tidy headers found in /usr/local/include"
 
         run: |
           set -e -x
           export DISPLAY=:0
-          export LIBTIDY_LIBRARY=/usr/local/lib/libtidy.so
-          export LIBTIDY_INCLUDE_DIR=/usr/local/include
+          echo "=== Environment variables before build ==="
+          echo "CMAKE_PREFIX_PATH: $CMAKE_PREFIX_PATH"
+          echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+          echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
           mkdir builds
           cd builds
-          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On "${{ github.workspace }}"
+          echo "=== Running CMake with verbose output ==="
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On -DCMAKE_VERBOSE_MAKEFILE=ON --debug-output "${{ github.workspace }}"
+          echo "=== CMake cache contents (tidy related) ==="
+          grep -i tidy CMakeCache.txt || echo "No tidy entries found in CMakeCache.txt"
+          echo "=== CMake configuration summary ==="
+          cmake -LA . | grep -i tidy || echo "No tidy configuration found"
+          echo "=== Starting build ==="
           make -j3
           Xvfb :0 -ac -screen 0 1024x768x24+32 >/dev/null 2>&1 &
           sleep 3
