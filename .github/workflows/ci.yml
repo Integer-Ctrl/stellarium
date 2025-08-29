@@ -334,10 +334,26 @@ jobs:
           echo "CMAKE_PREFIX_PATH: $CMAKE_PREFIX_PATH"
           echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
           echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+          echo "=== Setting up environment for tidy detection ==="
+          export CMAKE_PREFIX_PATH="/usr/local:$CMAKE_PREFIX_PATH"
+          export PKG_CONFIG_PATH="/usr/local/libdata/pkgconfig:$PKG_CONFIG_PATH"
+          echo "Updated CMAKE_PREFIX_PATH: $CMAKE_PREFIX_PATH"
+          echo "Updated PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+          echo "=== Testing pkg-config for tidy ==="
+          which pkg-config || echo "pkg-config not found, installing..."
+          pkg install -y pkgconf || true
+          pkg-config --exists tidy && echo "tidy found via pkg-config" || echo "tidy not found via pkg-config"
+          pkg-config --cflags --libs tidy 2>/dev/null || echo "Failed to get tidy flags"
           mkdir builds
           cd builds
           echo "=== Running CMake with verbose output ==="
-          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On -DCMAKE_VERBOSE_MAKEFILE=ON --debug-output "${{ github.workspace }}"
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On \
+                -DCMAKE_VERBOSE_MAKEFILE=ON --debug-output \
+                -DCMAKE_PREFIX_PATH="/usr/local" \
+                -DLibTidy_ROOT="/usr/local" \
+                -DLIBTIDY_INCLUDE_DIR="/usr/local/include" \
+                -DLIBTIDY_LIBRARY="/usr/local/lib/libtidy.so" \
+                "${{ github.workspace }}"
           echo "=== CMake cache contents (tidy related) ==="
           grep -i tidy CMakeCache.txt || echo "No tidy entries found in CMakeCache.txt"
           echo "=== CMake configuration summary ==="
