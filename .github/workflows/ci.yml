@@ -248,7 +248,10 @@ jobs:
         export PATH="/usr/local/opt/qt@6/bin:$PATH"
         mkdir -p build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On ${{ github.workspace }}
+        cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+              -DSTELLARIUM_RELEASE_BUILD=Off \
+              -DENABLE_TESTING=On \
+              ${{ github.workspace }}
 
     - name: Compile
       working-directory: build
@@ -287,7 +290,10 @@ jobs:
           export DISPLAY=:0
           mkdir builds
           cd builds
-          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On "${{ github.workspace }}"
+          cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+                -DSTELLARIUM_RELEASE_BUILD=Off \
+                -DENABLE_TESTING=On \
+                "${{ github.workspace }}"
           make -j3
           Xvfb :0 -ac -screen 0 1024x768x24+32 >/dev/null 2>&1 &
           sleep 3
@@ -326,7 +332,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSTELLARIUM_RELEASE_BUILD=Off -DENABLE_TESTING=On \
                 -DCMAKE_PREFIX_PATH="/usr/local" \
                 -DLIBTIDY_INCLUDE_DIR="/usr/local/include" \
-                -DLIBTIDY_LIBRARY="/usr/local/lib/libtidy5.so"
+                -DLIBTIDY_LIBRARY="/usr/local/lib/libtidy5.so" \
                 "${{ github.workspace }}"
           make -j3
           Xvfb :0 -ac -screen 0 1024x768x24+32 >/dev/null 2>&1 &
