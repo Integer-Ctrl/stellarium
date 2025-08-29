@@ -344,6 +344,13 @@ jobs:
           pkg install -y pkgconf || true
           pkg-config --exists tidy && echo "tidy found via pkg-config" || echo "tidy not found via pkg-config"
           pkg-config --cflags --libs tidy 2>/dev/null || echo "Failed to get tidy flags"
+          echo "=== Creating missing libtidy.so symlink ==="
+          ls -la /usr/local/lib/libtidy*
+          if [ ! -e /usr/local/lib/libtidy.so ]; then
+            ln -sf /usr/local/lib/libtidy.so.58 /usr/local/lib/libtidy.so
+            echo "Created symlink: /usr/local/lib/libtidy.so -> /usr/local/lib/libtidy.so.58"
+          fi
+          ls -la /usr/local/lib/libtidy*
           mkdir builds
           cd builds
           echo "=== Running CMake with verbose output ==="
