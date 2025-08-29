@@ -28,10 +28,6 @@
 #include "StelDialog.hpp"
 #include <QObject>
 
-#ifdef SCM_CONVERTER_ENABLED_CPP
-# include "ScmConvertDialog.hpp"
-#endif
-
 class Ui_scmStartDialog;
 
 class ScmStartDialog : public StelDialog
@@ -43,18 +39,6 @@ public:
 	ScmStartDialog(SkyCultureMaker *maker);
 	~ScmStartDialog() override;
 
-	/**
-	 * @brief Check if the converter dialog is currently visible.
-	 * @return true if the converter dialog is visible, false otherwise.
-	 */
-	bool isConverterDialogVisible();
-
-	/**
-	 * @brief Set the visibility of the converter dialog.
-	 * @param b The boolean value to be set.
-	 */
-	void setConverterDialogVisibility(bool b);
-
 public slots:
 	void retranslate() override;
 
@@ -65,9 +49,6 @@ private slots:
 private:
 	Ui_scmStartDialog *ui  = nullptr;
 	SkyCultureMaker *maker = nullptr;
-#ifdef SCM_CONVERTER_ENABLED_CPP
-	ScmConvertDialog *converterDialog = nullptr;
-#endif
 };
 
 #endif // SCMSTARTDIALOG_HPP

@@ -26,10 +26,6 @@
 #include <cassert>
 #include <QDebug>
 
-#ifdef SCM_CONVERTER_ENABLED_CPP
-# include "ScmConvertDialog.hpp"
-#endif // SCM_CONVERTER_ENABLED_CPP
-
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -78,29 +74,6 @@ void ScmStartDialog::createDialogContent()
 	        &ScmStartDialog::startScmCreationProcess); // Create
 	connect(ui->scmStartEditpushButton, &QPushButton::clicked, this,
 	        &ScmStartDialog::closeDialog); // Edit - TODO: add logic (currently closing the window)
-
-/* =============================================== SkyCultureConverter ============================================== */
-#ifdef SCM_CONVERTER_ENABLED_CPP
-	ui->scmStartConvertpushButton->setToolTip(
-		tr("Convert SkyCultures from the old (fib) format to the new (json) format"));
-	connect(ui->scmStartConvertpushButton, &QPushButton::clicked, this,
-	        [this]()
-	        {
-			if (!converterDialog)
-			{
-				converterDialog = new ScmConvertDialog(maker);
-			}
-			maker->setStartDialogVisibility(false); // Hide the start dialog
-			converterDialog->setVisible(true);
-		});
-#else   // SCM_CONVERTER_ENABLED_CPP is not defined
-	// Converter is disabled, so disable the button
-	ui->scmStartConvertpushButton->setEnabled(false);
-	ui->scmStartConvertpushButton->setToolTip(
-		tr("Converter is only available from Qt6.5 onwards, currently build with version %1")
-			.arg(QT_VERSION_STR));
-#endif  // SCM_CONVERTER_ENABLED_CPP
-/* ================================================================================================================== */
 }
 
 void ScmStartDialog::startScmCreationProcess()
@@ -120,40 +93,4 @@ void ScmStartDialog::startScmCreationProcess()
 void ScmStartDialog::closeDialog()
 {
 	maker->setIsScmEnabled(false); // Disable the Sky Culture Maker
-}
-
-bool ScmStartDialog::isConverterDialogVisible()
-{
-#ifdef SCM_CONVERTER_ENABLED_CPP
-	if (converterDialog != nullptr)
-	{
-		return converterDialog->visible();
-	}
-	else
-	{
-		return false;
-	}
-#else
-	return false; // Converter dialog is not available
-#endif
-}
-
-void ScmStartDialog::setConverterDialogVisibility(bool b)
-{
-#ifdef SCM_CONVERTER_ENABLED_CPP
-	if (converterDialog != nullptr)
-	{
-		if (b != converterDialog->visible())
-		{
-			converterDialog->setVisible(b);
-		}
-	}
-	else
-	{
-		qWarning() << "SkyCultureMaker: Converter dialog is not initialized!";
-	}
-#else
-	Q_UNUSED(b);
-	qWarning() << "SkyCultureMaker: Converter dialog is not available in this build!";
-#endif // SCM_CONVERTER_ENABLED_CPP
 }
