@@ -45,7 +45,6 @@ struct Description
 	QString cultureDescription;
 	QString about;
 
-	QString geoRegion;
 	QString sky;
 	QString moonAndSun;
 	QString planets;
@@ -64,7 +63,7 @@ struct Description
 	 */
 	bool isComplete() const
 	{
-		return !name.trimmed().isEmpty() && !geoRegion.trimmed().isEmpty() && !sky.trimmed().isEmpty() &&
+		return !name.trimmed().isEmpty() && !sky.trimmed().isEmpty() &&
 		       !moonAndSun.trimmed().isEmpty() && !zodiac.trimmed().isEmpty() && !planets.trimmed().isEmpty() &&
 		       !constellations.trimmed().isEmpty() && !milkyWay.trimmed().isEmpty() &&
 		       !otherObjects.trimmed().isEmpty() && !about.trimmed().isEmpty() &&
