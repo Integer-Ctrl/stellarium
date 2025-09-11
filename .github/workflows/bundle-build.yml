@@ -91,4 +91,3 @@ jobs:
       with:
         name: stellarium-windows-installer
         path: stellarium-installer
-        retention-days: 3  # Don't store to long as stellarium builds are large
